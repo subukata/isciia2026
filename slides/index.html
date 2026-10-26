@@ -100,8 +100,8 @@
   .part-chip.lit { color: var(--title); }
   .part-chip.lit::after { content: ""; display: block; position: absolute; }
   .part-chip.lit span { box-shadow: inset 0 -.22rem 0 var(--title); }
-  /* The slide number, bottom right, on the rail's row (none on the title). */
-  #pageno { position: absolute; right: 3rem; top: 43.25rem; z-index: 3; font: 700 1.4rem/1 var(--body); color: var(--muted); font-variant-numeric: tabular-nums; }
+  /* The slide number, in the bottom right corner on the rail's row, beyond the 3rem margin (none on the title). */
+  #pageno { position: absolute; right: .5rem; top: 43.25rem; z-index: 3; font: 700 1.4rem/1 var(--body); color: var(--muted); font-variant-numeric: tabular-nums; }
   .tools { position: fixed; right: 10px; top: 0; height: var(--bar); display: flex; align-items: center; gap: 6px; z-index: 25; transition: opacity .3s; }
   .tools.idle { opacity: 0; pointer-events: none; }
   .tools button { font: 600 14px/1 var(--body); color: var(--muted); background: #FFFFFF; border: 1px solid var(--line); border-radius: 6px; padding: 5px 10px; cursor: pointer; }
@@ -231,11 +231,13 @@
   .site-qr { position: absolute; right: 3rem; top: 2.4rem; width: 17rem; display: grid; gap: .4rem; justify-items: center;
     pointer-events: auto; color: inherit; text-decoration: none; }
   .site-qr:hover p b { text-decoration: underline; text-underline-offset: .2em; }
-  /* Over the code on the title, as on About me (drawn there on the stage, scenes-intro.js). */
-  #corner-qr { position: absolute; right: 3rem; top: .3rem; width: 2.8rem; height: 2.8rem; padding: .2rem; box-sizing: border-box;
+  /* The small code on the other slides (main.js): in the frame's top right corner, beyond the 3rem margin, and clear
+     of the Ours tag below it (top 3.85rem). */
+  #corner-qr { position: absolute; right: .3rem; top: .3rem; width: 3.4rem; height: 3.4rem; padding: .2rem; box-sizing: border-box;
     background: #FFFFFF; border-radius: .2rem; z-index: 3; }
   #corner-qr svg { display: block; width: 100%; height: 100%; }
   #frame:has(.scene.active:is([data-id="title"], [data-id="about"], [data-id="principle"], [data-id="end"])) #corner-qr { display: none; }
+  /* Over the code on the title, as on About me (drawn there on the stage, scenes-intro.js). */
   .site-qr p.photo { font: 780 1.9rem/1.1 var(--display); color: var(--hl); }
   .scene[data-id="title"] .site-qr { top: 1.8rem; gap: .3rem; } .scene[data-id="title"] .site-qr .qr { width: 7.5rem; height: 7.5rem; }
   .site-qr .qr { width: 10rem; height: 10rem; padding: .4rem; box-sizing: border-box; background: #FFFFFF; }
