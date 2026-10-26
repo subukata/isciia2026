@@ -7,7 +7,7 @@
 import {
   A, ub, C, FONT, XA, START, BOUNDS_A, RADIUS, leftOf, hoodOf, kmeansA, lrcmA, rscmA, rmcmA, rmcm2A, run, memo, R, fit,
   pointItems, protoItems, hard, boundaryStyle, diverging, text, labelWidth, plate, fractionPlate, ring, line, arrow, membershipLegend, slider, onClick, f2, withMotive, withIdea, swing, live, born,
-  CLUSTER, mixRGB, css, cycle, newExample, remap,
+  CLUSTER, mixRGB, css, cycle, newExample, remap, symbol,
 } from './common.js';
 
 export default function part2(ctx) {
@@ -316,7 +316,7 @@ export default function part2(ctx) {
 
   // ------------------------------------------------------------ recommendation: a toy example with ratings
   // 7 users rate 6 contents (0: not rated). Rough c-means (Lingras's rule, slack 1 to 2) on these rows gives exactly the
-  // two overlapping clusters below: U1-U3 in cluster 1, U5-U7 in cluster 2, U4 in both.
+  // two overlapping clusters below: x1-x3 in cluster 1, x5-x7 in cluster 2, x4 in both.
   const RATINGS = [
     [5, 4, 0, 2, 0, 0],
     [4, 0, 5, 0, 2, 0],
@@ -343,7 +343,7 @@ export default function part2(ctx) {
       S.set([], { dur });
       const F = ctx.field();
       // Two tables side by side: the ratings as they come (left), and after clustering (right): the same rows with the
-      // cluster bars (U4 under both) and the two prototypes under them. Room left of the right table for the bars.
+      // cluster bars (x4 under both) and the two prototypes under them. Room left of the right table for the bars.
       // Rows as tall as the last step allows (its benefit box under the caption), the same in every step: the tables stay put.
       const cw = 80, rh = 35, labW = 70, gap = 10, TW = labW + 6 * cw, barW = 210;
       const xL = F.x + 10, xR = xL + TW + 70 + barW, y0 = F.y + 50;
@@ -351,12 +351,12 @@ export default function part2(ctx) {
       const cell = (g, x, y, fill, edge) => { g.fillStyle = fill; g.strokeStyle = edge; g.lineWidth = 1.5; g.beginPath(); g.roundRect(x + 3, y + 3, cw - 6, rh - 6, 6); g.fill(); g.stroke(); };
       const rgb = c => `rgb(${c.map(Math.round)})`;
       // In step 2, one user in focus at a time on the right table (the others fade there): one of cluster 1, one of
-      // cluster 2, then U4, which belongs to both. The left table stays the raw data.
+      // cluster 2, then x4, which belongs to both. The left table stays the raw data.
       const ratings = (g, x0, focus) => {
         ITEMS.forEach((s, j) => text(g, s, colX(x0, j) + cw / 2, y0 + rh - 10, { size: 28, weight: 760, align: 'center', color: C.title, halo: false }));
         RATINGS.forEach((row, i) => {
           g.save(); g.globalAlpha *= focus >= 0 && i !== focus ? 0.3 : 1;
-          text(g, `U${i + 1}`, x0 + labW - 14, rowY(i) + rh / 2 + 9, { size: 28, weight: 700, align: 'right', color: C.title, halo: false });
+          symbol(g, 'x', String(i + 1), x0 + labW - 14, rowY(i) + rh / 2 + 6, { size: 32, color: C.title, align: 'right' });
           row.forEach((r, j) => {
             cell(g, colX(x0, j), rowY(i), r ? rgb(mixRGB('#FFFFFF', '#5E6B7D', 0.12 + 0.14 * (r - 1))) : '#FFFFFF', r ? 'rgba(0,0,0,0)' : C.line);
             text(g, r ? String(r) : '–', colX(x0, j) + cw / 2, rowY(i) + rh / 2 + 9, { size: 28, weight: 700, align: 'center', color: r >= 4 ? '#FFFFFF' : r ? C.ink : C.muted, halo: false });
@@ -368,7 +368,7 @@ export default function part2(ctx) {
       S.over = g => {
         const focus = step === 2 ? cycle([1, 5, 3], 4) : -1, picks = focus >= 0 ? cfPicks(focus) : [];
         const inFocus = c => focus < 0 || CF_CLUSTERS[c].includes(focus);
-        newExample(g, '7 users × 6 items', F);
+        newExample(g, 'ratings: 7 users × 6 items', F);
         ratings(g, xL, -1);
         if (step === 0) {
           // After clustering: still to come.
@@ -379,7 +379,7 @@ export default function part2(ctx) {
         }
         plate(g, 'After clustering, $C = 2$', xR - barW + 40, F.y + 2);
         ratings(g, xR, focus);
-        // Cluster bars beside the users (U4 under both), and the two prototypes under the ratings.
+        // Cluster bars beside the users (x4 under both), and the two prototypes under the ratings.
         const bars = born('cfx:bars', { dur: 600 }), protos = born('cfx:protos', { delay: 350, dur: 600 });
         CF_CLUSTERS.forEach((us, c) => {
           g.save(); g.globalAlpha *= (inFocus(c) ? 1 : 0.3) * bars;
@@ -388,7 +388,7 @@ export default function part2(ctx) {
           text(g, `cluster ${c + 1}`, xR - 64, (top + bottom) / 2 + 10, { size: 28, weight: 760, align: 'right', color: CLUSTER[c], halo: false });
           g.restore();
           g.save(); g.globalAlpha *= (inFocus(c) ? 1 : 0.3) * protos;
-          text(g, `P${c + 1}`, xR + labW - 14, protoY(c) + rh / 2 + 9, { size: 28, weight: 760, align: 'right', color: CLUSTER[c], halo: false });
+          symbol(g, 'b', String(c + 1), xR + labW - 14, protoY(c) + rh / 2 + 6, { size: 32, color: CLUSTER[c], align: 'right' });
           CF_PROTO[c].forEach((v, j) => {
             cell(g, colX(xR, j), protoY(c), rgb(mixRGB('#FFFFFF', CLUSTER[c], 0.08 + 0.13 * v)), 'rgba(0,0,0,0)');
             text(g, v.toFixed(1), colX(xR, j) + cw / 2, protoY(c) + rh / 2 + 9, { size: 28, weight: 700, align: 'center', color: C.ink, halo: false });
