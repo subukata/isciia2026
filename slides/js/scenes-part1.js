@@ -200,7 +200,7 @@ export default function part1(ctx) {
     { name: 'LRCM (Lingras)', params: () => lr, label: () => `$β = ${f2(lr[1])}$` },
     { name: 'PRCM (Peters)', params: () => pr, label: () => `$α = ${f2(pr[0])}$` },
     { name: 'GRCM (ours)', params: () => [grcm[0], grcm[1], 1], label: () => `$α = ${f2(grcm[0])}$ · $β = ${f2(grcm[1])}$` },
-    { name: 'ExRCM (ours)', params: () => ex, label: () => `$p$ ${ex[2].toFixed(1)} · $α$ ${ex[0].toFixed(1)} · $β$ ${ex[1].toFixed(1)}` },
+    { name: 'ExRCM (ours)', params: () => ex, label: () => `$p = ${ex[2].toFixed(1)}$ · $α = ${ex[0].toFixed(1)}$ · $β = ${ex[1].toFixed(1)}$` },
   ];
   const family = {
     id: 'family', steps: 4,

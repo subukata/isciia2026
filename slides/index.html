@@ -281,7 +281,7 @@
 
   /* ---- the rail: one segment per scene, no text */
   /* References: short (authors, venue, year), on the rail's row at its right end (not in the sentences). */
-  .ref { position: absolute; right: 6rem; top: 43.25rem; margin: 0; font: 500 1.4rem/1 var(--body); color: var(--muted); text-align: right; white-space: nowrap; }
+  .ref { position: absolute; right: 3rem; top: 43.25rem; margin: 0; font: 500 1.4rem/1 var(--body); color: var(--muted); text-align: right; white-space: nowrap; }
   /* The rail: short, and the same length on every slide (the reference and the slide number take the row's right end). */
   #rail { position: absolute; left: 3rem; width: 30rem; top: 43.5rem; height: .9rem; display: flex; gap: .8rem; z-index: 3; }
   .rail-part { display: flex; gap: .2rem; min-width: 0; }
@@ -489,7 +489,7 @@
   <h2 data-steps="0">FCM gives boundary data points degrees near 0.5</h2>
   <h2 data-steps="1,2,3">In RCM, a data point belongs to all relatively close clusters</h2>
   <div class="motive" data-steps="0"><p><b>Problem</b> FCM's degrees in $[0,1]$ are hard to interpret: near 0.5, we cannot tell where a data point belongs.</p><p><b>So we</b> let a data point between clusters belong to both.</p></div>
-    <p class="lead" data-steps="2">To let a data point belong to several clusters, RCM uses the upper membership $\overline{u}_{ci}$: 1 if data point $i$ belongs to cluster $c$.<br>Data point $i$ belongs to every cluster whose prototype is at most $\beta$ farther than the nearest one.</p>
+    <p class="lead" data-steps="2">To let a data point belong to several clusters, RCM uses the upper membership $\overline{u}_{ci}$.<br>Data point $i$ belongs to every cluster at most $\beta$ farther than the nearest one.</p>
   <p class="lead" data-steps="3">A data point in two clusters counts ½ in each; each prototype is the weighted mean.</p>
       <div class="eqband tall" data-steps="2">$$\underbrace{\overline{u}_{ci}=1}_{i\text{ belongs to }c}\iff d_{ci}\le \underbrace{\class{t-dmin}{d_i^{\min}}}_{\text{nearest}}+\underbrace{\class{t-beta}{\beta}}_{\text{slack}}$$</div>
   <div class="eqband tall" data-steps="3">$$\underbrace{\tilde{u}_{ci}=\frac{\overline{u}_{ci}}{\sum_k\overline{u}_{ki}}}_{\substack{\text{normalized}\\\text{membership}}}$$ $$\underbrace{\bm{b}_c=\frac{\sum_i\tilde{u}_{ci}\,\bm{x}_i}{\sum_i\tilde{u}_{ci}}}_{\text{weighted mean}}$$</div>
@@ -500,7 +500,7 @@
   <p class="cap" data-steps="3"><span class="next">→ Two classic rules set this threshold differently.</span></p>
   <div class="ctrl"><label class="param">$\beta$ <input type="range" id="rg-beta" min="0" max="1.2" step="0.05" value="0.35"><output for="rg-beta"></output></label><button type="button" class="btn" id="rg-run">Run</button></div>
   <p class="ref">Pawlak, 1982 · Lingras and West, 2004</p>
-  <aside class="notes"><p>This slide shows / that FCM gives boundary data points degrees near 0.5.<br>But FCM's degrees between 0 and 1 / are hard to interpret.<br>Near 0.5, / we cannot tell where a data point belongs.<br><b>So we</b> let a data point between clusters / belong to both.<br>The ringed data points / have such degrees.</p><p>(→) In rough c-means, or RCM, / a data point belongs to all <b>relatively close</b> clusters.<br>RCM builds on rough set theory, / a theory of sets with <b>certain</b> and <b>possible</b> members.<br>On the left, / FCM gives every data point a degree.<br>On the right, / RCM gives each cluster certain and possible members.<br>So RCM handles <b>overlapping membership</b>.<br>And it extracts a <b>clear boundary</b>: / the data points in both clusters, / shown as diamonds.</p><p>(→) To let a data point belong to several clusters, / RCM uses the upper membership, u-bar_ci.<br>It is 1 / if data point i belongs to cluster c.<br>And i belongs to every cluster / whose prototype is at most beta farther / than the nearest one.<br>d_ci is the distance from i to prototype c, / and d_i min is the distance to the nearest one.<br>The solid circle shows d_i min, / and the dashed circle adds beta to it.<br>So beta is the slack.<br>This boundary data point is shown up close.<br>As beta changes, / i belongs to both clusters, / or to one cluster only.</p><p>(→) A data point in two clusters / counts one half in each, / and each prototype is the weighted mean.<br>The dashed lines / give one half to each of its clusters.<br>But two classic rules / set this threshold differently.</p></aside>
+  <aside class="notes"><p>This slide shows / that FCM gives boundary data points degrees near 0.5.<br>But FCM's degrees between 0 and 1 / are hard to interpret.<br>Near 0.5, / we cannot tell where a data point belongs.<br><b>So we</b> let a data point between clusters / belong to both.<br>The ringed data points / have such degrees.</p><p>(→) In rough c-means, or RCM, / a data point belongs to all <b>relatively close</b> clusters.<br>RCM builds on rough set theory, / a theory of sets with <b>certain</b> and <b>possible</b> members.<br>On the left, / FCM gives every data point a degree.<br>On the right, / RCM gives each cluster certain and possible members.<br>So RCM handles <b>overlapping membership</b>.<br>And it extracts a <b>clear boundary</b>: / the data points in both clusters, / shown as diamonds.</p><p>(→) To let a data point belong to several clusters, / RCM uses the upper membership, u-bar_ci.<br>Data point i belongs to every cluster / at most beta farther than the nearest one.<br>For those clusters, / u-bar_ci is 1.<br>d_ci is the distance from i to prototype c, / and d_i min is the distance to the nearest one.<br>The solid circle shows d_i min, / and the dashed circle adds beta to it.<br>So beta is the slack.<br>This boundary data point is shown up close.<br>As beta changes, / i belongs to both clusters, / or to one cluster only.</p><p>(→) A data point in two clusters / counts one half in each, / and each prototype is the weighted mean.<br>The dashed lines / give one half to each of its clusters.<br>But two classic rules / set this threshold differently.</p></aside>
 </section>
 
 <section class="scene" data-id="family" data-part="1" data-title="GRCM and ExRCM generalize the RCM thresholds">
@@ -583,10 +583,10 @@
     <p class="lead" data-steps="1">The update rules of the labels and the prototypes are derived by minimizing $J$.<br>Labels go by the smaller cost $q$; prototypes are $\mu$-weighted means.</p>
   <div class="eqband tall" data-steps="0">$$J=\sum_c\sum_i \underbrace{\class{t-mu}{\mu_{ci}}}_{\substack{\text{rough membership,}\\\text{in place of }u}}\|\bm{x}_i-\bm{b}_c\|^2$$</div>
     <div class="eqband tall small-gap" data-steps="1">$$q_{cj}=\underbrace{\sum_i P_{ij}\|\bm{x}_i-\bm{b}_c\|^2}_{\substack{\bm{b}_c\text{'s error over the data points}\\\text{with }j\text{ in their neighborhoods}}}$$ $$\underbrace{\bm{b}_c=\frac{\sum_i \mu_{ci}\,\bm{x}_i}{\sum_i \mu_{ci}}}_{\mu\text{-weighted mean}}$$</div>
-  <p class="cap" data-steps="1"><span class="pt">$P_{ij}$: the weight of $j$ in $\mathcal{N}_i$ ($1/|\mathcal{N}_i|$, or 0 outside).</span><span class="pt">Each update minimizes $J$, so $J$ never increases.</span></p>
+  <p class="cap" data-steps="1"><span class="pt">$P_{ij}=1/|\mathcal{N}_i|$ if $j\in\mathcal{N}_i$, else 0.</span><span class="pt">Each update minimizes $J$, so $J$ never increases.</span></p>
   <div class="ctrl"><label class="param">radius <input type="range" id="ob-radius" min="0.15" max="0.8" step="0.01" value="0.30"><output for="ob-radius"></output></label><button type="button" class="btn" id="ob-run">Run</button></div>
   <p class="ref">Ubukata, Notsu, Honda, Inf. Sci., 2021</p>
-  <aside class="notes"><p>This slide shows / that RMCM2 puts rough membership into one objective.<br>We proposed rough-membership-based rough clustering, / RMCM2.<br>RMCM2 minimizes the k-means objective / with rough membership in place of the crisp assignment.<br>In J, / mu, the rough membership, / takes the place of u.<br>The lines are the errors in J, / weighted by mu.<br>The dashed circle is the neighborhood / of one data point.<br>Its neighbors are in both clusters, / so its error goes to <b>both</b> prototypes.<br>As delta changes, / the neighborhood and the lines change with it.</p><p>(→) The update rules of the labels and the prototypes / are derived by minimizing J.<br>Labels go by the smaller cost q, / and prototypes are mu-weighted means.<br>q_cj is b_c's error / over the data points with j in their neighborhoods.<br>The dashed circle / shows these data points.<br>P_ij is the weight of j in N_i: / one over the size of N_i, / or 0 outside.<br>Here, / j goes to the cluster / with the smaller q.<br>Each update minimizes J, / so J <b>never increases</b>.</p></aside>
+  <aside class="notes"><p>This slide shows / that RMCM2 puts rough membership into one objective.<br>We proposed rough-membership-based rough clustering, / RMCM2.<br>RMCM2 minimizes the k-means objective / with rough membership in place of the crisp assignment.<br>In J, / mu, the rough membership, / takes the place of u.<br>The lines are the errors in J, / weighted by mu.<br>The dashed circle is the neighborhood / of one data point.<br>Its neighbors are in both clusters, / so its error goes to <b>both</b> prototypes.<br>As delta changes, / the neighborhood and the lines change with it.</p><p>(→) The update rules of the labels and the prototypes / are derived by minimizing J.<br>Labels go by the smaller cost q, / and prototypes are mu-weighted means.<br>q_cj is b_c's error / over the data points with j in their neighborhoods.<br>The dashed circle / shows these data points.<br>P_ij is one over the size of N_i / if j is in N_i, / and 0 otherwise.<br>Here, / j goes to the cluster / with the smaller q.<br>Each update minimizes J, / so J <b>never increases</b>.</p></aside>
 </section>
 
 <section class="scene" data-id="cfex" data-part="2" data-title="Recommendation uses overlapping clusters">
@@ -606,6 +606,7 @@
   <span class="ours-tag">Our concept</span>
   <p class="lead" data-steps="0">Overlaps could also show how clusters connect: the shape (topology) of the data.</p>
   <p class="cap" data-steps="0">With ExRCM or RMCM2, shared data points glue neighboring clusters into a graph: here a loop.</p>
+  <p class="ref">Okimoto et al., 2026 · Ubukata, Notsu, Honda, Inf. Sci., 2021</p>
   <aside class="notes"><p>Finally, / overlapping clusters / could form a prototype graph.<br>This is a concept / that we are working toward.<br>Overlaps could also show how clusters connect: / the shape, or topology, of the data.<br>This new example is a ring, / with ExRCM and 8 prototypes.<br>With ExRCM or RMCM2, / shared data points glue neighboring clusters into a graph.<br>Here, / the graph is a <b>loop</b>.<br>[End of Part 2]</p></aside>
 </section>
 
@@ -613,8 +614,8 @@
 
 <section class="scene" data-id="toc3" data-theme="dark" data-part="3" data-title="Outline · Part 3">
   <h2>Part 3 · Topographic Mapping</h2>
-  <p class="cap" data-steps="0"><span class="pt">Part 3 maps high-dimensional data to a low-dimensional representation, with prototypes kept in order: topographic mapping.</span><span class="pt">From the SOM to SOM-OLP, with one objective.</span></p>
-  <aside class="notes"><p>[Part 3 · 7.5 min]<br>Part 3 is topographic mapping.<br>It maps high-dimensional data / to a low-dimensional representation, / with prototypes kept in order.<br>We go from the SOM to SOM-OLP, / with one objective.</p></aside>
+  <p class="cap" data-steps="0"><span class="pt">Part 3 lays out high-dimensional data on a low-dimensional map.</span><span class="pt">From the SOM to SOM-OLP, with one objective.</span></p>
+  <aside class="notes"><p>[Part 3 · 7.5 min]<br>Part 3 is topographic mapping.<br>It lays out high-dimensional data / on a low-dimensional map, / with prototypes kept in order.<br>We go from the SOM to SOM-OLP, / with one objective.</p></aside>
 </section>
 
 
@@ -630,7 +631,7 @@
   <h2>The SOM orders prototypes on a lattice</h2>
   <p class="lead" data-steps="0">1. An input $\bm{x}$ comes in.<br>2. Its nearest prototype is found: the winner $w$.<br>3. The winner and the nodes near it in the latent space move toward $\bm{x}$ together.</p>
   <div class="eqband tall" data-steps="0">$$\underbrace{\bm{b}_c}_{\text{node }c}\leftarrow\bm{b}_c+\underbrace{\alpha}_{\text{rate}}\,\underbrace{h(c,w)}_{\substack{w\text{: the winner,}\\\text{nearest to }\bm{x}}}\,\underbrace{(\bm{x}-\bm{b}_c)}_{\substack{\text{toward}\\\text{the input}}}$$ $$\underbrace{h(c,w)=e^{-\|\bm{r}_c-\bm{r}_w\|^2/2\sigma^2}}_{\substack{\text{pulls the winner's neighbors too}\\\bm{r}_c\text{: node }c\text{ on the lattice; }\sigma\text{: reach}}}$$</div>
-  <p class="lead" data-steps="1">Each node moves to a weighted mean of all data points.</p>
+  <p class="lead" data-steps="1">In batch SOM, each node moves to a weighted mean of all data points.</p>
   <div class="eqband tall" data-steps="1">$$\bm{b}_c=\frac{\sum_i h(c,w_i)\,\bm{x}_i}{\sum_i h(c,w_i)}$$ $$\underbrace{w_i=\mathop{\arg\min}_k\|\bm{x}_i-\bm{b}_k\|^2}_{\text{the winner of data point }i}$$</div>
   <p class="cap" data-steps="0">The shading on the right is $h(c,w)$: largest at the winner, less for its lattice neighbors.</p>
   <p class="cap" data-steps="1">On the lattice, a data point can only sit on its winner node.<span class="next">→ Can each data point have its own position on the lattice?</span></p>
@@ -654,6 +655,7 @@
   <p class="lead" data-steps="0">We move one input $\bm{x}$ across the data space and watch where it lands on the lattice.</p>
   <p class="cap" data-steps="0"><b class="label">Notice</b> The SOM winner jumps from node to node; the latent position $\bm{v}$ moves smoothly.<span class="next">→ How is $\bm{v}$ found?</span></p>
   <div class="ctrl"><label class="param">$\lambda$ <input type="range" id="pr-lam" min="0.01" max="0.3" step="0.01" value="0.08"><output for="pr-lam"></output></label><label class="param">$\gamma$ <input type="range" id="pr-gamma" min="0" max="2" step="0.05" value="0.2"><output for="pr-gamma"></output></label></div>
+  <p class="ref">Ubukata, Notsu, Honda, IJCNN 2026</p>
   <aside class="notes"><p>SOM-OLP moves a data point / smoothly on the lattice.<br>We move one input, x, / across the data space, / and watch where it lands on the lattice.<br>[Drag x.]<br>The SOM winner jumps from node to node, / but the latent position v moves smoothly.<br>So how is v found?</p></aside>
 </section>
 
@@ -671,6 +673,8 @@
     <p class="cap" data-steps="1"><span class="pt">$\bm{r}_c$: node $c$'s place on the lattice; $\gamma$ and $\lambda$ weigh the lattice distance and the entropy.</span><span class="pt">$q_{ci}$: the data fit plus the lattice distance, the cost of node $c$ for data point $i$.</span></p>
     <p class="cap" data-steps="2"><span class="pt">No block increased $J$ here.</span><span class="pt">$O(nC)$ per iteration ($n$ data points, $C$ nodes); Heskes's energy: $O(nC^2)$.</span></p>
   <div class="ctrl"><label class="param">$\lambda$ <input type="range" id="bc-lam" min="0.05" max="1" step="0.05" value="0.3"><output for="bc-lam"></output></label><label class="param">$\gamma$ <input type="range" id="bc-gamma" min="0" max="10" step="0.5" value="3"><output for="bc-gamma"></output></label></div>
+  <p class="ref" data-steps="0,1">Ubukata, Notsu, Honda, IJCNN 2026</p>
+  <p class="ref" data-steps="2">Ubukata, Notsu, Honda, IJCNN 2026 · Heskes, 1999</p>
   <aside class="notes"><p>SOM-OLP adds one variable: / the latent position.<br>We have the SOM's prototypes b / and memberships u, / which are soft winners.<br>And we add a new variable: / each data point's latent position, v_i.<br>We find all three by minimizing one objective, / so that no update makes it worse.<br>The memberships u link the data space / and the latent space.</p><p>(→) So SOM-OLP minimizes one objective.<br>The objective has three terms: / data fit, / lattice distance of each position v, / and entropy of u.<br>r_c is node c's place / on the lattice.<br>Gamma and lambda weigh / the lattice distance and the entropy.<br>q_ci, the data fit plus the lattice distance, / is the cost of node c for data point i.</p><p>(→) SOM-OLP minimizes J in closed form, / one block at a time.<br>We fix two blocks of variables / and minimize over the third.<br>u is a softmax, / v is a mean of nodes, / and b is a mean of data.<br>No block increased J here.<br>One iteration costs order n C, / with n data points and C nodes.<br>Heskes's energy, / in contrast, / costs order n C squared.</p></aside>
 </section>
 
@@ -679,6 +683,7 @@
   <span class="ours-tag">Ours</span>
   <p class="lead" data-steps="0">We checked SOM-OLP on real data: Iris, 150 flowers with 4 features.</p>
   <p class="cap" data-steps="0"><b class="label">Check</b> SOM-OLP places flowers between the nodes; the species keep their order.</p>
+  <p class="ref">Ubukata, Notsu, Honda, IJCNN 2026</p>
   <aside class="notes"><p>Here is Iris / on a 16 by 16 map.<br>We checked SOM-OLP on real data: / Iris, flowers with 4 features.<br>SOM-OLP places flowers between the nodes, / and the species keep their order.<br>The parameters are the ones tuned for Iris / in the public implementation.<br>So this shows the layout, / not better performance.</p></aside>
 </section>
 
@@ -687,6 +692,7 @@
   <span class="ours-tag">Ours</span>
   <p class="lead" data-steps="0">Then on 64-dimensional data: Digits, 1,797 images of 8 × 8 pixels.</p>
   <p class="cap" data-steps="0"><b class="label">Check</b> With SOM-OLP, each digit gathers in its own region.</p>
+  <p class="ref">Ubukata, Notsu, Honda, IJCNN 2026</p>
   <aside class="notes"><p>Here is Digits / on a 16 by 16 map.<br>The data are 64-dimensional: / images of 8 by 8 pixels.<br>With SOM-OLP, / each digit gathers in its own region.<br>[Hover over a data point to show its image.]<br>[End of Part 3]</p></aside>
 </section>
 
@@ -736,7 +742,8 @@
   <p class="cap" data-steps="2">On the same surface and lattice, the energy-based winner can differ from the nearest node: for <span id="hk-count">363</span> of 800 data points (with $h$ of width $\sigma$ = <span id="hk-sig">1</span>).</p>
   <p class="cap" data-steps="3">Every candidate's term sums over all nodes: $O(nC^2)$ work per iteration.</p>
   <div class="ctrl"><label class="param">$\sigma$ <input type="range" id="hk-sigma" min="0.25" max="2" step="0.25" value="1"><output for="hk-sigma"></output></label></div>
-  <aside class="notes"><p>(Supplement, for questions)<br>SOM updates are rules / that decrease no known function.<br><b>So we want</b> SOM learning / to minimize one energy, / as k-means does.<br>Here is batch SOM on the surface.</p><p>(→) Heskes's SOM / minimizes one energy.<br>We choose each winner / by how well its whole lattice neighborhood fits the data point.<br>Then one energy is minimized.<br>On the left is a data point x on the surface.<br>On the right, / the lattice shows its nearest node and its winner.</p><p>(→) One energy covers all the errors, / and each winner is chosen / to make its own term smallest.<br>h of c and w_i / is large near the winner.<br>On the same surface and lattice, / the energy-based winner can differ from the nearest node.<br>Here, / it differs for many data points, / with h of width sigma equal to 1.</p><p>(→) Every candidate's term / sums over all nodes.<br>So each iteration needs / order n C squared work.<br>SOM-OLP, / in contrast, / keeps one objective / without this cost.</p></aside>
+  <p class="ref">Heskes, 1999</p>
+  <aside class="notes"><p>(Supplement, for questions)<br>SOM updates are rules / that decrease no known function.<br><b>So we want</b> SOM learning / to minimize one energy, / as k-means does.<br>Here is batch SOM on the surface.</p><p>(→) Heskes's SOM / minimizes one energy.<br>Heskes chooses each winner / by how well its whole lattice neighborhood fits the data point.<br>Then one energy is minimized.<br>On the left is a data point x on the surface.<br>On the right, / the lattice shows its nearest node and its winner.</p><p>(→) One energy covers all the errors, / and each winner is chosen / to make its own term smallest.<br>h of c and w_i / is large near the winner.<br>On the same surface and lattice, / the energy-based winner can differ from the nearest node.<br>Here, / it differs for many data points.</p><p>(→) Every candidate's term / sums over all nodes.<br>So each iteration needs / order n C squared work.<br>SOM-OLP, / in contrast, / keeps one objective / without this cost.</p></aside>
 </section>
 
 
