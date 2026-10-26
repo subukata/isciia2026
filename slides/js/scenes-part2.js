@@ -6,7 +6,7 @@
  */
 import {
   A, ub, C, FONT, XA, START, BOUNDS_A, RADIUS, leftOf, hoodOf, kmeansA, lrcmA, rscmA, rmcmA, rmcm2A, run, memo, R, fit,
-  pointItems, protoItems, hard, boundaryStyle, diverging, text, labelWidth, plate, fractionPlate, ring, line, arrow, membershipLegend, slider, onClick, f2, withMotive, withIdea, swing, live, born,
+  pointItems, protoItems, hard, boundaryStyle, diverging, text, labelWidth, labelSize, plate, fractionPlate, ring, line, arrow, membershipLegend, slider, onClick, f2, withMotive, withIdea, swing, live, born,
   CLUSTER, mixRGB, css, cycle, newExample, remap, symbol,
 } from './common.js';
 
@@ -267,16 +267,28 @@ export default function part2(ctx) {
         // The errors of J, each weighted by μ: a line from every point to each prototype, as strong as its μ. A point between
         // the clusters sends its error to both; the others, to one. The radius δ swings slowly (the labels and the prototypes
         // stay): μ, and with it the lines and the colors, follow; the larger δ, the more points are shared.
-        let dl = r, mu = state.mu;
+        // One point shows where its μ comes from: its neighborhood, dashed at the smooth radius rr, its errors drawn strong,
+        // each as wide as the share of its neighbors in that cluster, and the counts under the circle. The point: pure with at
+        // least 3 neighbors at the swing's smallest δ, mixed at its largest (the most balanced at the slider's δ), so that the
+        // swing takes it from one cluster to both.
+        const lo = Math.max(0.15, r - 0.12), hi = r + 0.15, l0 = leftOf(state.B), hoodLo = hoodOf(lo);
+        const muLo = A.roughMembership(hoodLo, state.labels, 2), muHi = A.roughMembership(hoodOf(hi), state.labels, 2);
+        const turns = XA.map((_, i) => i).filter(i => hoodLo[i].length >= 3 && muLo[i * 2] % 1 === 0 && muHi[i * 2] % 1 !== 0)
+          .sort((a, b) => Math.abs(fin.mu[a * 2 + l0] - 0.5) - Math.abs(fin.mu[b * 2 + l0] - 0.5));
+        const focus = turns.length ? turns[0] : probe;
+        let dl = r, rr = r, mu = state.mu;
         live(ctx, dur + 300, () => {
-          const next = swing(Math.max(0.15, r - 0.12), r + 0.15, 10, r);
+          const next = swing(lo, hi, 10, r);
           return () => {
-            const q = Math.round(next() * 100) / 100;
+            rr = next();
+            const q = Math.round(rr * 100) / 100;
             if (q === dl) return;
             dl = q; mu = A.roughMembership(hoodOf(q), state.labels, 2);
             S.set(pointItems(XA, m, muStyle(mu, leftOf(state.B))), { dur: 240, keep: true });
           };
         });
+        // The focus point's neighbors at the smooth radius: the circle, the strong lines and the counts always agree.
+        const near = () => XA.map((_, j) => j).filter(j => Math.hypot(XA[j][0] - XA[focus][0], XA[j][1] - XA[focus][1]) <= rr);
         S.under = (g, st) => {
           const mm = st.map, l = leftOf(state.B), grow = born('ob:errors', { delay: 300, dur: 700 });
           state.B.forEach((b, c) => {
@@ -284,7 +296,25 @@ export default function part2(ctx) {
             XA.forEach((p, i) => { const v = mu[i * 2 + c]; if (v > 0) line(g, mm.map(p), Bc, { color: c === l ? C.blue : C.verm, lw: 1.6, alpha: 0.45 * v, grow }); });
           });
         };
-        S.over = g => plate(g, `Errors in $J$, weighted by $μ$ ($δ$ = ${dl.toFixed(2)})`, F.x + 4, F.y + 2);
+        S.over = (g, st) => {
+          plate(g, `Errors in $J$, weighted by $μ$ ($δ$ = ${dl.toFixed(2)})`, F.x + 4, F.y + 2);
+          const mm = st.map, l = leftOf(state.B), P = mm.map(XA[focus]), inside = near(), n = inside.length, R0 = rr * mm.k;
+          const a = inside.filter(j => state.labels[j] === l).length, show = born('ob:nb', { delay: 800, dur: 600 });
+          // Its errors over the points, each stopping short of its prototype's star.
+          const reach = born('ob:nblines', { delay: 1000, dur: 600 });
+          state.B.forEach((b, c) => {
+            const v = (c === l ? a : n - a) / n, Bc = mm.map(b), d = Math.hypot(Bc[0] - P[0], Bc[1] - P[1]);
+            const end = [Bc[0] - (Bc[0] - P[0]) * 18 / d, Bc[1] - (Bc[1] - P[1]) * 18 / d];
+            if (v > 0) line(g, P, end, { color: c === l ? C.blue : C.verm, lw: 2.5 + 5 * v, grow: reach });
+          });
+          ring(g, ...P, R0, { color: C.hl, lw: 3, dash: [12, 9], grow: show });
+          ring(g, ...P, 14, { lw: 3.4, grow: born('ob:nbpoint', { delay: 800, dur: 300 }) });
+          // Under the circle (over it when the figure ends first), kept inside the figure.
+          const s = a === n || a === 0 ? `$𝒩ᵢ$: all ${n} in cluster ${a ? 1 : 2}` : `$𝒩ᵢ$: ${a} in cluster 1, ${n - a} in cluster 2`;
+          const w = labelWidth(g, s, 32) + 28, h = labelSize(32) * 1.5, x = Math.max(F.x + w / 2, Math.min(F.x + F.w - w / 2, P[0]));
+          const y = P[1] + R0 + 16 + h <= F.y + F.h ? P[1] + R0 + 16 : P[1] - R0 - 16 - h;
+          g.save(); g.globalAlpha *= show; plate(g, s, x, y, { size: 32, align: 'center' }); g.restore();
+        };
         return;
       }
       // The update of the labels, for one point j: the points whose neighborhoods contain j (those within the radius of j,
