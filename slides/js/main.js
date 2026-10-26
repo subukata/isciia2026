@@ -143,7 +143,7 @@ function show(si, step, { instant = false } = {}) {
   const lit = s.lit ? s.lit[Math.min(step, s.lit.length - 1)] : s.part >= 0 && s.part <= 3 ? [s.part] : [];
   for (const chip of document.querySelectorAll('.part-chip')) chip.classList.toggle('lit', lit.includes(Number(chip.dataset.k)));
   $('parts').hidden = s.id === 'title' && step === 0;
-  // The slide number, top right (none on the title): the scene's number, as in the hash and "number + Enter".
+  // The slide number, bottom right (none on the title): the scene's number, as in the hash and "number + Enter".
   $('pageno').textContent = s.id === 'title' ? '' : String(si + 1);
   split = s.split(step);
   root.classList.toggle('split', split);
@@ -180,10 +180,6 @@ function show(si, step, { instant = false } = {}) {
     }
   }
   updateRail();
-  // A slide with a reference: the rail leaves the row's right end to it, as wide as the reference (--ref-w).
-  const ref = s.el.querySelector('.ref');
-  root.classList.toggle('with-ref', !!ref);
-  if (ref) root.style.setProperty('--ref-w', `${ref.getBoundingClientRect().width * 80 / $('frame').getBoundingClientRect().width}rem`);
   fitWords(s);
   try { history.replaceState(null, '', step ? `#${si + 1}.${step + 1}` : `#${si + 1}`); } catch (e) {}
   if (!sameScene && si > 0 && clock.start === null) clock.start = Date.now();
@@ -532,6 +528,11 @@ const [s0, t0] = parseHash();
 const DEFAULT_LOOK = '2026';
 function setLook(look) { document.documentElement.dataset.look = look; applyLook(look); outlineLook(look); }
 setLook(new URLSearchParams(location.search).get('look') ?? DEFAULT_LOOK);
+// The talk site's QR code, small at the top right of the slides (index.html: #corner-qr); the address is data-site of About me.
+{
+  const box = $('corner-qr'), site = document.querySelector('[data-id="about"]')?.dataset.site?.trim();
+  if (box && site && window.qrcode) { const q = window.qrcode(0, 'M'); q.addData(site); q.make(); box.innerHTML = q.createSvgTag({ cellSize: 4, margin: 0, scalable: true }); box.href = site; }
+}
 show(PRESENTER ? 0 : s0, PRESENTER ? 0 : t0, { instant: PRESENTER });
 // Once the equations exist, a scene that lights terms in its steps is shown again so the light lands.
 // A split step places its figure under its equation, so it is drawn again once the equation has its size.

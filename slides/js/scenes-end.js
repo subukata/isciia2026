@@ -13,7 +13,7 @@ export default function closing(ctx) {
   const PARTS3 = [
     { title: 'Part 1 · ExRCM', says: 'Unified the RCM thresholds; one exponent shapes the clusters flexibly.' },
     { title: 'Part 2 · RMCM2', says: 'Handles uncertainty through neighborhoods, inside one objective.' },
-    { title: 'Part 3 · SOM-OLP', says: 'Each point gets its own latent position on the map, under one objective.' },
+    { title: 'Part 3 · SOM-OLP', says: 'Each data point gets its own latent position on the map, under one objective.' },
   ];
   const SAY = 36, LINE = 50;
   /** The words of s in lines no wider than w at the sentences' size. */
@@ -52,5 +52,11 @@ export default function closing(ctx) {
       };
     },
   };
-  return [principle];
+  // The end of the talk, before the supplement: thanks, the speaker and the talk site's code (index.html).
+  const end = {
+    id: 'end', steps: 1,
+    narrowAspect: () => 0.45,
+    show(ctx, step, { dur }) { M.hide(); S.set([], { dur }); fillSiteQR(ctx, 'end'); },
+  };
+  return [principle, end];
 }

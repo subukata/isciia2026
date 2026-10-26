@@ -37,15 +37,18 @@ export default function part2(ctx) {
         return { hood, share, lower, nLower, nBoundary: XA.length - nLower };
       };
       let rq = RADIUS, cur = at(rq);
-      // The point in focus: mixed at the starting radius, with at least 5 neighbors, and at least 0.12 from the nearest point of
-      // the other cluster (the most balanced such point), so that a smaller radius makes its neighborhood pure.
+      // The point in focus: mixed at the starting radius, with at least 5 neighbors, and still holding several neighbors (4 or
+      // more, itself included) just inside the nearest point of the other cluster (the most balanced such point): so a smaller
+      // radius makes its neighborhood pure while it holds several data points, not only the point itself.
       const otherDist = i => Math.min(...XA.map((p, j) => (km.labels[j] !== km.labels[i] ? Math.hypot(p[0] - XA[i][0], p[1] - XA[i][1]) : Infinity)));
+      const pureCount = i => { const r = 0.95 * otherDist(i); return XA.filter(p => Math.hypot(p[0] - XA[i][0], p[1] - XA[i][1]) <= r).length; };
       const mixed = XA.map((_, i) => i).filter(i => cur.share[i] > 0 && cur.share[i] < 1 && cur.hood[i].length >= 5);
-      const far = mixed.filter(i => otherDist(i) >= 0.12);
-      const focus = far.length ? far.sort((a, b) => Math.abs(cur.share[a] - 0.5) - Math.abs(cur.share[b] - 0.5))[0] : mixed.sort((a, b) => otherDist(b) - otherDist(a))[0];
+      const several = mixed.filter(i => pureCount(i) >= 4);
+      const focus = several.length ? several.sort((a, b) => Math.abs(cur.share[a] - 0.5) - Math.abs(cur.share[b] - 0.5))[0] : mixed.sort((a, b) => pureCount(b) - pureCount(a))[0];
       const c = XA[focus], zoom = step === 0;
-      // The radius swings down past the nearest point of the other cluster: there the neighborhood in focus is pure (certain).
-      const lo = Math.min(0.2, 0.75 * otherDist(focus));
+      // The radius swings down to just inside the nearest point of the other cluster: there the neighborhood in focus is pure
+      // (certain), and still holds several data points.
+      const lo = 0.95 * otherDist(focus);
       const m = S.view(zoom ? [c[0] - 1.1, c[0] + 1.1, c[1] - 0.62, c[1] + 0.62] : BOUNDS_A, F, dur);
       const items = () => pointItems(XA, m, i => {
         if (zoom) return { ...hard(km.labels[i] !== left), r: 10 };
@@ -65,7 +68,7 @@ export default function part2(ctx) {
           // The neighborhood in focus at the smooth radius: the circle and the points marked inside it always agree.
           const inside = XA.map((_, j) => j).filter(j => Math.hypot(XA[j][0] - c[0], XA[j][1] - c[1]) <= rr);
           const P = mm.map(c), n = inside.length, a = inside.filter(j => km.labels[j] === left).length;
-          plate(g, 'One point, up close', F.x + 4, F.y + 2);
+          plate(g, 'One data point, up close', F.x + 4, F.y + 2);
           const members = born('rs:members', { delay: 700, dur: 400 });
           ring(g, ...P, rr * mm.k, { color: C.hl, lw: 4, dash: [12, 9], grow: born('rs:hood', { delay: 200, dur: 700 }) });
           for (const j of inside) ring(g, ...mm.map(XA[j]), 20, { color: C.hl, lw: 3, grow: members });
@@ -78,7 +81,7 @@ export default function part2(ctx) {
           return;
         }
         if (step === 1) {
-          plate(g, `Lower approximations: ${nLower} certain points`, F.x + 4, F.y + 2);
+          plate(g, `Lower approximations: ${nLower} certain data points`, F.x + 4, F.y + 2);
           // One certain point of each cluster, with its neighborhood inside the cluster.
           for (const side of [left, 1 - left]) {
             const i = XA.map((_, k) => k).filter(k => lower[k] && km.labels[k] === side && hood[k].length >= 4).sort((p, q) => A.sqd(XA[p], km.B[side]) - A.sqd(XA[q], km.B[side]))[0];
@@ -86,7 +89,7 @@ export default function part2(ctx) {
           }
           return;
         }
-        plate(g, `Boundary: ${nBoundary} points with mixed neighborhoods`, F.x + 4, F.y + 2);
+        plate(g, `Boundary: ${nBoundary} data points with mixed neighborhoods`, F.x + 4, F.y + 2);
       };
     },
   };
@@ -127,7 +130,7 @@ export default function part2(ctx) {
       M.show({ name: 'RCM, β = 0.35', rule: 'Rule-based updates' });
       S.over = (g, st) => {
         const mm = st.map, P = mm.map(c), n = hood[focus].length;
-        plate(g, 'One boundary point and its neighborhood, up close', F.x + 4, F.y + 2);
+        plate(g, 'One boundary data point and its neighborhood, up close', F.x + 4, F.y + 2);
         const members = born('dg:members', { delay: 700, dur: 400 });
         ring(g, ...P, RADIUS * mm.k, { lw: 3.4, dash: [12, 9], grow: born('dg:hood', { delay: 200, dur: 700 }) });
         for (const j of hood[focus]) if (j !== focus) ring(g, ...mm.map(XA[j]), 20, { color: C.hl, lw: 3.4, grow: members });
@@ -189,10 +192,10 @@ export default function part2(ctx) {
       });
       S.over = (g, st) => {
         const mm = st.map, i = grHover >= 0 ? grHover : zoom ? probe : -1;
-        if (zoom) plate(g, 'One point, up close', F.x + 4, F.y + 2);
+        if (zoom) plate(g, 'One data point, up close', F.x + 4, F.y + 2);
         else {
-          plate(g, `Certain: ${XA.length - mixed} points`, pa.x, pa.y - 6);
-          plate(g, `Boundary: ${mixed} points`, pb.x, pb.y - 6);
+          plate(g, `Certain: ${XA.length - mixed} data points`, pa.x, pa.y - 6);
+          plate(g, `Boundary: ${mixed} data points`, pb.x, pb.y - 6);
           g.save(); g.globalAlpha *= born('gr:legend', { delay: 300 }); membershipLegend(g, pb.x + pb.w - 380, pb.y + pb.h - 40, 380, 'rough membership $μ₁$'); g.restore();
           return;
         }
@@ -202,7 +205,7 @@ export default function part2(ctx) {
         const P = mm.map(XA[i]), a = inside.filter(j => km.labels[j] === left).length, n = inside.length;
         ring(g, ...P, rr * mm.k, { color: step === 0 ? C.hl : C.ink, lw: step === 0 ? 4 : 3, dash: [12, 9], grow: born('gr:hood' + i, { delay: 150, dur: 600 }) });
         ring(g, ...P, zoom ? 22 : 14, { lw: 3.4, grow: born('gr:point' + i, { dur: 300 }) });
-        if (step === 0) text(g, `$𝒩ᵢ$: ${n} points`, P[0] + rr * mm.k + 16, P[1] - 10, { size: 34, weight: 700, color: C.hl });
+        if (step === 0) text(g, `$𝒩ᵢ$: ${n} data points`, P[0] + rr * mm.k + 16, P[1] - 10, { size: 34, weight: 700, color: C.hl });
         if (step === 1) for (const j of inside) {
           const Q = mm.map(XA[j]), one = km.labels[j] === left;
           ring(g, ...Q, 20, { color: C.hl, lw: 3, grow: born('gr:members' + i, { delay: 300 }) });
@@ -303,7 +306,7 @@ export default function part2(ctx) {
         }
         ring(g, ...P, 16, { lw: 3.6, grow: born('ob:point' + j, { dur: 300 }) });
         text(g, '$j$', P[0] + 18, P[1] + 8, { size: 36, weight: 700 });
-        plate(g, 'Dashed: the points with $j$ in their neighborhoods', F.x + 4, F.y + 2);
+        plate(g, 'Dashed: the data points with $j$ in their neighborhoods', F.x + 4, F.y + 2);
         // Both costs and the label on one plate, at the bottom left (clear of the prototypes and the lines).
         plate(g, `$q₁ⱼ$ = ${f2(q1)} ${q1 <= q2 ? '<' : '>'} $q₂ⱼ$ = ${f2(q2)}: $j$ to cluster ${c === l ? 1 : 2}`, F.x + 4, F.y + F.h - 58, { size: 32, color: col });
       };
@@ -478,8 +481,8 @@ export default function part2(ctx) {
         }
       };
       S.over = g => {
-        newExample(g, '240 points on a ring, ExRCM with 8 prototypes', F);
-        const titles = ['Overlapping clusters (ExRCM)', 'Shared points glue the pieces', 'A graph among prototypes'];
+        newExample(g, '240 data points on a ring, ExRCM with 8 prototypes', F);
+        const titles = ['Overlapping clusters (ExRCM)', 'Shared data points glue the pieces', 'A graph among prototypes'];
         rects.forEach((r, k) => {
           plate(g, titles[k], r.x + r.w / 2, r.y - 52, { align: 'center', color: k === 2 ? C.hl : C.title });
           if (k < 2 && !ctx.narrow()) arrow(g, [r.x + r.w + 12, r.y + r.h / 2], [r.x + r.w + 58, r.y + r.h / 2], { color: C.gray, lw: 3.4, head: 14, grow: born('gr:arrow' + k, { delay: 200 }) });
@@ -536,7 +539,7 @@ export default function part2(ctx) {
         ring(g, ...P, r, { color: C.hl, lw: 3.4, dash: [10, 8], grow: born('rsm:hoods', { delay: 300, dur: 700 }) });
         sideLabel(g, F, label, P, r, side, { color: C.hl, verdict, verdictColor: color });
       }
-      plate(g, 'Neighborhoods of three points', F.x + 4, F.y + 2);
+      plate(g, 'Neighborhoods of three data points', F.x + 4, F.y + 2);
     };
   };
 

@@ -207,7 +207,7 @@ export default function intro(ctx) {
       if (step >= 2) items.push(...pointItems(BLOBS, ms[2], i => ({ fill: CLUSTER[fin.labels[i]], shape: SHAPE[fin.labels[i]], r: 4.5, alpha: 0.3 }), 'k'), ...protoItems(fin.B, ms[2], { r: 28 }));
       S.set(items, { dur: Math.max(dur, 1000), stagger: forward ? (sp, k) => (k % 300) * 1.6 : null });
       S.over = g => {
-        ['300 points, no labels', 'Clustering: 3 groups', '300 points → 3 prototypes'].forEach((label, k) => { if (k <= step) plate(g, label, rects[k].x, rects[k].y - 56); });
+        ['Data points, no labels', 'Clustering: 3 groups', 'Data points → 3 prototypes'].forEach((label, k) => { if (k <= step) plate(g, label, rects[k].x, rects[k].y - 56); });
         if (step >= 2) fin.B.forEach(b => ring(g, ...ms[2].map(b), 34, { color: C.hl, lw: 3, grow: born('why:protos', { delay: 500 }) }));
         if (!ctx.narrow()) for (let k = 0; k < step; k++) arrow(g, [rects[k].x + rects[k].w + 14, rects[k].y + rects[k].h / 2], [rects[k + 1].x - 14, rects[k].y + rects[k].h / 2], { color: C.gray, lw: 5, head: 22, grow: born('why:arrow' + k, { dur: 500 }) });
       };
@@ -254,7 +254,7 @@ export default function intro(ctx) {
           line(g, P, Q, { color: C.hl, lw: 5, grow: born('km:d' + sample, { dur: 500 }) });
           text(g, 'squared distance', mid[0] + (right ? 20 : -20), mid[1] + (below ? 40 : -20), { size: 30, weight: 700, color: C.hl, align: right ? 'left' : 'right' });
           // The figure's label and the value of J, in the free space under the equation.
-          plate(g, 'k-means on 300 points, $C = 3$', F.x + 4, F.y + 2);
+          plate(g, 'k-means on 300 data points, $C = 3$', F.x + 4, F.y + 2);
           plate(g, `$J$ = ${J.toFixed(1)}`, F.x + 4, F.y + 60, { size: 44, color: C.hl });
         };
         return;
@@ -306,7 +306,7 @@ export default function intro(ctx) {
     S.over = (g, st) => {
       const grow = born('km:lines', { delay: 300, dur: 900 });
       BLOBS.forEach((p, i) => line(g, st.map.map(p), st.map.map(fin.B[fin.labels[i]]), { color: CLUSTER[fin.labels[i]], lw: 1.2, alpha: 0.35, grow }));
-      plate(g, 'Each point joined to its prototype', F.x + 4, F.y + 2);
+      plate(g, 'Each data point joined to its prototype', F.x + 4, F.y + 2);
     };
   };
 

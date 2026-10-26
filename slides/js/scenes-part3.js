@@ -84,8 +84,8 @@ export default function part3(ctx) {
       place(enter);
       S.under = g => { g.save(); g.globalAlpha *= born('maps:grid', { delay: 300, dur: 700 }); drawGrid(g, lm, 10, C.line); g.restore(); };
       S.over = g => {
-        plate(g, 'New example · 800 points in 3D', left.x, left.y - 56, { color: C.hl, border: '#BFCDE3' });
-        plate(g, 'A topographic map: the surface laid flat', right.x, right.y - 56);
+        plate(g, 'New example · 800 data points in 3D', left.x, left.y - 56, { color: C.hl, border: '#BFCDE3' });
+        plate(g, 'A 2D topographic map: the surface laid flat', right.x, right.y - 56);
         if (!ctx.narrow()) arrow(g, [left.x + left.w + 24, left.y + left.h / 2], [right.x - 24, right.y + right.h / 2], { lw: 5, head: 24, color: C.gray, grow: born('maps:arrow', { delay: 200 }) });
       };
       spin(ctx, enter + 50, place, dragRotate(() => place(0)));
@@ -233,7 +233,7 @@ export default function part3(ctx) {
       const side = Math.min(right.w, right.h), lm = latticeMap({ x: right.x, y: right.y, w: side, h: side }, 0.06), kx = right.x + side + 30;
       S.over = g => {
         const x = XS[hkPoint], r = heskesOf(x, sigma), hh = H_OF(sigma), n = 100;
-        plate(g, '800 points, batch SOM lattice', left.x, left.y - 50);
+        plate(g, '800 data points, batch SOM lattice', left.x, left.y - 50);
         plate(g, 'Lattice: 10 × 10 nodes', right.x, right.y - 50);
         // Data space: the point x, its nearest node and its energy-based winner.
         const X = sad.P(x), N = sad.P(B[r.near]), Wn = sad.P(B[r.win]);
@@ -264,7 +264,7 @@ export default function part3(ctx) {
         if (step === 1) {
           text(g, '$nC$² = 8,000,000', kx, right.y + 214, { size: 36, weight: 760, color: C.hl, halo: false });
           text(g, 'terms per iteration', kx, right.y + 254, { size: 28, weight: 600, halo: false });
-          text(g, '(800 points, 100 nodes)', kx, right.y + 290, { size: 28, weight: 600, color: C.muted, halo: false });
+          text(g, '(800 data points, 100 nodes)', kx, right.y + 290, { size: 28, weight: 600, color: C.muted, halo: false });
         }
       };
       // Any point of the surface can be the example.
@@ -593,7 +593,7 @@ export default function part3(ctx) {
         }
         if (bcTerm.has('ent')) plate(g, 'entropy: softness of u', F.x + 4, F.y + 2, { color: C.hl });
         if (bcTerm.has('lat')) plate(g, 'lattice distance of v to the nodes', F.x + 4, F.y + 2, { color: C.hl });
-        if (bcTerm.has('fit')) plate(g, 'data fit: points near their prototypes (data space)', F.x + 4, F.y + 2, { color: C.hl });
+        if (bcTerm.has('fit')) plate(g, 'data fit: data points near their prototypes (data space)', F.x + 4, F.y + 2, { color: C.hl });
       };
       if (step === 0) {
         showUpTo(0, dur);
@@ -782,7 +782,7 @@ export default function part3(ctx) {
       text(g, 'latent space: $v$', lRect.x + lRect.w / 2, lRect.y - 8, { size: 28, weight: 600, color: C.muted, align: 'center', halo: false });
       const kx = narrow ? F.x + 10 : F.x + F.w - 430, ky = narrow ? F.y + F.h - 150 : F.y + 140;
       // The new variable first, in our color; the two the SOM has too, muted.
-      [['v', 'each point\'s position on the lattice (new)', C.ours], ['u', 'memberships: soft winners', C.muted], ['b', 'prototypes, as in the SOM', C.muted]].forEach(([sym, words, color], k) => {
+      [['v', 'each data point\'s position on the lattice (new)', C.ours], ['u', 'memberships: soft winners', C.muted], ['b', 'prototypes, as in the SOM', C.muted]].forEach(([sym, words, color], k) => {
         text(g, sym, kx, ky + k * 60, { size: 38, weight: 700, italic: true, color, halo: false });
         text(g, words, kx + 40, ky + k * 60, { size: 30, weight: 700, color: k ? C.muted : C.ink, halo: false });
       });

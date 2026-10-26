@@ -33,8 +33,8 @@ export default function part1(ctx) {
           for (const sg of [1, -1]) line(g, mid, [mid[0] - sg * dy / n * 500, mid[1] + sg * dx / n * 500], { color: C.muted, lw: 2.4, dash: [10, 8], grow: cut });
           XA.forEach(p => { if (Math.abs(Math.sqrt(A.sqd(p, b1)) - Math.sqrt(A.sqd(p, b2))) <= 0.35) ring(g, ...mm.map(p), 14, { lw: 2.4, grow: near }); });
           // Parts 1 and 2 use these points; the plate says so once, as the data change from the introduction.
-          if (from !== 'fuzzy') newExample(g, '300 points in two overlapping groups', F);
-          else plate(g, 'k-means on 300 points, $C = 2$', F.x + 4, F.y + 2);
+          if (from !== 'fuzzy') newExample(g, '300 data points in two overlapping groups', F);
+          else plate(g, 'k-means on 300 data points, $C = 2$', F.x + 4, F.y + 2);
           // What the rings mark, under the ringed band (the boundary), not in the caption.
           const rg = XA.filter(p => Math.abs(Math.sqrt(A.sqd(p, b1)) - Math.sqrt(A.sqd(p, b2))) <= 0.35).map(p => mm.map(p));
           const lx = Math.min(Math.max(rg.reduce((a, q) => a + q[0], 0) / rg.length, F.x + 230), F.x + F.w - 230);
@@ -147,7 +147,7 @@ export default function part1(ctx) {
           plate(g, 'Dashed: ½ to each of its clusters', F.x + 4, F.y + 2, { color: C.hl });
           return;
         }
-        plate(g, 'One boundary point, up close', F.x + 4, F.y + 2);
+        plate(g, 'One boundary data point, up close', F.x + 4, F.y + 2);
         // The prototypes where they are drawn now (they glide between RCM's results), and β as it swings: no jumps.
         const p = XA[probe], P = mm.map(p), Bs = s.B.map((b, c) => S.pos('rb' + c) ?? mm.map(b));
         const d = Bs.map(Q => Math.hypot(Q[0] - P[0], Q[1] - P[1]) / mm.k), dmin = Math.min(...d), near = d.indexOf(dmin);
@@ -399,7 +399,7 @@ export default function part1(ctx) {
       const Rg = XA.map((p, i) => (unsure[i] ? st.map.map(p) : null)).filter(Boolean);
       const cx = Rg.reduce((a, q) => a + q[0], 0) / Rg.length, bottom = Math.max(...Rg.map(q => q[1]));
       const lx = Math.min(Math.max(cx, F.x + 220), F.x + F.w - 220), ly = Math.min(F.y + F.h - 48, bottom + 44);
-      text(g, `ringed: ${n} points`, lx, ly, { size: 30, weight: 700, color: C.hl, align: 'center' });
+      text(g, `ringed: ${n} data points`, lx, ly, { size: 30, weight: 700, color: C.hl, align: 'center' });
       text(g, 'with $u$ between 0.35 and 0.65', lx, ly + 36, { size: 30, weight: 700, color: C.hl, align: 'center' });
     };
   };
