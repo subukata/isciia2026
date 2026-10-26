@@ -175,7 +175,7 @@ export default function intro(ctx) {
         text(g, 'Take a photo!', qx + size / 2, F.y + 40, { size: 38, weight: 780, family: FONT.display, color: C.hl, align: 'center', halo: false });
         siteCode(g, qx, F.y + 74, size, url);
         // What the code opens (its address is long, and the code is enough).
-        text(g, 'The talk site:', qx + size / 2, F.y + 74 + size + 52, { size: 28, weight: 700, color: C.ink, align: 'center', halo: false });
+        text(g, 'Talk site:', qx + size / 2, F.y + 74 + size + 52, { size: 28, weight: 700, color: C.ink, align: 'center', halo: false });
         text(g, 'slides, papers, code', qx + size / 2, F.y + 74 + size + 90, { size: 28, weight: 600, color: C.muted, align: 'center', halo: false });
       };
       // The code and its words open the site: a mouse on the press, a finger on the lift (when browsers allow a new tab).

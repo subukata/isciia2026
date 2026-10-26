@@ -283,13 +283,13 @@
         </header>
         <ul class="methods">
           <li class="m">
-            <div class="m-head"><span class="m-name">k-means</span><span class="tag obj">one objective</span><span class="yr">1982</span></div>
-            <p>Each point goes to its nearest prototype, and each prototype moves to the mean of its points; the sum of squared distances never increases.</p>
-            <span class="src">Lloyd · <a href="https://doi.org/10.1109/TIT.1982.1056489" target="_blank" rel="noopener">IEEE Trans. Inf. Theory, 1982</a></span>
+            <div class="m-head"><span class="m-name">k-means</span><span class="tag obj">one objective</span><span class="yr">1967</span></div>
+            <p>Each data point goes to its nearest prototype, and each prototype moves to the mean of its data points; the sum of squared distances never increases.</p>
+            <span class="src">MacQueen · Berkeley Symp., 1967 · Lloyd · <a href="https://doi.org/10.1109/TIT.1982.1056489" target="_blank" rel="noopener">IEEE Trans. Inf. Theory, 1982</a></span>
           </li>
           <li class="m">
             <div class="m-head"><span class="m-name">FCM</span><span class="tag obj">one objective</span><span class="yr">1981</span></div>
-            <p>Every point belongs to every cluster by a degree; the degrees soften with m.</p>
+            <p>Every data point belongs to every cluster by a degree; the degrees soften with m.</p>
             <span class="src">Bezdek · <a href="https://doi.org/10.1007/978-1-4757-0450-1" target="_blank" rel="noopener">Plenum, 1981</a></span>
           </li>
         </ul>
@@ -305,7 +305,7 @@
         <ul class="methods">
           <li class="m">
             <div class="m-head"><span class="m-name">RCM</span><span class="tag rule">rule-based</span><span class="yr">2004</span></div>
-            <p>Each point belongs to every relatively close cluster, within β of the nearest: upper approximations.</p>
+            <p>Each data point belongs to every relatively close cluster, within β of the nearest: upper approximations.</p>
             <span class="src">Lingras &amp; West · <a href="https://doi.org/10.1023/B:JIIS.0000029668.88665.1A" target="_blank" rel="noopener">J. Intell. Inf. Syst., 2004</a> · Peters · <a href="https://doi.org/10.1016/j.patcog.2006.02.002" target="_blank" rel="noopener">Pattern Recognit., 2006</a></span>
           </li>
           <li class="m ours">
@@ -331,7 +331,7 @@
         <ul class="methods">
           <li class="m">
             <div class="m-head"><span class="m-name">Rough membership</span><span class="role">definition</span><span class="yr">1994</span></div>
-            <p>The share of a point's neighbors that lie in a cluster.</p>
+            <p>The share of a data point's neighbors that lie in a cluster.</p>
             <span class="src">Pawlak · <a href="https://doi.org/10.1007/BF01001956" target="_blank" rel="noopener">Int. J. Comput. Inf. Sci., 1982</a> · Pawlak &amp; Skowron · Wiley, 1994</span>
           </li>
           <li class="m ours">
@@ -350,7 +350,7 @@
             <span class="src">Kim, Ubukata, Notsu, Honda · <a href="https://researchmap.jp/subukata/published_papers/36187542" target="_blank" rel="noopener">ISIS, 2021</a></span>
           </li>
         </ul>
-        <p class="gist-line"><b>In short</b> From distances to neighborhoods, and from rules to one objective; overlapping clusters can also link prototypes into a graph.</p>
+        <p class="gist-line"><b>In short</b> From distances to neighborhoods, and from rules to one objective; overlapping clusters could also link prototypes into a graph.</p>
       </section>
 
       <section class="part" aria-labelledby="p3">
@@ -367,7 +367,7 @@
           </li>
           <li class="m ours hero">
             <div class="m-head"><span class="m-name">SOM-OLP</span><span class="tag obj">one objective</span><span class="yr">2026</span></div>
-            <p>Each point gets a continuous latent position; one objective, three closed-form updates, O(nC) per iteration.</p>
+            <p>Each data point gets a continuous latent position; one objective, three closed-form updates, O(nC) per iteration.</p>
             <span class="src">Ubukata, Notsu, Honda · <a href="https://doi.org/10.1109/ijcnn69854.2026.11729950" target="_blank" rel="noopener">IJCNN, 2026</a> · <a href="https://arxiv.org/abs/2604.13622" target="_blank" rel="noopener">arXiv</a> · <a href="https://github.com/subukata/som-olp" target="_blank" rel="noopener">code</a></span>
           </li>
           <li class="m">
@@ -383,8 +383,8 @@
     <section class="card code-card" aria-labelledby="code-h">
       <h2 class="ch" id="code-h">Code</h2>
       <ul class="code">
-        <li><a href="https://github.com/subukata/ubukit" target="_blank" rel="noopener"><b>UbuKit</b><span class="what">Clustering and self-organizing maps for Python and JavaScript, with the same names, parameters and equations in both: k-means, fuzzy c-means (FCM) and its entropy-regularized form, rough c-means (RCM, ExRCM), rough membership c-means (RMCM), online and batch SOM, and SOM-OLP; with evaluation metrics (ARI, AMI, trustworthiness, continuity) and TPE search. The live figures of the talk run on its JavaScript package.</span><span class="how"><code>pip install ubukit</code> · <code>npm install ubukit</code> · MIT license</span></a></li>
-        <li><a href="https://github.com/subukata/som-olp" target="_blank" rel="noopener"><b>som-olp</b><span class="what">A minimal Python implementation of SOM-OLP, as in the paper (IJCNN 2026; arXiv:2604.13622): prototypes and continuous latent positions of the points learned under one objective, by closed-form block updates that never increase it, at O(NM) per iteration (N points, M nodes). With example scripts, and the Optuna search that tuned the Iris settings used in the talk.</span><span class="how">Python (NumPy, SciPy, scikit-learn, Matplotlib) · MIT license</span></a></li>
+        <li><a href="https://github.com/subukata/ubukit" target="_blank" rel="noopener"><b>UbuKit</b><span class="what">Clustering and self-organizing maps for Python and JavaScript, with the same names, parameters and equations in both: k-means, fuzzy c-means (FCM) and its entropy-regularized form, rough c-means (RCM, ExRCM), rough membership c-means (RMCM), online and batch SOM, and SOM-OLP; with evaluation metrics (ARI, AMI, trustworthiness, continuity) and TPE search. Many of the talk's live figures run on its JavaScript package.</span><span class="how"><code>pip install ubukit</code> · <code>npm install ubukit</code> · MIT license</span></a></li>
+        <li><a href="https://github.com/subukata/som-olp" target="_blank" rel="noopener"><b>som-olp</b><span class="what">A minimal Python implementation of SOM-OLP, as in the paper (IJCNN 2026; arXiv:2604.13622): prototypes and continuous latent positions of the data points learned under one objective, by closed-form block updates that never increase it, at O(nC) per iteration (n data points, C nodes). With example scripts, and the Optuna search that tuned the Iris settings used in the talk.</span><span class="how">Python (NumPy, SciPy, scikit-learn, Matplotlib) · MIT license</span></a></li>
       </ul>
     </section>
 
@@ -451,6 +451,6 @@
 
   <footer>
     <span>Seiki Ubukata · Osaka Metropolitan University</span>
-    <span>Figures and demos computed with UbuKit</span>
+    <span>Live figures computed with UbuKit and the slides' own code</span>
   </footer>
 </div>

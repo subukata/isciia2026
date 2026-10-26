@@ -397,7 +397,7 @@
 </section>
 
 <!-- data-site: the URL of the talk site, shown as a QR code on this slide (empty: a marked place). The GitHub Pages
-     mirror (slides/mirror/build_mirror.py), not claude.ai: claude.ai cannot be opened from mainland China. -->
+     site, not claude.ai: claude.ai cannot be opened from mainland China. -->
 <section class="scene" data-id="about" data-part="0" data-title="About me" data-site="https://subukata.github.io/isciia2026/">
   <h2>About me</h2>
   <div class="profile">
@@ -454,7 +454,7 @@
   <p class="cap" data-steps="0">k-means is a clustering method that represents each cluster by the mean of its data points.</p>
   <p class="cap" data-steps="1"><span class="pt">$J$ measures the fit: the squared distance from each data point to its prototype, summed over all data points.</span><span class="pt">$\bm{x}_i$: data point $i$; $\bm{b}_c$: the prototype of cluster $c$.</span></p>
   <p class="cap" data-steps="2">Each update minimizes $J$, so $J$ never increases.</p>
-  <p class="ref">MacQueen, 1967</p>
+  <p class="ref">MacQueen, 1967 · Lloyd, 1982</p>
   <aside class="notes"><p>Good prototypes / are close to their data points.<br>Each prototype should stand for the data points / of its group.<br>So <b>we need</b> one number for how well they do, / and prototypes that make it small.<br>Here, / each data point is joined to its prototype.<br><b>k-means</b> is a clustering method / that represents each cluster / by the mean of its data points.</p><p>(→) So k-means minimizes one objective.<br>We split the data points into C clusters, / and here C is 3.<br>The membership u_ci says / which cluster data point i is in.<br>So choosing u / is the clustering.<br>Then, / the objective <b>J</b> measures the fit: / the squared distance from each data point to its prototype, / summed over all data points.<br>In J, / u_ci is 1 if i is in c, / and 0 otherwise.<br>x_i is data point i, / and b_c is the prototype of cluster c.</p><p>(→) k-means minimizes J / by two alternating updates.<br>We minimize J <b>in turns</b>: / assign with the prototypes fixed, / then average.<br>With b fixed, / each data point goes to the nearest prototype.<br>With u fixed, / each prototype moves to the mean.<br>Each update minimizes J, / so J <b>never increases</b>.</p></aside>
 </section>
 
@@ -579,14 +579,14 @@
 <section class="scene" data-id="objective" data-split="0,1" data-part="2" data-title="RMCM2 puts rough membership into one objective">
   <h2 data-steps="0,1">RMCM2 puts rough membership into one objective</h2>
   <span class="ours-tag">Ours</span>
-  <p class="lead" data-steps="0">We proposed rough-membership-based rough clustering (RMCM2).<br>RMCM2 minimizes the k-means objective with rough membership in place of the crisp assignment.</p>
+  <p class="lead" data-steps="0">We proposed objective-based rough membership c-means (RMCM2).<br>RMCM2 minimizes the k-means objective with rough membership in place of the crisp assignment.</p>
     <p class="lead" data-steps="1">The update rules of the labels and the prototypes are derived by minimizing $J$.<br>Labels go by the smaller cost $q$; prototypes are $\mu$-weighted means.</p>
   <div class="eqband tall" data-steps="0">$$J=\sum_c\sum_i \underbrace{\class{t-mu}{\mu_{ci}}}_{\substack{\text{rough membership,}\\\text{in place of }u}}\|\bm{x}_i-\bm{b}_c\|^2$$</div>
     <div class="eqband tall small-gap" data-steps="1">$$q_{cj}=\underbrace{\sum_i P_{ij}\|\bm{x}_i-\bm{b}_c\|^2}_{\substack{\bm{b}_c\text{'s error over the data points}\\\text{with }j\text{ in their neighborhoods}}}$$ $$\underbrace{\bm{b}_c=\frac{\sum_i \mu_{ci}\,\bm{x}_i}{\sum_i \mu_{ci}}}_{\mu\text{-weighted mean}}$$</div>
   <p class="cap" data-steps="1"><span class="pt">$P_{ij}=1/|\mathcal{N}_i|$ if $j\in\mathcal{N}_i$, else 0.</span><span class="pt">Each update minimizes $J$, so $J$ never increases.</span></p>
   <div class="ctrl"><label class="param">radius <input type="range" id="ob-radius" min="0.15" max="0.8" step="0.01" value="0.30"><output for="ob-radius"></output></label><button type="button" class="btn" id="ob-run">Run</button></div>
   <p class="ref">Ubukata, Notsu, Honda, Inf. Sci., 2021</p>
-  <aside class="notes"><p>This slide shows / that RMCM2 puts rough membership into one objective.<br>We proposed rough-membership-based rough clustering, / RMCM2.<br>RMCM2 minimizes the k-means objective / with rough membership in place of the crisp assignment.<br>In J, / mu, the rough membership, / takes the place of u.<br>The lines are the errors in J, / weighted by mu.<br>The dashed circle is the neighborhood / of one data point.<br>Its neighbors are in both clusters, / so its error goes to <b>both</b> prototypes.<br>As delta changes, / the neighborhood and the lines change with it.</p><p>(→) The update rules of the labels and the prototypes / are derived by minimizing J.<br>Labels go by the smaller cost q, / and prototypes are mu-weighted means.<br>q_cj is b_c's error / over the data points with j in their neighborhoods.<br>The dashed circle / shows these data points.<br>P_ij is one over the size of N_i / if j is in N_i, / and 0 otherwise.<br>Here, / j goes to the cluster / with the smaller q.<br>Each update minimizes J, / so J <b>never increases</b>.</p></aside>
+  <aside class="notes"><p>This slide shows / that RMCM2 puts rough membership into one objective.<br>We proposed objective-based rough membership c-means, / RMCM2.<br>RMCM2 minimizes the k-means objective / with rough membership in place of the crisp assignment.<br>In J, / mu, the rough membership, / takes the place of u.<br>The lines are the errors in J, / weighted by mu.<br>The dashed circle is the neighborhood / of one data point.<br>Its neighbors are in both clusters, / so its error goes to <b>both</b> prototypes.<br>As delta changes, / the neighborhood and the lines change with it.</p><p>(→) The update rules of the labels and the prototypes / are derived by minimizing J.<br>Labels go by the smaller cost q, / and prototypes are mu-weighted means.<br>q_cj is b_c's error / over the data points with j in their neighborhoods.<br>The dashed circle / shows these data points.<br>P_ij is one over the size of N_i / if j is in N_i, / and 0 otherwise.<br>Here, / j goes to the cluster / with the smaller q.<br>Each update minimizes J, / so J <b>never increases</b>.</p></aside>
 </section>
 
 <section class="scene" data-id="cfex" data-part="2" data-title="Recommendation uses overlapping clusters">
