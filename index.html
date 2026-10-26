@@ -1,0 +1,456 @@
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Uncertainty, Topology, and Graphs</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<style>
+/* Archivo and Source Sans 3 (OFL), served with the deck: Google Fonts cannot be reached from mainland China. */
+@font-face {
+  font-family: 'Archivo';
+  font-style: normal;
+  font-weight: 100 900;
+  font-stretch: 62% 125%;
+  font-display: swap;
+  src: url(slides/vendor/fonts/Archivo-normal-latin-ext.woff2) format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: 'Archivo';
+  font-style: normal;
+  font-weight: 100 900;
+  font-stretch: 62% 125%;
+  font-display: swap;
+  src: url(slides/vendor/fonts/Archivo-normal-latin.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'Source Sans 3';
+  font-style: italic;
+  font-weight: 200 900;
+  font-display: swap;
+  src: url(slides/vendor/fonts/SourceSans3-italic-latin-ext.woff2) format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: 'Source Sans 3';
+  font-style: italic;
+  font-weight: 200 900;
+  font-display: swap;
+  src: url(slides/vendor/fonts/SourceSans3-italic-latin.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'Source Sans 3';
+  font-style: normal;
+  font-weight: 200 900;
+  font-display: swap;
+  src: url(slides/vendor/fonts/SourceSans3-normal-latin-ext.woff2) format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: 'Source Sans 3';
+  font-style: normal;
+  font-weight: 200 900;
+  font-display: swap;
+  src: url(slides/vendor/fonts/SourceSans3-normal-latin.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+</style>
+<script>document.documentElement.lang = 'en';</script>
+<style>
+  /* Layout: a conference board of cards on a 12-column grid. First row: the talk (title), the speaker in brief, and
+     the slides. Then the talk itself: the introduction and the three parts as four columns (what each covers, its
+     methods with their papers, classic ones included, and the gist, lined up across the columns). Then the code; last,
+     the speaker's selected papers, with the CV open (it can be folded). Medium screens: two
+     columns; phones: one, the title and the slides first.
+     The board describes the research in general terms (no timings, no slide-by-slide content), so the slides can
+     change without it.
+     Color: navy for structure and emphasis, deep green for our methods, on a cool mineral ground; the slides card is the
+     one strong surface (navy into deep green). Light and dark, each with every text color at least 7:1 on its background.
+     Type: Archivo (variable width) for names and headings, Source Sans 3 for text, as in the slides. */
+  :root {
+    --bg: #EDF1F2; --panel: #FFFFFF; --soft: #F4F7F7; --ink: #101B27; --title: #0B2545; --muted: #45505D; --line: #D3DCDD;
+    --accent: #1C4A80; --accent-bg: #EAF0F7; --ours: #0A5C45; --ours-bg: #E9F3EE;
+    --obj: #1B5189; --obj-bg: #E3ECF6; --obj-ink: #143E69; --rule: #37424E; --rule-bg: #ECEFF1;
+    --navy: #0B2545; --deep: #0E4A40; --on-brand: #FFFFFF; --on-brand-soft: #C9E6DA;
+    --glow-a: rgba(14, 74, 64, .10); --glow-b: rgba(11, 37, 69, .09);
+    --shadow: 0 1px 2px rgba(11, 37, 69, .06), 0 10px 26px -18px rgba(11, 37, 69, .28);
+    --shadow-hi: 0 2px 4px rgba(11, 37, 69, .10), 0 18px 36px -18px rgba(11, 37, 69, .45);
+    --display: "Archivo", "Segoe UI", system-ui, sans-serif;
+    --body: "Source Sans 3", "Segoe UI", system-ui, sans-serif;
+    color-scheme: light;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #0A1118; --panel: #101A24; --soft: #14212D; --ink: #E3E9EF; --title: #F2F6FA; --muted: #A9B5C1; --line: #243344;
+      --accent: #9DC1EA; --accent-bg: #13243A; --ours: #63D3A6; --ours-bg: #11271F;
+      --obj: #8FBBEE; --obj-bg: #15283D; --obj-ink: #B7D4F6; --rule: #BAC4CE; --rule-bg: #1A2531;
+      --navy: #14365F; --deep: #0D4A40; --on-brand: #FFFFFF; --on-brand-soft: #D3EDE2;
+      --glow-a: rgba(60, 170, 130, .10); --glow-b: rgba(70, 120, 200, .12);
+      --shadow: 0 1px 2px rgba(0, 0, 0, .40), 0 12px 28px -18px rgba(0, 0, 0, .70);
+      --shadow-hi: 0 2px 4px rgba(0, 0, 0, .45), 0 20px 38px -18px rgba(0, 0, 0, .85);
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #0A1118; --panel: #101A24; --soft: #14212D; --ink: #E3E9EF; --title: #F2F6FA; --muted: #A9B5C1; --line: #243344;
+    --accent: #9DC1EA; --accent-bg: #13243A; --ours: #63D3A6; --ours-bg: #11271F;
+    --obj: #8FBBEE; --obj-bg: #15283D; --obj-ink: #B7D4F6; --rule: #BAC4CE; --rule-bg: #1A2531;
+    --navy: #14365F; --deep: #0D4A40; --on-brand: #FFFFFF; --on-brand-soft: #D3EDE2;
+    --glow-a: rgba(60, 170, 130, .10); --glow-b: rgba(70, 120, 200, .12);
+    --shadow: 0 1px 2px rgba(0, 0, 0, .40), 0 12px 28px -18px rgba(0, 0, 0, .70);
+    --shadow-hi: 0 2px 4px rgba(0, 0, 0, .45), 0 20px 38px -18px rgba(0, 0, 0, .85);
+    color-scheme: dark;
+  }
+
+  html, body { min-height: 100%; }
+  body {
+    /* A faint wash of deep green and navy at the top, on the mineral ground. */
+    background: radial-gradient(1100px 520px at 0% -10%, var(--glow-a), transparent 62%), radial-gradient(900px 480px at 100% -8%, var(--glow-b), transparent 60%), var(--bg);
+    color: var(--ink); font: 400 15px/1.5 var(--body); -webkit-font-smoothing: antialiased;
+    padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
+    padding-block: 16px; box-sizing: border-box; margin: 0;
+  }
+  a { color: inherit; }
+  a:focus-visible, button:focus-visible, summary:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 4px; }
+  .page { max-width: 1440px; margin: 0 auto; display: grid; gap: 14px; }
+
+  /* ---------------------------------------------------------------- the grid */
+  .layout { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 14px; align-items: stretch; }
+  .band { grid-column: span 6; }
+  .speaker { grid-column: span 3; }
+  .slides-card { grid-column: span 3; }
+  .parts { grid-column: 1 / -1; }
+  .code-card { grid-column: 1 / -1; }
+  .about { grid-column: 1 / -1; }
+
+  /* ---------------------------------------------------------------- shared cards */
+  .card { background: var(--panel); border: 1px solid var(--line); border-radius: 16px; box-shadow: var(--shadow); min-width: 0; padding: 14px 18px 16px; display: grid; gap: 8px; align-content: start; box-sizing: border-box; }
+  .ch { margin: 0; font: 700 12px/1 var(--body); letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
+
+  /* ---------------------------------------------------------------- the talk, the speaker in brief, the slides */
+  .band { align-content: center; gap: 10px; padding: 18px 22px 20px; }
+  h1 { font: 760 clamp(26px, 2.5vw, 36px)/1.06 var(--display); font-variation-settings: "wdth" 88; color: var(--title); margin: 0; text-wrap: balance; letter-spacing: -.015em; }
+  .sub { margin: 0; font-size: 16.5px; color: var(--muted); }
+  .sub b { color: var(--accent); font-weight: 700; }
+  .name { font: 760 22px/1.1 var(--display); font-variation-settings: "wdth" 90; color: var(--title); margin: 0; }
+  .aff { margin: 0; color: var(--muted); font-size: 14px; line-height: 1.35; }
+  .bio { margin: 0; font-size: 14px; line-height: 1.4; }
+  .links { display: flex; flex-wrap: wrap; gap: 6px; padding: 0; margin: 2px 0 0; list-style: none; }
+  .links a {
+    display: inline-flex; align-items: center; gap: 6px; padding: 5px 11px; border-radius: 999px; border: 1px solid var(--line);
+    text-decoration: none; font-weight: 600; font-size: 13px; color: var(--ink); background: var(--soft);
+    transition: border-color .15s, color .15s, background-color .15s;
+  }
+  .links a:hover { border-color: var(--accent); color: var(--accent); }
+  .links a.home { background: var(--navy); border-color: var(--navy); color: var(--on-brand); }
+  .links a.home:hover { background: var(--ours); border-color: var(--ours); color: var(--on-brand); }
+  @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .links a.home:hover { color: var(--bg); } }
+  :root[data-theme="dark"] .links a.home:hover { color: var(--bg); }
+  /* The slides: the one strong surface on the board, navy into deep green. */
+  .slides-card {
+    display: grid; gap: 10px; align-content: center; padding: 18px 20px; border-radius: 16px; text-decoration: none; min-width: 0;
+    background: linear-gradient(135deg, var(--navy) 0%, var(--navy) 35%, var(--deep) 100%); border: 1px solid var(--navy);
+    color: var(--on-brand); box-shadow: var(--shadow); transition: box-shadow .2s, transform .2s;
+  }
+  .slides-card:hover { box-shadow: var(--shadow-hi); transform: translateY(-2px); }
+  .slides-card:focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; }
+  .sc-k { font: 700 12px/1 var(--body); letter-spacing: .1em; text-transform: uppercase; color: var(--on-brand-soft); }
+  .sc-title { display: flex; align-items: center; gap: 12px; font: 760 27px/1.05 var(--display); font-variation-settings: "wdth" 88; letter-spacing: -.01em; }
+  .sc-title svg { width: 28px; height: 28px; flex: none; }
+  .sc-desc { font-size: 14.5px; line-height: 1.45; }
+  .sc-go { justify-self: start; display: inline-flex; align-items: center; gap: 8px; padding: 8px 16px; border-radius: 999px; background: var(--on-brand); color: var(--navy); font: 720 15px/1 var(--display); transition: background-color .15s, color .15s; }
+  .slides-card:hover .sc-go { background: var(--on-brand-soft); color: var(--navy); }
+
+  /* ---------------------------------------------------------------- the four columns (header, methods and the gist line up) */
+  .parts { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); grid-template-rows: auto 1fr auto; column-gap: 12px; row-gap: 0; }
+  .part { grid-row: 1 / span 3; display: grid; grid-template-rows: subgrid; background: var(--panel); border: 1px solid var(--line); border-radius: 16px; box-shadow: var(--shadow); min-width: 0; overflow: hidden; }
+  .part header { padding: 14px 16px 10px; display: grid; gap: 3px; align-content: start; }
+  .part .k { font: 700 12px/1 var(--body); letter-spacing: .1em; text-transform: uppercase; color: var(--muted); margin: 0; }
+  .part h2 { font: 740 19px/1.15 var(--display); font-variation-settings: "wdth" 88; color: var(--title); margin: 3px 0 0; }
+  .part .q { margin: 3px 0 0; color: var(--accent); font-weight: 700; font-size: 14.5px; line-height: 1.38; }
+  .methods { list-style: none; margin: 0; padding: 2px 0 4px; display: grid; align-content: start; border-top: 1px solid var(--line); }
+  .m { padding: 8px 16px; display: grid; gap: 2px; border-top: 1px solid var(--line); }
+  .m:first-child { border-top: 0; }
+  .m-head { display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap; }
+  .m-name { font: 720 15.5px/1.2 var(--display); font-variation-settings: "wdth" 90; color: var(--title); }
+  /* Ours: a dot before the name (not color alone); the main result of each part: a bar on the left and a larger name. */
+  .ours .m-name { color: var(--ours); }
+  .ours .m-name::before { content: "●"; font-size: .62em; margin-right: 5px; vertical-align: .18em; }
+  .m.hero { box-shadow: inset 4px 0 0 var(--ours); background: var(--ours-bg); }
+  .m.hero .m-name { font-size: 17.5px; }
+  .m .yr { margin-left: auto; font-size: 12.5px; color: var(--muted); font-variant-numeric: tabular-nums; }
+  .m .role { font-size: 12.5px; font-style: italic; color: var(--muted); }
+  .tag { font: 700 12px/1 var(--body); letter-spacing: .04em; padding: 3px 7px; border-radius: 999px; white-space: nowrap; }
+  .tag.rule { background: var(--rule-bg); color: var(--rule); }
+  .tag.obj { background: var(--obj-bg); color: var(--obj-ink); }
+  .m p { margin: 0; font-size: 13.5px; line-height: 1.36; color: var(--ink); }
+  .m .src { font-size: 12.5px; color: var(--muted); }
+  .m .src a { color: var(--obj); text-decoration-thickness: 1px; text-underline-offset: 2px; }
+  .gist-line { margin: 0; padding: 10px 16px 12px; border-top: 1px solid var(--line); background: var(--accent-bg); font-size: 14px; line-height: 1.4; color: var(--ink); }
+  .gist-line b { color: var(--accent); }
+
+  /* ---------------------------------------------------------------- membership and updates; code and classic papers */
+  .code { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+  .code a { display: grid; gap: 1px; text-decoration: none; padding: 9px 12px; border-radius: 12px; border: 1px solid var(--line); background: var(--soft); transition: border-color .15s; }
+  .code a:hover { border-color: var(--obj); }
+  .code b { font: 720 14.5px/1.2 var(--display); font-variation-settings: "wdth" 90; color: var(--title); }
+  .code .what { font-size: 13.5px; line-height: 1.45; color: var(--ink); }
+  .code .how { margin-top: 4px; font-size: 12.5px; color: var(--muted); }
+  .code code { font: 12px/1.3 ui-monospace, SFMono-Regular, Consolas, monospace; background: var(--panel); border: 1px solid var(--line); border-radius: 4px; padding: 0 4px; }
+
+  /* ---------------------------------------------------------------- the speaker's papers and CV */
+  .about { gap: 12px; padding: 16px 20px 18px; }
+  .about h3 { margin: 0; font: 720 15px/1.2 var(--display); font-variation-settings: "wdth" 90; color: var(--title); }
+  /* Selected papers: newest first, down the first column and on into the second; each names its part of the talk. */
+  .pubs { list-style: none; margin: 0; padding: 0; columns: 2; column-gap: 28px; }
+  .pubs li { break-inside: avoid; display: grid; grid-template-columns: 4.3em minmax(0, 1fr); gap: 0 10px; padding-bottom: 9px; font-size: 14px; line-height: 1.35; }
+  .pubs .y { font-weight: 700; color: var(--muted); font-variant-numeric: tabular-nums; }
+  .pubs a { color: var(--obj); font-weight: 600; text-underline-offset: 2px; }
+  .pubs small { display: block; color: var(--muted); font-size: 13px; line-height: 1.3; }
+  .pubs .in-talk { display: block; color: var(--ours); font-weight: 700; font-size: 12.5px; }
+  /* The CV, folded: career, education, service and awards. */
+  .cv-more { border-top: 1px solid var(--line); padding-top: 10px; }
+  .cv-more summary { cursor: pointer; font: 720 15px/1.2 var(--display); font-variation-settings: "wdth" 90; color: var(--title); }
+  .cv-cols { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr) minmax(0, 1.3fr); gap: 16px 28px; padding-top: 12px; }
+  .cv-cols > div { min-width: 0; display: grid; gap: 8px; align-content: start; }
+  .cv { display: grid; grid-template-columns: 4.3em minmax(0, 1fr); gap: 7px 10px; margin: 0; font-size: 14px; line-height: 1.35; }
+  .cv + h3 { margin-top: 8px; }
+  .cv dt { font-weight: 700; color: var(--muted); font-variant-numeric: tabular-nums; }
+  .cv dd { margin: 0; color: var(--ink); }
+  .cv dd small { display: block; color: var(--muted); font-size: 13px; line-height: 1.3; }
+  .more { margin: 0; font-size: 14px; }
+  .more a { color: var(--obj); font-weight: 600; text-underline-offset: 2px; }
+  footer { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 6px 16px; color: var(--muted); font-size: 12.5px; padding: 0 4px; }
+
+  /* ---------------------------------------------------------------- medium screens: two columns */
+  @media (max-width: 1180px) {
+    .layout { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .band, .parts, .about { grid-column: 1 / -1; }
+    .speaker, .slides-card { grid-column: span 1; }
+    .parts { grid-template-columns: repeat(2, minmax(0, 1fr)); grid-template-rows: none; gap: 12px; }
+    .part { grid-row: auto; grid-template-rows: auto 1fr auto; }
+  }
+  @media (max-width: 960px) {
+    .cv-cols { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .cv-cols > .awards { grid-column: 1 / -1; }
+    .pubs { columns: 1; }
+  }
+  /* ---------------------------------------------------------------- phones: one column, the title and the slides first */
+  @media (max-width: 700px) {
+    body { font-size: 15.5px; }
+    .layout, .parts, .code, .cv-cols { grid-template-columns: minmax(0, 1fr); }
+    .layout > * { grid-column: 1 / -1; }
+    .band { order: 0; } .slides-card { order: 1; } .speaker { order: 2; } .parts { order: 3; } .code-card { order: 4; } .about { order: 5; }
+    .sc-title { font-size: 24px; }
+  }
+  @media (prefers-reduced-motion: reduce) { * { scroll-behavior: auto; transition: none !important; } .slides-card:hover { transform: none; } }
+</style>
+
+<div class="page">
+  <div class="layout">
+    <header class="card band">
+      <p class="ch">ISCIIA 2026 · Invited talk</p>
+      <h1>Uncertainty, Topology, and Graphs in Prototype&#8209;Based Learning</h1>
+    </header>
+
+    <section class="card speaker" aria-labelledby="speaker-h">
+      <h2 class="ch" id="speaker-h">The speaker</h2>
+      <p class="name">Seiki Ubukata</p>
+      <p class="aff">Associate Professor, Graduate School of Informatics, Osaka Metropolitan University, Osaka, Japan</p>
+      <p class="bio">Soft computing: fuzzy and rough clustering, and self-organizing maps.</p>
+      <ul class="links">
+        <li><a class="home" href="https://omu-hi.github.io/en/ubukata/" target="_blank" rel="noopener">Web page</a></li>
+        <li><a href="https://researchmap.jp/subukata?lang=en" target="_blank" rel="noopener">researchmap</a></li>
+      </ul>
+    </section>
+
+    <a class="slides-card" href="slides/" target="_blank" rel="noopener">
+      <span class="sc-k">The slides</span>
+      <span class="sc-title">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8M12 16v4"/></svg>
+        Open the slides
+      </span>
+      <span class="sc-desc">Every figure runs live in your browser. Step through with the arrow keys, or swipe on a phone.</span>
+      <span class="sc-go">Open <span aria-hidden="true">→</span></span>
+    </a>
+
+    <main class="parts">
+      <section class="part" aria-labelledby="p0">
+        <header>
+          <p class="k">Introduction</p>
+          <h2 id="p0">Clustering: k-means and FCM</h2>
+          <p class="q">k-means splits data into crisp clusters; fuzzy c-means expresses the boundary by degrees.</p>
+        </header>
+        <ul class="methods">
+          <li class="m">
+            <div class="m-head"><span class="m-name">k-means</span><span class="tag obj">one objective</span><span class="yr">1982</span></div>
+            <p>Each point goes to its nearest prototype, and each prototype moves to the mean of its points; the sum of squared distances never increases.</p>
+            <span class="src">Lloyd · <a href="https://doi.org/10.1109/TIT.1982.1056489" target="_blank" rel="noopener">IEEE Trans. Inf. Theory, 1982</a></span>
+          </li>
+          <li class="m">
+            <div class="m-head"><span class="m-name">FCM</span><span class="tag obj">one objective</span><span class="yr">1981</span></div>
+            <p>Every point belongs to every cluster by a degree; the degrees soften with m.</p>
+            <span class="src">Bezdek · <a href="https://doi.org/10.1007/978-1-4757-0450-1" target="_blank" rel="noopener">Plenum, 1981</a></span>
+          </li>
+        </ul>
+        <p class="gist-line"><b>In short</b> A prototype summarizes each group; crisp or fuzzy membership is the starting point of the three parts.</p>
+      </section>
+
+      <section class="part" aria-labelledby="p1">
+        <header>
+          <p class="k">Part 1</p>
+          <h2 id="p1">Rough Clustering (Distances)</h2>
+          <p class="q">Rough clustering finds uncertain regions between clusters by distances.</p>
+        </header>
+        <ul class="methods">
+          <li class="m">
+            <div class="m-head"><span class="m-name">RCM</span><span class="tag rule">rule-based</span><span class="yr">2004</span></div>
+            <p>Each point belongs to every relatively close cluster, within β of the nearest: upper approximations.</p>
+            <span class="src">Lingras &amp; West · <a href="https://doi.org/10.1023/B:JIIS.0000029668.88665.1A" target="_blank" rel="noopener">J. Intell. Inf. Syst., 2004</a> · Peters · <a href="https://doi.org/10.1016/j.patcog.2006.02.002" target="_blank" rel="noopener">Pattern Recognit., 2006</a></span>
+          </li>
+          <li class="m ours">
+            <div class="m-head"><span class="m-name">GRCM</span><span class="tag rule">rule-based</span><span class="yr">2017</span></div>
+            <p>One threshold with a ratio α and a difference β; α = 1 or β = 0 gives the classic rules.</p>
+            <span class="src">Ubukata, Notsu, Honda · <a href="https://researchmap.jp/subukata/published_papers/18990380" target="_blank" rel="noopener">IJCSNS, 2017</a></span>
+          </li>
+          <li class="m ours hero">
+            <div class="m-head"><span class="m-name">ExRCM</span><span class="tag rule">rule-based</span><span class="yr">2026</span></div>
+            <p>Raises the distances to a power p, which shapes the clusters: round, polygonal or star-shaped; p = 1 gives GRCM.</p>
+            <span class="src">Okimoto, Ubukata, Honda · <a href="https://doi.org/10.1007/978-981-92-5644-0_13" target="_blank" rel="noopener">IUKM, LNCS 16919, 2026</a></span>
+          </li>
+        </ul>
+        <p class="gist-line"><b>In short</b> One family of thresholds for distance-based rough clustering; an exponent shapes the clusters.</p>
+      </section>
+
+      <section class="part" aria-labelledby="p2">
+        <header>
+          <p class="k">Part 2</p>
+          <h2 id="p2">Rough Clustering (Neighborhoods)</h2>
+          <p class="q">Rough set theory finds uncertainty by neighborhoods.</p>
+        </header>
+        <ul class="methods">
+          <li class="m">
+            <div class="m-head"><span class="m-name">Rough membership</span><span class="role">definition</span><span class="yr">1994</span></div>
+            <p>The share of a point's neighbors that lie in a cluster.</p>
+            <span class="src">Pawlak · <a href="https://doi.org/10.1007/BF01001956" target="_blank" rel="noopener">Int. J. Comput. Inf. Sci., 1982</a> · Pawlak &amp; Skowron · Wiley, 1994</span>
+          </li>
+          <li class="m ours">
+            <div class="m-head"><span class="m-name">RSCM · RMCM</span><span class="tag rule">rule-based</span><span class="yr">2018</span></div>
+            <p>Regions from neighborhoods (RSCM), or rough membership as weights (RMCM).</p>
+            <span class="src">Ubukata et al. · <a href="https://doi.org/10.20965/jaciii.2018.p0551" target="_blank" rel="noopener">JACIII, 2018 (RSCM)</a> · <a href="https://doi.org/10.20965/jaciii.2018.p0956" target="_blank" rel="noopener">JACIII, 2018 (RMCM)</a></span>
+          </li>
+          <li class="m ours hero">
+            <div class="m-head"><span class="m-name">RMCM2</span><span class="tag obj">one objective</span><span class="yr">2021</span></div>
+            <p>Rough membership inside the k-means objective; every update minimizes it.</p>
+            <span class="src">Ubukata, Notsu, Honda · <a href="https://doi.org/10.1016/j.ins.2020.10.037" target="_blank" rel="noopener">Information Sciences, 2021</a></span>
+          </li>
+          <li class="m ours">
+            <div class="m-head"><span class="m-name">Recommendation</span><span class="role">application</span><span class="yr">2021</span></div>
+            <p>A user between groups draws on both, by rough membership, in collaborative filtering.</p>
+            <span class="src">Kim, Ubukata, Notsu, Honda · <a href="https://researchmap.jp/subukata/published_papers/36187542" target="_blank" rel="noopener">ISIS, 2021</a></span>
+          </li>
+        </ul>
+        <p class="gist-line"><b>In short</b> From distances to neighborhoods, and from rules to one objective; overlapping clusters can also link prototypes into a graph.</p>
+      </section>
+
+      <section class="part" aria-labelledby="p3">
+        <header>
+          <p class="k">Part 3</p>
+          <h2 id="p3">Topographic Mapping</h2>
+          <p class="q">Prototypes are kept in order on a map.</p>
+        </header>
+        <ul class="methods">
+          <li class="m">
+            <div class="m-head"><span class="m-name">SOM · Batch SOM</span><span class="tag rule">rule-based</span><span class="yr">1982</span></div>
+            <p>Prototypes on a lattice; each input pulls its winner and the winner's neighbors.</p>
+            <span class="src">Kohonen · <a href="https://doi.org/10.1007/BF00337288" target="_blank" rel="noopener">Biol. Cybern., 1982</a></span>
+          </li>
+          <li class="m ours hero">
+            <div class="m-head"><span class="m-name">SOM-OLP</span><span class="tag obj">one objective</span><span class="yr">2026</span></div>
+            <p>Each point gets a continuous latent position; one objective, three closed-form updates, O(nC) per iteration.</p>
+            <span class="src">Ubukata, Notsu, Honda · <a href="https://doi.org/10.1109/ijcnn69854.2026.11729950" target="_blank" rel="noopener">IJCNN, 2026</a> · <a href="https://arxiv.org/abs/2604.13622" target="_blank" rel="noopener">arXiv</a> · <a href="https://github.com/subukata/som-olp" target="_blank" rel="noopener">code</a></span>
+          </li>
+          <li class="m">
+            <div class="m-head"><span class="m-name">Heskes's energy</span><span class="tag obj">one objective</span><span class="yr">1999</span></div>
+            <p>SOM learning as one energy; its winners couple the nodes, at O(nC²) per iteration.</p>
+            <span class="src">Heskes · <a href="https://doi.org/10.1016/B978-044450270-4/50024-3" target="_blank" rel="noopener">Kohonen Maps, 1999</a></span>
+          </li>
+        </ul>
+        <p class="gist-line"><b>In short</b> From winner nodes to latent positions, with one objective at O(nC) per iteration.</p>
+      </section>
+    </main>
+
+    <section class="card code-card" aria-labelledby="code-h">
+      <h2 class="ch" id="code-h">Code</h2>
+      <ul class="code">
+        <li><a href="https://github.com/subukata/ubukit" target="_blank" rel="noopener"><b>UbuKit</b><span class="what">Clustering and self-organizing maps for Python and JavaScript, with the same names, parameters and equations in both: k-means, fuzzy c-means (FCM) and its entropy-regularized form, rough c-means (RCM, ExRCM), rough membership c-means (RMCM), online and batch SOM, and SOM-OLP; with evaluation metrics (ARI, AMI, trustworthiness, continuity) and TPE search. The live figures of the talk run on its JavaScript package.</span><span class="how"><code>pip install ubukit</code> · <code>npm install ubukit</code> · MIT license</span></a></li>
+        <li><a href="https://github.com/subukata/som-olp" target="_blank" rel="noopener"><b>som-olp</b><span class="what">A minimal Python implementation of SOM-OLP, as in the paper (IJCNN 2026; arXiv:2604.13622): prototypes and continuous latent positions of the points learned under one objective, by closed-form block updates that never increase it, at O(NM) per iteration (N points, M nodes). With example scripts, and the Optuna search that tuned the Iris settings used in the talk.</span><span class="how">Python (NumPy, SciPy, scikit-learn, Matplotlib) · MIT license</span></a></li>
+      </ul>
+    </section>
+
+    <section class="card about" id="about" aria-labelledby="about-h">
+      <h2 class="ch" id="about-h">Selected papers of the speaker</h2>
+      <ol class="pubs">
+        <li><span class="y">2026</span><div><a href="https://doi.org/10.1007/978-981-92-5644-0_13" target="_blank" rel="noopener">Exponentiated Rough C-Means Clustering Based on a Distance Exponent</a><small>M. Okimoto, S. Ubukata, K. Honda · IUKM 2026, LNCS 16919, part II, 162–174</small><span class="in-talk">Part 1 · ExRCM</span></div></li>
+        <li><span class="y">2026</span><div><a href="https://doi.org/10.1109/ijcnn69854.2026.11729950" target="_blank" rel="noopener">Self-Organizing Maps with Optimized Latent Positions</a><small>S. Ubukata, A. Notsu, K. Honda · IJCNN 2026 · <a href="https://arxiv.org/abs/2604.13622" target="_blank" rel="noopener">arXiv:2604.13622</a></small><span class="in-talk">Part 3 · SOM-OLP</span></div></li>
+        <li><span class="y">2021</span><div><a href="https://doi.org/10.1016/j.ins.2020.10.037" target="_blank" rel="noopener">Objective function-based rough membership C-means clustering</a><small>S. Ubukata, A. Notsu, K. Honda · Information Sciences 548, 479–496</small><span class="in-talk">Part 2 · RMCM2</span></div></li>
+        <li><span class="y">2021</span><div><a href="https://researchmap.jp/subukata/published_papers/36187542" target="_blank" rel="noopener">Two types of collaborative filtering based on rough membership c-means clustering</a><small>H. Kim, S. Ubukata, A. Notsu, K. Honda · ISIS 2021, 1–6</small><span class="in-talk">Part 2 · Recommendation</span></div></li>
+        <li><span class="y">2020</span><div><a href="https://doi.org/10.20965/jaciii.2020.p0738" target="_blank" rel="noopener">Noise Rejection Approaches for Various Rough Set-Based C-Means Clustering</a><small>S. Ubukata, S. Sekiya, A. Notsu, K. Honda · JACIII 24(6), 738–749</small></div></li>
+        <li><span class="y">2019</span><div><a href="https://doi.org/10.7717/peerj-cs.238" target="_blank" rel="noopener">A unified approach for cluster-wise and general noise rejection approaches for k-means clustering</a><small>S. Ubukata · PeerJ Computer Science 5, e238</small></div></li>
+        <li><span class="y">2018</span><div><a href="https://doi.org/10.20965/jaciii.2018.p0956" target="_blank" rel="noopener">Rough Set-Based Clustering Utilizing Probabilistic Memberships</a><small>S. Ubukata, H. Kato, A. Notsu, K. Honda · JACIII 22(6), 956–964</small><span class="in-talk">Part 2 · RMCM</span></div></li>
+        <li><span class="y">2018</span><div><a href="https://doi.org/10.20965/jaciii.2018.p0551" target="_blank" rel="noopener">Characteristics of Rough Set C-Means Clustering</a><small>S. Ubukata, K. Umado, A. Notsu, K. Honda · JACIII 22(4), 551–564</small><span class="in-talk">Part 2 · RSCM</span></div></li>
+        <li><span class="y">2017</span><div><a href="https://researchmap.jp/subukata/published_papers/18990380" target="_blank" rel="noopener">General Formulation of Rough C-Means Clustering</a><small>S. Ubukata, A. Notsu, K. Honda · IJCSNS 17(9), 29–38</small><span class="in-talk">Part 1 · GRCM</span></div></li>
+      </ol>
+      <details class="cv-more" open>
+        <summary>Career, education, service and awards</summary>
+        <div class="cv-cols">
+          <div>
+            <h3>Career</h3>
+            <dl class="cv">
+              <dt>2022–</dt><dd>Associate Professor<small>Graduate School of Informatics, Osaka Metropolitan University</small></dd>
+              <dt>2020–22</dt><dd>Associate Professor<small>Graduate School of Engineering, Osaka Prefecture University</small></dd>
+              <dt>2015–20</dt><dd>Assistant Professor<small>Graduate School of Engineering, Osaka Prefecture University</small></dd>
+              <dt>2014–15</dt><dd>Assistant Professor<small>Graduate School of Engineering Science, Osaka University</small></dd>
+            </dl>
+            <h3>Education</h3>
+            <dl class="cv">
+              <dt>2014</dt><dd>Ph.D. (Information Science and Technology)<small>Hokkaido University</small></dd>
+              <dt>2009</dt><dd>Master of Information Science and Technology<small>Hokkaido University</small></dd>
+              <dt>2007</dt><dd>Bachelor of Engineering<small>Hokkaido University</small></dd>
+            </dl>
+          </div>
+          <div>
+            <h3>Service</h3>
+            <dl class="cv">
+              <dt>2025–</dt><dd>Auditor<small>Japan Society for Fuzzy Theory and Intelligent Informatics (SOFT)</small></dd>
+              <dt>2023–25</dt><dd>Board of Directors<small>SOFT</small></dd>
+              <dt>2025–</dt><dd>Secretary<small>IEEE CIS Japan Chapter</small></dd>
+              <dt>2019–</dt><dd>Editorial Board<small>Journal of Advanced Computational Intelligence and Intelligent Informatics (JACIII)</small></dd>
+              <dt>2024</dt><dd>Program Vice-Co-Chair<small>SCIS&amp;ISIS 2024</small></dd>
+              <dt>2024</dt><dd>On-Line Conference Chair<small>IEEE WCCI 2024</small></dd>
+              <dt>2022</dt><dd>Program Vice-Chair<small>IUKM 2022</small></dd>
+            </dl>
+          </div>
+          <div class="awards">
+            <h3>Selected awards</h3>
+            <dl class="cv">
+              <dt>2024</dt><dd>Emerging Research Leader Award, SOFT<small>Introduction to Rough Clustering: Fundamentals and Applications</small></dd>
+              <dt>2022</dt><dd>JACIII Best Paper Award<small>Three-Mode Fuzzy Co-Clustering Based on Probabilistic Concept and Comparison with FCM-Type Algorithms</small></dd>
+              <dt>2021</dt><dd>SICE Annual Conference International Award (Basic Technology)<small>Fuzzy-Possibilistic Clustering for Categorical Multivariate Data</small></dd>
+              <dt>2019</dt><dd>JACIII Young Researcher Award<small>Characteristics of Rough Set C-Means Clustering</small></dd>
+              <dt>2017</dt><dd>ISIS 2017 Best Paper Award<small>Designation of Candidate Solutions in Differential Evolution Based on Bandit Algorithm</small></dd>
+              <dt>2016</dt><dd>SCIS&amp;ISIS 2016 Best Paper Award<small>A Noise Fuzzy Co-clustering Scheme in MMMs-Induced Clustering</small></dd>
+              <dt>2015</dt><dd>IEEE CIS Japan Chapter Young Researcher Award<small>Behavior Control of Multiple Agents Based on Locality of Binary Relations</small></dd>
+            </dl>
+          </div>
+        </div>
+      </details>
+      <p class="more">Full lists of works, awards and service: <a href="https://researchmap.jp/subukata?lang=en" target="_blank" rel="noopener">researchmap</a></p>
+    </section>
+  </div>
+
+  <footer>
+    <span>Seiki Ubukata · Osaka Metropolitan University</span>
+    <span>Figures and demos computed with UbuKit</span>
+  </footer>
+</div>
