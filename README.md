@@ -1,7 +1,8 @@
-# ISCIIA 2026 invited talk
+# ISCIIA 2026 keynote
 
 **Uncertainty, Topology, and Graphs in Prototype-Based Learning**
-Seiki Ubukata, Osaka Metropolitan University. ISCIIA 2026, Beijing, October 30, 2026.
+Seiki Ubukata, Osaka Metropolitan University.
+Keynote, China-Japan Bilateral Symposium on Advanced Computational Intelligence, ISCIIA 2026, Beijing, October 30, 2026, 11:50–12:20 (Beijing time).
 
 - Talk site: https://subukata.github.io/isciia2026/
 - Slides, with live figures: https://subukata.github.io/isciia2026/slides/
