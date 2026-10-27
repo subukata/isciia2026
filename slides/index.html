@@ -224,9 +224,9 @@
   .pos { color: var(--pos); font-weight: 700; } .neg { color: var(--neg); font-weight: 700; } .ours { color: var(--ours); font-weight: 700; }
   [data-steps]:not(.shown) { display: none !important; }
 
-  /* ---- the title scene: the session as in the official program, the title and its subtitle, then the speaker and the
-     date; all above the four parts drawn on the stage (from y 356, scenes-intro.js). */
-  .title-block { position: absolute; left: 3rem; top: 1.8rem; width: 59rem; display: grid; gap: .55rem; }
+  /* ---- the title scene: the session as in the official program, the title, then the speaker and the date; all above
+     the four parts drawn on the stage (from y 356, scenes-intro.js). */
+  .title-block { position: absolute; left: 3rem; top: 2.4rem; width: 59rem; display: grid; gap: .8rem; }
   /* The talk site's QR code, top right (the title and the summary; main code: fillSiteQR). A link to the site: the code
      and its words open it (fillSiteQR sets the address); it looks the same until the pointer is on it. */
   .site-qr { position: absolute; right: 3rem; top: 2.4rem; width: 17rem; display: grid; gap: .4rem; justify-items: center;
@@ -255,9 +255,9 @@
   .end-block .who { font: 500 2rem/1.3 var(--body); color: var(--muted); }
   .scene[data-id="end"] .site-qr { top: 9.5rem; right: 7rem; width: 20rem; } .scene[data-id="end"] .site-qr .qr { width: 15rem; height: 15rem; }
   html.narrow .end-block { position: static; order: 1; width: auto; } html.narrow .end-block h1 { font-size: 34px; } html.narrow .end-block .who { font-size: 16px; }
-  .title-block h1 { font: 760 3.3rem/1.04 var(--display); font-variation-settings: "wdth" 90; letter-spacing: -.014em; color: var(--title); text-wrap: balance; }
-  .title-block .sub { font: 700 1.9rem/1.2 var(--body); color: var(--ink); }
-  .title-block .who { font: 500 1.65rem/1.3 var(--body); color: var(--muted); }
+  .title-block h1 { font: 760 3.5rem/1.04 var(--display); font-variation-settings: "wdth" 90; letter-spacing: -.014em; color: var(--title); text-wrap: balance; }
+  .title-block .sub { font: 700 2rem/1.2 var(--body); color: var(--ink); }
+  .title-block .who { font: 500 1.8rem/1.3 var(--body); color: var(--muted); }
   .title-block .venue { font: 600 1.35rem/1.2 var(--body); color: var(--muted); }
 
   /* ---- controls: hidden while presenting; C shows them */
@@ -392,11 +392,10 @@
   <div class="title-block">
     <p class="venue">Keynote · China&#8209;Japan Bilateral Symposium on Advanced Computational Intelligence · ISCIIA 2026</p>
     <h1>Uncertainty, Topology, and Graphs in Prototype&#8209;Based Learning</h1>
-    <p class="sub">From Soft Clustering to Objective&#8209;Based Structure Learning</p>
     <p class="who">Seiki Ubukata · Osaka Metropolitan University · October 30, 2026</p>
   </div>
   <a class="site-qr" target="_blank" rel="noopener"><p class="photo">Take a photo!</p><div class="qr" role="img" aria-label="QR code of the talk site"></div><p><b>Website<br>for this talk</b></p></a>
-  <aside class="notes"><p>[Introduction · 5 min]<br>My talk is / "Uncertainty, Topology, and Graphs / in Prototype-Based Learning: / From Soft Clustering / to Objective-Based Structure Learning."<br><b>Please take a photo</b> of the QR code.<br>It opens the talk site, / with the slides, papers, and code.<br>The four panels here / are the four parts of this talk.<br>I begin with k-means and FCM, / and then three parts present <b>our methods</b>.<br>But first, / let me introduce myself.</p></aside>
+  <aside class="notes"><p>[Introduction · 5 min]<br>My talk is / "Uncertainty, Topology, and Graphs / in Prototype-Based Learning."<br><b>Please take a photo</b> of the QR code.<br>It opens the talk site, / with the slides, papers, and code.<br>The four panels here / are the four parts of this talk.<br>I begin with k-means and FCM, / and then three parts present <b>our methods</b>.<br>But first, / let me introduce myself.</p></aside>
 </section>
 
 <!-- data-site: the URL of the talk site, shown as a QR code on this slide (empty: a marked place). The GitHub Pages
