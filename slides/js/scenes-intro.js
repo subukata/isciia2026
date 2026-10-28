@@ -228,7 +228,8 @@ export default function intro(ctx) {
     show(ctx, step, { dur, forward }) {
       // J (step 0), then its two updates (step 1); the equation sits top left and the figure takes the right side.
       const F = ctx.field({ eq: 'tall', meter: true });
-      const m = S.view(BOUNDS_B, F, dur), fin = blobsFinal(), init = blobsInit();
+      // With J, the figure is right of the equation (data-beside): its label and the value of J at its top, the data under them.
+      const m = S.view(BOUNDS_B, step === 0 ? { ...F, y: F.y + 120, h: F.h - 120 } : F, dur), fin = blobsFinal(), init = blobsInit();
       const J = fin.history.at(-1);
       const painted = s => blobItems(m, i => ({ fill: CLUSTER[s.labels[i]], shape: SHAPE[s.labels[i]] }));
       const cells = B => (g, st) => {
@@ -254,7 +255,7 @@ export default function intro(ctx) {
           const right = mid[0] < F.x + F.w / 2, below = mid[1] < F.y + F.h / 2;
           line(g, P, Q, { color: C.hl, lw: 5, grow: born('km:d' + sample, { dur: 500 }) });
           text(g, 'squared distance', mid[0] + (right ? 20 : -20), mid[1] + (below ? 40 : -20), { size: 30, weight: 700, color: C.hl, align: right ? 'left' : 'right' });
-          // The figure's label and the value of J, in the free space under the equation.
+          // The figure's label and the value of J, above the data.
           plate(g, 'k-means on 300 data points, $C = 3$', F.x + 4, F.y + 2);
           plate(g, `$J$ = ${J.toFixed(1)}`, F.x + 4, F.y + 60, { size: 44, color: C.hl });
         };
