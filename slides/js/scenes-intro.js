@@ -166,20 +166,21 @@ export default function intro(ctx) {
     show(ctx, step, { dur }) {
       M.hide();
       S.set([], { dur });
-      // The profile, service and awards are the page's own text (index.html); the talk site's code is drawn to their right.
-      const narrow = ctx.narrow(), F = narrow ? ctx.field() : { x: 600, y: 168, w: 940, h: 580 };
-      const qx = F.x + F.w - 270, size = 250;
+      // The profile, career, service and awards are the page's own text (index.html); the talk site's code is drawn under
+      // the awards, in the third column.
+      const narrow = ctx.narrow(), F = narrow ? ctx.field() : { x: 1060, y: 520, w: 480, h: 330 };
+      if (!narrow) S.clip = { x: F.x - 20, y: F.y - 10, w: F.w + 40, h: F.h + 20 };
+      const size = 200, qx = F.x + (F.w - size) / 2;
       const url = ctx.el('copy').querySelector('[data-id="about"]')?.dataset.site?.trim() ?? '';
       S.over = g => {
         // The talk site, to photograph.
         text(g, 'Take a photo!', qx + size / 2, F.y + 40, { size: 38, weight: 780, family: FONT.display, color: C.hl, align: 'center', halo: false });
-        siteCode(g, qx, F.y + 74, size, url);
+        siteCode(g, qx, F.y + 64, size, url);
         // What the code opens (its address is long, and the code is enough).
-        text(g, 'Website', qx + size / 2, F.y + 74 + size + 52, { size: 28, weight: 700, color: C.ink, align: 'center', halo: false });
-        text(g, 'for this talk', qx + size / 2, F.y + 74 + size + 90, { size: 28, weight: 700, color: C.ink, align: 'center', halo: false });
+        text(g, 'Website for this talk', qx + size / 2, F.y + 64 + size + 46, { size: 28, weight: 700, color: C.ink, align: 'center', halo: false });
       };
       // The code and its words open the site: a mouse on the press, a finger on the lift (when browsers allow a new tab).
-      const onSite = (x, y) => url && x >= qx - 30 && x <= qx + size + 30 && y >= F.y && y <= F.y + 74 + size + 104;
+      const onSite = (x, y) => url && x >= F.x && x <= F.x + F.w && y >= F.y && y <= F.y + 64 + size + 60;
       const open = () => window.open(url, '_blank', 'noopener');
       let tap = false;
       S.handlers.move = (x, y) => S.cursor(onSite(x, y) ? 'pointer' : '');
