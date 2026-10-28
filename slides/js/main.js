@@ -33,6 +33,7 @@ const PARTS = [
 const sections = [...document.querySelectorAll('#copy > .scene')];
 let split = false;   // this step's layout: the words left and the figure right (data-split), or the wide one
 let eqRowBottom = 0; // in the split layout, where an equation's own row ends (stage units)
+let eqRowSide = null; // a row marked data-beside: where its equations end on the right and where the row begins (stage units)
 let leadShift = 0;   // how much lower than designed the key sentence under the title ends (stage units)
 let leadBottom = 0;  // where it ends (stage units; 0 without one)
 let footTop = 0;     // where the words at the bottom (a benefit box, with the caption over it) begin (stage units; 0 without)
@@ -55,8 +56,10 @@ const ctx = {
    */
   field(opts = {}) {
     if (split && !narrow) {
-      // Right of the column of words (as wide as its equation needs), under the title or the equation's row.
-      const y0 = root.classList.contains('eq-row') ? eqRowBottom + 24 : 140, x0 = 60 + colWidth + 40;
+      // Right of the column of words (as wide as its equation needs), under the title or the equation's row; or, for a
+      // row marked data-beside, right of its equations from the top of the row (the words stay under the equations).
+      const y0 = eqRowSide ? eqRowSide.y : root.classList.contains('eq-row') ? eqRowBottom + 24 : 140;
+      const x0 = eqRowSide ? eqRowSide.x : 60 + colWidth + 40;
       const r = { x: x0, y: y0, w: 1540 - x0, h: 852 - y0 };
       stage.clip = { x: r.x - 20, y: r.y - 12, w: r.w + 40, h: r.h + 16 };
       return r;
@@ -270,9 +273,10 @@ function spaceEquations(s) {
   }
 }
 function placeEquation(s) {
-  root.classList.remove('eq-row');
+  root.classList.remove('eq-row', 'eq-beside');
   for (const v of ['--col-top', '--col-w', '--lead-shift', '--lead-end']) s.el.style.removeProperty(v);
   colWidth = 560;
+  eqRowSide = null;
   leadShift = 0;
   leadBottom = 0;
   if (!split || narrow) { placeLead(s); return; }
@@ -293,6 +297,13 @@ function placeEquation(s) {
   placeLead(s);
   eqRowBottom = Math.max(...bands.map(y));
   s.el.style.setProperty('--col-top', `${(eqRowBottom + 24) / 20}rem`);
+  // A tall but narrow equation (data-beside on its band): the figure takes the room right of it, from the top of the row,
+  // instead of the short strip under it. The band is only as wide as its equations, so it stays clear of the figure.
+  if (bands.some(b => b.hasAttribute('data-beside'))) {
+    root.classList.add('eq-beside');
+    const right = Math.max(...bands.flatMap(b => [...b.querySelectorAll('mjx-container')].map(m => (m.getBoundingClientRect().right - fr.left) * unit)));
+    eqRowSide = { x: Math.ceil(right) + 40, y: Math.min(...bands.map(b => (b.getBoundingClientRect().top - fr.top) * unit)) };
+  }
 }
 const next = () => {
   if (cur.step < scenes[cur.si].steps - 1) show(cur.si, cur.step + 1);
