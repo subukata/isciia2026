@@ -173,6 +173,9 @@
   .scene[data-id="bcd"] .eqband[data-beside] { font-size: 1.9rem; }
   /* RMCM2's objective: the key sentence across the top, then J and its figure lower, in the middle of the room left. */
   html.split.eq-row:not(.narrow) .scene.active[data-id="objective"] > .eqband[data-beside] { top: calc(12.2rem + var(--lead-shift, 0rem)); }
+  /* Page 22: larger words (the key sentence and J), J and its figure moved down under them. */
+  .scene[data-id="objective"] > .lead[data-steps="0"] { font-size: 2.3rem; line-height: 1.2; }
+  html.split.eq-row:not(.narrow) .scene.active[data-id="objective"] > .eqband[data-beside] { font-size: 2.35rem; }
   html.split:not(.narrow) #meter { left: 3rem; top: auto; bottom: 3.2rem; width: 27rem; height: 8.4rem; }
   /* Lists in captions. */
   .cap.bullets { margin: 0; padding-left: 1.3em; }
@@ -541,11 +544,11 @@
 </section>
 
 <!-- One page (2026-10-30): the definition of the neighborhood, the idea, and the figure of three neighborhoods. -->
-<section class="scene" data-id="roughset" data-split="all" data-part="2" data-title="Rough sets judge each data point by its neighborhood">
-  <h2>Rough sets judge each data point by its neighborhood</h2>
+<section class="scene" data-id="roughset" data-split="all" data-part="2" data-title="Rough clustering based on neighborhoods">
+  <h2>Rough clustering based on neighborhoods</h2>
   <p class="lead">The neighborhood of a data point: every data point within a radius $\delta$.</p>
   <div class="eqband tall">$$\underbrace{\mathcal{N}_i}_{\text{the neighborhood of }i}=\{\,j:\ \|\bm{x}_i-\bm{x}_j\|\le \delta\,\}$$</div>
-  <p class="cap"><b>Neighborhoods induce uncertainty.</b></p>
+  <p class="cap"><b>The basic idea of rough set theory: neighborhoods induce uncertainty.</b></p>
   <p class="idea"><b>Idea</b> If all neighbors of a data point belong to a cluster, the data point certainly belongs to it; if only some do, possibly.</p>
   <p class="ref">Pawlak, 1982</p>
 </section>
@@ -560,8 +563,9 @@
   <p class="cap" data-steps="1">Ringed: data points undecided by distance, yet certain by their neighborhoods.<span class="next">→ So let the neighborhood decide: rough membership.</span></p>
 </section>
 
-<section class="scene" data-id="granule" data-split="0" data-part="2" data-title="Rough membership grades a data point by its neighbors">
-  <h2 data-steps="0,1">Rough membership grades a data point by its neighbors</h2>
+<section class="scene" data-id="granule" data-split="0" data-part="2" data-title="Rough membership">
+  <h2 data-steps="0">Rough membership</h2>
+  <h2 data-steps="1">Certain and boundary regions based on rough membership</h2>
   <p class="lead" data-steps="0">Rough membership: the share of the neighbors that belong to cluster $c$.</p>
   <p class="lead" data-steps="1">We can extract certain and uncertain regions by $\mu_{ci}$.<br>All neighbors belong to $c$: certain; only some do: possible.</p>
   <div class="eqband tall" data-steps="0">$$\mu_{ci}=\underbrace{\frac{|\mathcal{N}_i\cap X_c|}{|\mathcal{N}_i|}}_{\text{share of cluster }c\text{ among the neighbors}}$$</div>
