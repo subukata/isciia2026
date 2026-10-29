@@ -578,13 +578,14 @@
 </section>
 
 <section class="scene" data-id="objective" data-split="0,1" data-part="2" data-title="RMCM2 puts rough membership into one objective">
-  <h2 data-steps="0,1">RMCM2 puts rough membership into one objective</h2>
+  <h2 data-steps="0">Proposed method: RMCM2</h2>
+  <h2 data-steps="1">RMCM2 puts rough membership into one objective</h2>
   <span class="ours-tag">Ours</span>
   <p class="lead" data-steps="0">We proposed objective-based rough membership c-means (RMCM2).<br>RMCM2 minimizes the k-means objective with rough membership in place of the crisp assignment.</p>
     <p class="lead" data-steps="1">The update rules of the labels and the prototypes are derived by minimizing $J$.<br>Labels go by the smaller cost $q$; prototypes are $\mu$-weighted means.</p>
   <div class="eqband tall" data-steps="0" data-beside>$$J=\sum_c\sum_i \underbrace{\class{t-mu}{\mu_{ci}}}_{\substack{\text{rough membership,}\\\text{in place of }u}}\|\bm{x}_i-\bm{b}_c\|^2$$</div>
     <div class="eqband tall small-gap" data-steps="1">$$q_{cj}=\underbrace{\sum_i P_{ij}\|\bm{x}_i-\bm{b}_c\|^2}_{\substack{\bm{b}_c\text{'s error over the data points}\\\text{with }j\text{ in their neighborhoods}}}$$ $$\underbrace{\bm{b}_c=\frac{\sum_i \mu_{ci}\,\bm{x}_i}{\sum_i \mu_{ci}}}_{\mu\text{-weighted mean}}$$</div>
-  <p class="cap" data-steps="1"><span class="pt">$P_{ij}=1/|\mathcal{N}_i|$ if $j\in\mathcal{N}_i$, else 0.</span><span class="pt">Data point $j$ is assigned by the distance between its whole neighborhood and each prototype.</span><span class="pt">Each update minimizes $J$, so $J$ never increases.</span></p>
+  <p class="cap" data-steps="1"><span class="pt">$P_{ij}=1/|\mathcal{N}_i|$ if $j\in\mathcal{N}_i$, else 0.</span><span class="pt">Data point $j$ is assigned by the distance between its whole neighborhood and each prototype.</span></p>
   <div class="ctrl"><label class="param">radius <input type="range" id="ob-radius" min="0.15" max="0.8" step="0.01" value="0.30"><output for="ob-radius"></output></label><button type="button" class="btn" id="ob-run">Run</button></div>
   <p class="ref">Ubukata, Notsu, Honda, Inf. Sci., 2021</p>
 </section>
