@@ -667,14 +667,17 @@ export default function part3(ctx) {
     return { raw, y, X, means };
   })();
   const DIGITS_PARAMS = { side: 16, lam: 2.79, gamma: 5.53 };   // tuned for Digits in the public SOM-OLP example
+  const LAM_HARD = 0.02;   // a small λ: the data points bound to the nodes (p22 swings between the two)
   const TAB10 = ['#1F77B4', '#FF7F0E', '#2CA02C', '#D62728', '#9467BD', '#8C564B', '#E377C2', '#7F7F7F', '#BCBD22', '#17BECF'];
-  const digitsRuns = { som: null, olp: null, failed: false, onReady: null };
+  const digitsRuns = { som: null, olp: null, olpHard: null, failed: false, onReady: null };
   const digitsReady = () => digitsRuns.onReady?.();
   /** On the main thread, only if the worker could not run. */
   function digitsHere() {
     digitsRuns.som = mapState(16)(ub.batchSom(DIGITS.X, [16, 16], { epochs: 60, sigma: 4, sigmaEnd: 0.5 }));
     const gen = ub.steps.somOlp(DIGITS.X, A.lattice(16), { lam: DIGITS_PARAMS.lam, gamma: DIGITS_PARAMS.gamma, maxIter: 1000, tol: 0 }), stop = settled(), adapt = mapState(0);
     for (;;) { const { value, done } = gen.next(); const s = adapt(done ? value : value.result()); if (done || stop(s)) { digitsRuns.olp = s; break; } }
+    const hard = ub.steps.somOlp(DIGITS.X, A.lattice(16), { lam: LAM_HARD, gamma: DIGITS_PARAMS.gamma, maxIter: 1000, tol: 0 }), stopH = settled();
+    for (;;) { const { value, done } = hard.next(); const s = adapt(done ? value : value.result()); if (done || stopH(s)) { digitsRuns.olpHard = s; break; } }
     digitsReady();
   }
   // Start when the deck opens (not in the presenter's window, which draws no figures).
@@ -683,11 +686,11 @@ export default function part3(ctx) {
       const worker = new Worker(new URL('./digits-worker.js', import.meta.url), { type: 'module' });
       worker.onmessage = ({ data }) => {
         digitsRuns[data.kind] = mapState(data.kind === 'som' ? 16 : 0)(data.result);
-        if (data.kind === 'olp') worker.terminate();
+        if (data.kind === 'olpHard') worker.terminate();
         digitsReady();
       };
       worker.onerror = e => { e.preventDefault?.(); worker.terminate(); digitsRuns.failed = true; digitsReady(); };
-      worker.postMessage({ X: DIGITS.X, ...DIGITS_PARAMS });
+      worker.postMessage({ X: DIGITS.X, ...DIGITS_PARAMS, lamHard: LAM_HARD });
     } catch (err) { digitsRuns.failed = true; }
   }
   /** An 8 x 8 image (values 0 to 16) as gray squares. */
@@ -776,13 +779,33 @@ export default function part3(ctx) {
       digitsRuns.onReady = () => { if (rlShown) ctx.rerender(); };
       if (digitsRuns.failed && !digitsRuns.olp) ctx.after(80, digitsHere);
       const dg = digitsRuns.olp;
-      const items = irisOlp().emb.map((v, i) => { const [x, y] = li.at(v); return { ...irisItem(i), id: 'j' + i, x, y, hit: true, data: i }; });
-      if (dg) items.push(...dg.emb.map((v, i) => { const [x, y] = ld.at(v); return { id: 'e' + i, x, y, r: 3.6, fill: TAB10[DIGITS.y[i]], hit: true, data: i }; }));
+      // Two λ for each data set: the tuned one (the data points free between the nodes) and a small one (bound to the nodes).
+      // The maps swing slowly from one to the other and back.
+      const LAMS = [[1.32, DIGITS_PARAMS.lam], [LAM_HARD, LAM_HARD]];
+      const runs = [[irisOlp(), dg], [irisOlp(LAM_HARD), digitsRuns.olpHard]];
+      let bound = 0, label = 0, focus = -1;
+      const digitStyle = i => (focus < 0 ? { r: 3.6 } : { r: DIGITS.y[i] === focus ? 5.6 : 3.6, alpha: DIGITS.y[i] === focus ? 1 : 0.45 });
+      const itemsOf = ([ir, d]) => [
+        ...ir.emb.map((v, i) => { const [x, y] = li.at(v); return { ...irisItem(i), id: 'j' + i, x, y, hit: true, data: i }; }),
+        ...(d ? d.emb.map((v, i) => { const [x, y] = ld.at(v); return { ...digitStyle(i), id: 'e' + i, x, y, fill: TAB10[DIGITS.y[i]], hit: true, data: i }; }) : []),
+      ];
+      const items = itemsOf(runs[0]);
       S.set(items, { dur: Math.max(dur, 1300), stagger: forward ? (sp, k) => k * (1400 / items.length) : null });
+      if (!ctx.reduced()) {
+        // Digits swings too once its small-λ run is in (it is computed after the tuned one).
+        const swingMaps = () => {
+          bound = 1 - bound;
+          const [ir, d] = runs[bound];
+          S.set(itemsOf([ir, d && runs[1 - bound][1] ? d : runs[0][1]]), { dur: 3000, keep: true });
+          // The labels change halfway, as the points cross over.
+          ctx.after(1500, () => { label = bound; S.wake(); });
+          ctx.after(6200, swingMaps);
+        };
+        ctx.after(forward ? 3400 : 2000, swingMaps);
+      }
       S.under = g => { drawGrid(g, li, 16, C.faint); if (dg) drawGrid(g, ld, 16, C.faint); };
       // The digits' key: each digit's mean image and its color, ten rows over the map's height.
       const kStep = (half[1].map.h - 40) / 9, kScale = Math.min(5, (kStep - 8) / 8);
-      let focus = -1;
       if (dg) live(ctx, forward ? 2600 : 1200, () => () => {
         // One digit after another comes forward.
         const k = cycle([0, 1, 2, 3, 4, 5, 6, 7, 8, 9], 2.4);
@@ -791,8 +814,11 @@ export default function part3(ctx) {
         S.patch(Array.from({ length: DIGITS.raw.length }, (_, i) => ['e' + i, { r: DIGITS.y[i] === k ? 5.6 : 3.6, alpha: DIGITS.y[i] === k ? 1 : 0.45 }]), { dur: 400 });
       });
       S.over = g => {
-        plate(g, 'Iris: SOM-OLP', half[0].map.x, half[0].map.y - 56, { color: C.ours });
-        plate(g, 'Digits: SOM-OLP', half[1].map.x, half[1].map.y - 56, { color: C.ours });
+        // Each map's λ, and where it puts the data points.
+        const where = label ? 'on the nodes' : 'between the nodes';
+        plate(g, `Iris, $λ = ${f2(LAMS[label][0])}$: ${where}`, half[0].map.x, half[0].map.y - 56, { color: C.ours });
+        if (dg) plate(g, `Digits, $λ = ${f2(label && runs[1][1] ? LAMS[1][1] : LAMS[0][1])}$: ${label && runs[1][1] ? where : 'between the nodes'}`, half[1].map.x, half[1].map.y - 56, { color: C.ours });
+        else plate(g, 'Digits: SOM-OLP', half[1].map.x, half[1].map.y - 56, { color: C.ours });
         NAMES.forEach((name, k) => {
           const x = half[0].key.x, y = half[0].map.y + 40 + k * 56;
           g.fillStyle = CLUSTER[k]; g.beginPath();

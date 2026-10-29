@@ -1,7 +1,8 @@
 /**
  * Batch SOM and SOM-OLP on Digits (1797 points in 64 dimensions, a 16 x 16 lattice), off the main
  * thread: about six seconds of work, started when the deck opens, so the scene has it in time.
- * Message in: { X (standardized rows), side, lam, gamma }. Messages out: { kind: 'som' | 'olp', result }.
+ * Message in: { X (standardized rows), side, lam, gamma, lamHard }. Messages out: { kind: 'som' | 'olp' | 'olpHard', result }:
+ * olpHard is SOM-OLP again with a small λ (lamHard), its data points bound to the nodes.
  */
 import * as A from './algo.js';
 
@@ -15,13 +16,17 @@ const plain = r => ({
   history: Array.from(r.history), nIter: r.nIter, stopReason: r.stopReason,
 });
 
-self.onmessage = async ({ data: { X, side, lam, gamma } }) => {
+self.onmessage = async ({ data: { X, side, lam, gamma, lamHard } }) => {
   const ub = await ubukit;
   postMessage({ kind: 'som', result: plain(ub.batchSom(X, [side, side], { epochs: 60, sigma: 4, sigmaEnd: 0.5 })) });
   // The talk's stopping rule (as the public implementation): relative change of J at most 1e-4.
-  const gen = ub.steps.somOlp(X, A.lattice(side), { lam, gamma, maxIter: 1000, tol: 0 });
-  for (;;) {
-    const { value, done } = gen.next(), r = done ? value : value.result(), h = r.history, n = h.length;
-    if (done || (n >= 3 && Math.abs(h[n - 1] - h[n - 2]) / Math.max(1, Math.abs(h[n - 2])) <= 1e-4)) { postMessage({ kind: 'olp', result: plain(r) }); return; }
-  }
+  const olp = l => {
+    const gen = ub.steps.somOlp(X, A.lattice(side), { lam: l, gamma, maxIter: 1000, tol: 0 });
+    for (;;) {
+      const { value, done } = gen.next(), r = done ? value : value.result(), h = r.history, n = h.length;
+      if (done || (n >= 3 && Math.abs(h[n - 1] - h[n - 2]) / Math.max(1, Math.abs(h[n - 2])) <= 1e-4)) return plain(r);
+    }
+  };
+  postMessage({ kind: 'olp', result: olp(lam) });
+  if (lamHard) postMessage({ kind: 'olpHard', result: olp(lamHard) });
 };
