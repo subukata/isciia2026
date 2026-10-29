@@ -262,7 +262,7 @@ export default function part1(ctx) {
           }
           if (k < 3 && !ctx.narrow()) arrow(g, [r.x + r.w + 8, r.y + r.h / 2], [r.x + r.w + 40, r.y + r.h / 2], { color: k + 1 < n ? C.gray : C.line, lw: 3.4, head: 14, grow: born('fam:arrow' + k, { delay: 200 }) });
         });
-        // No key: the caption says what the colors mean, and the notes say a star can be dragged.
+        // No key: the caption says what the colors mean (a star can be dragged).
       };
       // The same three prototypes in every panel: drag one, and all rules redraw.
       let held = null;

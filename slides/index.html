@@ -79,7 +79,7 @@
   html.dark { --paper: #0F1A26; --ink: #E3E9F0; --title: #F3F6FA; --muted: #A7B2BF; --line: #3A4A5C; --faint: #253344; --hl: #A9C1EC; --ours: #4FD1A5; }
   html.dark .part-chip { color: #75838F; }
   html.dark .tick.done i { background: #5B6B7D; }
-  /* The white panels over the stage (notes, scenes, help, the presenter window, the tool buttons) keep the light colors on dark slides. */
+  /* The white panels over the stage (timer, scenes, help, the presenter window, the tool buttons) keep the light colors on dark slides. */
   html.dark .sheet, html.dark #presenter-window, html.dark .tools { --ink: #13202E; --title: #0E2741; --muted: #4F5B6A; --line: #C3CCD7; --faint: #E1E6EC; --hl: #1F3B73; --ours: #00775A; }
   [hidden] { display: none !important; }
   /* Phones do not enlarge small text on their own (iOS in landscape does, unless told): the slide keeps its layout. */
@@ -316,25 +316,19 @@
   .p-pace.late { color: var(--neg); } .p-pace.early { color: var(--pos); }
   .p-plan { font-size: 14px; color: var(--muted); }
   .p-now { font-weight: 700; margin: 0; } .p-next { color: var(--muted); margin: 4px 0 0; }
-  .p-notes p { margin: 6px 0 0; font-size: 18px; line-height: 1.6; max-width: 70em; color: var(--muted); padding: 4px 10px; border-left: 4px solid transparent; border-radius: 0 6px 6px 0; }
-  /* The paragraphs of the current step: what to say now. */
-  .p-notes p.now { color: var(--ink); background: #EAF0F7; border-left-color: var(--hl); }
   .p-buttons { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 6px; }
   .p-buttons button { font: 600 15px/1 var(--body); border: 1px solid var(--line); background: #FFFFFF; border-radius: 6px; padding: 8px 11px; cursor: pointer; }
-  aside.notes { display: none; }
-  /* A phone: the notes in one column (the clock on one line above them), not squeezed to the right of the clock. */
+  /* A phone: one column (the clock on one line above the scene and the next), not squeezed to the right of the clock. */
   @media (max-width: 760px) {
     #presenter, #presenter-window { grid-template-columns: minmax(0, 1fr); }
     #presenter { max-height: 62vh; }
     #presenter .p-clock, #presenter-window .p-clock { grid-auto-flow: column; justify-content: start; align-items: center; gap: 4px 12px; }
     #presenter .p-time, #presenter-window .p-time { font-size: 28px; }
     #presenter .p-plan, #presenter-window .p-plan { display: none; }
-    .p-notes p { max-width: none; font-size: 17px; }
   }
   #presenter-window { position: fixed; inset: 0; z-index: 30; background: #FFFFFF; overflow-y: auto; padding: 24px max(16px, env(safe-area-inset-left, 0px));
     display: grid; grid-template-columns: 280px minmax(0, 1fr); gap: 12px 30px; align-content: start; font: 400 18px/1.5 var(--body); }
   #presenter-window .p-time { font-size: 60px; }
-  #presenter-window .p-notes p { font-size: 22px; }
   html.presenter-mode #deck { display: none; }
 
   /* ---- narrow screens: title, stage, words and meter stacked */
@@ -397,7 +391,6 @@
     <p class="who">Seiki Ubukata · Osaka Metropolitan University · October 30, 2026</p>
   </div>
   <a class="site-qr" target="_blank" rel="noopener"><p class="photo">Take a photo!</p><div class="qr" role="img" aria-label="QR code of the talk site"></div><p><b>Website<br>for this talk</b></p></a>
-  <aside class="notes"><p>[Introduction · 5 min]<br>My talk is / "Uncertainty, Topology, and Graphs / in Prototype-Based Learning."<br><b>Please take a photo</b> of the QR code.<br>It opens the talk site, / with the slides, papers, and code.<br>The four panels here / are the four parts of this talk.<br>I begin with k-means and FCM, / and then three parts present <b>our methods</b>.<br>But first, / let me introduce myself.</p></aside>
 </section>
 
 <!-- data-site: the URL of the talk site, shown as a QR code on this slide (empty: a marked place). The GitHub Pages
@@ -433,21 +426,18 @@
       <dt>2015</dt><dd>IEEE CIS Japan Chapter Young Researcher Award</dd>
     </dl>
   </div>
-  <aside class="notes"><p>I am <b>Seiki Ubukata</b>, / Associate Professor at the Graduate School of Informatics, / Osaka Metropolitan University.<br>My research is on data clustering, / soft computing, / fuzzy theory, / rough set theory, / and self-organizing maps.</p></aside>
 </section>
 
 <section class="scene" data-id="why" data-part="0" data-title="Why clustering">
     <h2 data-steps="0">Clustering groups data; a prototype summarizes a group</h2>
   <p class="lead" data-steps="0">Most data come without labels, so we look for the groups in them.</p>
   <p class="cap" data-steps="0"><span class="next">→ k-means is the standard way to find these prototypes.</span></p>
-  <aside class="notes"><p>This slide shows / that clustering groups data, / and a prototype summarizes a group.<br>Most data come without labels, / so we look for the groups in them.<br>On the left, / the data points have no labels.<br>In the middle, / clustering finds 3 groups.<br>On the right, / each group is summarized by a prototype.<br>k-means is the standard way / to find these prototypes.</p></aside>
 </section>
 
 <section class="scene" data-id="outline" data-theme="dark" data-part="0" data-title="Overview of this talk" data-lit="0,1,2,3">
   <h2>Overview of this talk</h2>
   <p class="lead">All of these methods are prototype-based learning.</p>
   <p class="cap" data-steps="0"><span class="pt">Green names are our methods.</span><span class="pt">The thread: from rule-based updates to one objective.</span></p>
-  <aside class="notes"><p>This is the overview of this talk.<br>The introduction is clustering with k-means and FCM: / crisp clusters, then degrees.<br>Part 1 is rough clustering by distances: / uncertain regions found by distances.<br>Part 2 is rough clustering by neighborhoods: / uncertainty by neighborhoods, / and graphs from overlaps.<br>Part 3 is topographic mapping: / prototypes kept in order on a map.<br>All of these methods / are <b>prototype-based learning</b>.<br>Green names are <b>our methods</b>.<br>The thread of the talk / goes from rule-based updates / to one objective.</p></aside>
 </section>
 
 <section class="scene" data-id="kmeans" data-split="all" data-part="0" data-title="k-means minimizes one objective by two alternating updates">
@@ -463,7 +453,6 @@
   <p class="cap" data-steps="1"><span class="pt">$J$ measures the fit: the squared distance from each data point to its prototype, summed over all data points.</span><span class="pt">$\bm{x}_i$: data point $i$; $\bm{b}_c$: the prototype of cluster $c$.</span></p>
   <p class="cap" data-steps="2">Each update minimizes $J$, so $J$ never increases.</p>
   <p class="ref">MacQueen, 1967 · Lloyd, 1982</p>
-  <aside class="notes"><p>Good prototypes / are close to their data points.<br>A clustering is not only its prototypes / but also its assignment: / the cluster of each data point.<br>So <b>we need</b> one measure / of how good this cluster structure is.<br>Here, / each data point is joined to its prototype.<br><b>k-means</b> is a clustering method / that represents each cluster / by the mean of its data points.</p><p>(→) So k-means minimizes one objective.<br>We split the data points into C clusters, / and here C is 3.<br>The membership u_ci says / which cluster data point i is in.<br>So choosing u / is the clustering.<br>Then, / the objective <b>J</b> measures the fit: / the squared distance from each data point to its prototype, / summed over all data points.<br>In J, / u_ci is 1 if i is in c, / and 0 otherwise.<br>x_i is data point i, / and b_c is the prototype of cluster c.</p><p>(→) k-means minimizes J / by two alternating updates.<br>We minimize J <b>in turns</b>: / assign with the prototypes fixed, / then average.<br>With b fixed, / each data point goes to the nearest prototype.<br>With u fixed, / each prototype moves to the mean.<br>Each update minimizes J, / so J <b>never increases</b>.</p></aside>
 </section>
 
 
@@ -482,7 +471,6 @@
   <p class="cap" data-steps="3"><span class="pt">$u_{ci}$ is the degree of membership, larger for clusters that are relatively nearer.</span><span class="pt">$J$ never increases.</span></p>
   <div class="ctrl"><label class="param">$m$ <input type="range" id="fz-m" min="1.1" max="6" step="0.01" value="2"><output for="fz-m"></output></label><button type="button" class="btn" id="fz-run">Run</button></div>
   <p class="ref">Bezdek, 1981</p>
-  <aside class="notes"><p>k-means splits clusters / with a crisp boundary.<br>So it <b>cannot express</b> / how ambiguous the boundary is.<br>This is a new example / with two overlapping groups.<br>Here, / k-means puts each data point near the boundary / in one cluster only.<br><b>FCM</b>, fuzzy c-means, / is fuzzy clustering: / it extends the discrete membership, 0 or 1, / to a continuous membership / between 0 and 1.</p><p>(→) So FCM expresses the boundary / by degrees.<br>The nearer a prototype, / the larger the degree, / and each data point's degrees add up to 1.<br>FCM, or fuzzy c-means, / is a clustering method / that gives each data point a degree of membership in every cluster.</p><p>(→) FCM uses the same J as k-means, / but membership is a degree, / softened by the power m.<br>u_ci is between 0 and 1, / and it sums to 1 over the clusters.<br>m, which is greater than 1, / is the fuzzifier.<br>The larger m is, / the softer the degrees are.</p><p>(→) Both updates minimize J: / degrees from distances, / and prototypes as weighted means.<br>u_ci is the degree of membership, / larger for clusters that are relatively nearer, / and each prototype is a weighted mean.<br>So J <b>never increases</b>.</p></aside>
 </section>
 
 <!-- ============================================================ Part 1 (5.5 min) -->
@@ -490,7 +478,6 @@
 <section class="scene" data-id="toc1" data-theme="dark" data-part="1" data-title="Outline · Part 1">
   <h2>Part 1 · Rough Clustering (Distances)</h2>
   <p class="cap" data-steps="0"><span class="pt">Part 1 finds uncertain regions between clusters by distances.</span><span class="pt">From RCM to its family of thresholds: GRCM and ExRCM.</span></p>
-  <aside class="notes"><p>[Part 1 · 5.5 min]<br>Part 1 is rough clustering / by distances.<br>It finds uncertain regions between clusters / by distances.<br>We go from RCM / to its family of thresholds: / GRCM and ExRCM.</p></aside>
 </section>
 
 
@@ -507,7 +494,6 @@
   <p class="cap" data-steps="2"><span class="next">→ Two classic rules set this threshold differently.</span></p>
   <div class="ctrl"><label class="param">$\beta$ <input type="range" id="rg-beta" min="0" max="1.2" step="0.05" value="0.35"><output for="rg-beta"></output></label><button type="button" class="btn" id="rg-run">Run</button></div>
   <p class="ref">Pawlak, 1982 · Lingras and West, 2004</p>
-  <aside class="notes"><p>This is rough c-means, or RCM, clustering.<br>In RCM, / a data point belongs to all <b>relatively close</b> clusters.<br>RCM builds on rough set theory, / a theory of sets with <b>certain</b> and <b>possible</b> members.<br>On the left, / FCM gives every data point a degree.<br>On the right, / RCM gives each cluster certain and possible members.<br>So RCM handles <b>overlapping membership</b>.<br>And it extracts a <b>clear boundary</b>: / the data points in both clusters, / shown as diamonds.</p><p>(→) To let a data point belong to several clusters, / RCM uses the upper membership, u-bar_ci.<br>Data point i belongs to every cluster / at most beta farther than the nearest one.<br>For those clusters, / u-bar_ci is 1.<br>d_ci is the distance from i to prototype c, / and d_i min is the distance to the nearest one.<br>The solid circle shows d_i min, / and the dashed circle adds beta to it.<br>So beta is the slack.<br>This boundary data point is shown up close.<br>As beta changes, / i belongs to both clusters, / or to one cluster only.</p><p>(→) A data point in two clusters / counts one half in each, / and each prototype is the weighted mean.<br>The dashed lines / give one half to each of its clusters.<br>But two classic rules / set this threshold differently.</p></aside>
 </section>
 
 <section class="scene" data-id="family" data-part="1" data-title="GRCM and ExRCM generalize the RCM thresholds">
@@ -522,7 +508,6 @@
   <p class="benefit" data-steps="0"><b>Benefit</b> We can adjust how the boundary is extracted, with $\alpha$, $\beta$ and $p$.</p>
   <p class="ref">Peters, 2006 · Ubukata et al., 2017 · Okimoto et al., 2026</p>
   <div class="ctrl"><label class="param">$\alpha$ <input type="range" id="fm-alpha" min="1" max="2" step="0.05" value="1.25"><output for="fm-alpha"></output></label><label class="param">$\beta$ <input type="range" id="fm-beta" min="0" max="1.5" step="0.05" value="0.3"><output for="fm-beta"></output></label><label class="param">$p$ <input type="range" id="fm-zeta" min="0.5" max="4" step="0.25" value="1"><output for="fm-zeta"></output></label></div>
-  <aside class="notes"><p>This slide shows / that GRCM and ExRCM generalize the RCM thresholds.<br>Lingras adds a difference, beta, / and Peters a ratio, alpha.<br>We proposed generalized RCM, or GRCM, / which takes both.<br>We also proposed exponentiated RCM, or ExRCM, / which adds a power p.<br>[Drag a star: all panels follow.]<br>So we can <b>adjust</b> how the boundary is extracted, / with alpha, beta, and p.</p></aside>
 </section>
 
 <section class="scene" data-id="shapes" data-part="1" data-title="ExRCM's exponent p changes the cluster shape">
@@ -533,7 +518,6 @@
   <p class="benefit" data-steps="0"><b>Benefit</b> ExRCM captures clusters flexibly: one exponent $p$ makes the lower approximation round, polygonal or star-shaped.</p>
   <p class="next" data-steps="0">→ Yet every rule judges a data point by its distances alone.</p>
   <p class="ref">Okimoto et al., 2026</p>
-  <aside class="notes"><p>ExRCM's exponent p / changes the cluster shape.<br>Every panel uses the same rule, / with alpha equal to 1 and a shared beta, / and only p changes.<br>Dark orange is the center cluster's <b>lower approximation</b>.<br>Dark and light orange together / are its <b>upper approximation</b>.<br>With p equal to 1, / the sides are <b>bulging</b>.<br>With p equal to 2, / they are <b>straight</b>.<br>With p equal to 4, / they are <b>bent inward</b>.<br>And with p equal to 16, / the cluster is <b>a star</b>.<br>So ExRCM captures clusters <b>flexibly</b>.<br>One exponent p / makes the lower approximation round, polygonal, or star-shaped.<br>Yet every rule / judges a data point by its distances alone.<br>[End of Part 1]</p></aside>
 </section>
 
 
@@ -542,7 +526,6 @@
 <section class="scene" data-id="toc2" data-theme="dark" data-part="2" data-title="Outline · Part 2">
   <h2>Part 2 · Rough Clustering (Neighborhoods)</h2>
   <p class="cap" data-steps="0"><span class="pt">Part 2 finds uncertainty by neighborhoods, with rough set theory.</span><span class="pt">From rough membership to RMCM2, recommendation, and a concept: graphs.</span></p>
-  <aside class="notes"><p>[Part 2 · 6 min]<br>Part 2 is rough clustering / by neighborhoods.<br>It finds uncertainty by neighborhoods, / with rough set theory.<br>We go from rough membership / to RMCM2 and recommendation, / and end with a concept: / graphs.</p></aside>
 </section>
 
 <section class="scene" data-id="roughset" data-split="all" data-part="2" data-title="Rough sets judge each data point by its neighborhood">
@@ -554,7 +537,6 @@
   <p class="idea" data-steps="1"><b>Idea</b> If all neighbors of a data point are in a cluster, the data point is certainly in it; if only some are, possibly.</p>
   <p class="cap" data-steps="1">As $\delta$ shrinks, $\mathcal{N}_i$ becomes pure and $i$ certain.</p>
   <p class="ref">Pawlak, 1982</p>
-  <aside class="notes"><p>This slide shows / that in rough set theory, / neighborhoods give rise to uncertainty.<br>A data point is seen / only through its neighbors.<br>If they are in different clusters, / its cluster is <b>uncertain</b>.<br><b>So we</b> judge each data point by its neighborhood, / not by distance.<br>Here are the neighborhoods of three data points: / two are certain, / and one is uncertain.</p><p>(→) So rough sets judge each data point / by its neighborhood.<br>The neighborhood of a data point / is every data point within a radius delta, / itself included.<br>If all neighbors of a data point are in a cluster, / the data point is certainly in it.<br>If only some are, / it is possibly in it.<br>Here is one data point, up close.<br>As delta shrinks, / N_i becomes pure, / and i becomes certain.</p></aside>
 </section>
 
 
@@ -565,7 +547,6 @@
   <div class="motive" data-steps="0"><p><b>Two views</b> RCM judges a data point by distance; rough sets, by its neighborhood.</p><p><b>Check</b> Run both on the same data and compare the undecided data points.</p></div>
   <p class="cap" data-steps="0">This data point waits in the boundary by distance, yet all of its neighbors are in one cluster.</p>
   <p class="cap" data-steps="1">Ringed: data points undecided by distance, yet certain by their neighborhoods.<span class="next">→ So let the neighborhood decide: rough membership.</span></p>
-  <aside class="notes"><p>RCM judges a data point by its distance, / and rough sets judge it by its neighborhood.<br>We run both methods / on the same data.<br>By distance, / this data point waits in the boundary.<br>Yet all of its <b>10 neighbors</b> / are in one cluster.</p><p>(→) So distance and neighborhoods <b>can disagree</b>.<br>By distance, / 16 data points are undecided, / but by neighborhoods, / only 10 are.<br>The ringed ones / are certain by their neighborhoods.<br>So we let the neighborhood decide, / with rough membership.</p></aside>
 </section>
 
 <section class="scene" data-id="granule" data-split="0" data-part="2" data-title="Rough membership grades a data point by its neighbors">
@@ -580,7 +561,6 @@
   <p class="cap" data-steps="1"><span class="pt">$\mu_{ci}$ is a neighborhood-induced fuzzy membership.</span><span class="pt">We can extract certain and uncertain regions by $\mu_{ci}$.</span></p>
   <div class="ctrl"><label class="param">radius <input type="range" id="gr-radius" min="0.15" max="0.8" step="0.01" value="0.30"><output for="gr-radius"></output></label></div>
   <p class="ref">Pawlak and Skowron, 1994</p>
-  <aside class="notes"><p>Rough membership / grades a data point by its neighbors.<br>It is the share of a data point's neighbors / that are in the cluster.<br>X_c is the set of data points in cluster c, / with labels from k-means.<br>Here is one data point, up close, / with its mu for cluster 1.<br>As delta shrinks, / all of its neighbors are in cluster 1, / and mu reaches 1.</p><p>(→) If all neighbors are in the cluster, / the data point is certain.<br>If its neighbors are in both clusters, / it is possibly in either.<br>So mu equal to 1 means / certainly in c.<br>And mu between 0 and 1 means / possibly in c, / in the boundary.<br>So mu_ci is a neighborhood-induced fuzzy membership.<br>We can extract certain and uncertain regions / by mu_ci.</p></aside>
 </section>
 
 <section class="scene" data-id="objective" data-split="0,1" data-part="2" data-title="RMCM2 puts rough membership into one objective">
@@ -593,7 +573,6 @@
   <p class="cap" data-steps="1"><span class="pt">$P_{ij}=1/|\mathcal{N}_i|$ if $j\in\mathcal{N}_i$, else 0.</span><span class="pt">Each update minimizes $J$, so $J$ never increases.</span></p>
   <div class="ctrl"><label class="param">radius <input type="range" id="ob-radius" min="0.15" max="0.8" step="0.01" value="0.30"><output for="ob-radius"></output></label><button type="button" class="btn" id="ob-run">Run</button></div>
   <p class="ref">Ubukata, Notsu, Honda, Inf. Sci., 2021</p>
-  <aside class="notes"><p>This slide shows / that RMCM2 puts rough membership into one objective.<br>We proposed objective-based rough membership c-means, / RMCM2.<br>RMCM2 minimizes the k-means objective / with rough membership in place of the crisp assignment.<br>In J, / mu, the rough membership, / takes the place of u.<br>The lines are the errors in J, / weighted by mu.<br>The dashed circle is the neighborhood / of one data point.<br>Its neighbors are in both clusters, / so its error goes to <b>both</b> prototypes.<br>As delta changes, / the neighborhood and the lines change with it.</p><p>(→) The update rules of the labels and the prototypes / are derived by minimizing J.<br>Labels go by the smaller cost q, / and prototypes are mu-weighted means.<br>q_cj is b_c's error / over the data points with j in their neighborhoods.<br>The dashed circle / shows these data points.<br>P_ij is one over the size of N_i / if j is in N_i, / and 0 otherwise.<br>Here, / j goes to the cluster / with the smaller q.<br>Each update minimizes J, / so J <b>never increases</b>.</p></aside>
 </section>
 
 <section class="scene" data-id="cfex" data-part="2" data-title="Recommendation uses overlapping clusters">
@@ -605,7 +584,6 @@
   <p class="cap" data-steps="2"><span class="pt">Users in a cluster have similar tastes: an item with a high mean there is likely to be liked.</span><span class="pt">So from each of a user's clusters: its most popular unrated item; $\bm{x}_4$ gets two.</span></p>
   <p class="benefit" data-steps="2"><b>Benefit</b> Taking uncertainty into account improved recommendation performance.</p>
   <p class="ref">Kim, Ubukata, Notsu, Honda, ISIS 2021</p>
-  <aside class="notes"><p>This slide shows / that recommendation uses overlapping clusters.<br>We applied our rough clustering methods / to collaborative filtering, / that is, recommender systems.<br>The goal is to recommend to each user / an item they have not rated yet.<br>The new example is ratings / of 7 users for 6 items.<br>Each user x_i is a row of ratings from 1 to 5, / and a dash means not rated.</p><p>(→) With overlapping clusters, / C equal to 2, / x_4, between the groups, / belongs to both.<br>b_1 and b_2 are the prototypes: / each cluster's mean rating of each item.<br>A dash counts as 0.</p><p>(→) Users in a cluster have similar tastes.<br>So an item with a high mean there / is likely to be liked.<br>From each of a user's clusters, / we recommend its most popular unrated item.<br>So x_4 gets two.<br>Taking uncertainty into account / <b>improved</b> recommendation performance.</p></aside>
 </section>
 
 <section class="scene" data-id="graph" data-part="2" data-title="Overlapping clusters could form a prototype graph">
@@ -614,7 +592,6 @@
   <p class="lead" data-steps="0">Overlaps could also show how clusters connect: the shape (topology) of the data.</p>
   <p class="cap" data-steps="0">With ExRCM or RMCM2, shared data points glue neighboring clusters into a graph: here a loop.</p>
   <p class="ref">Okimoto et al., 2026 · Ubukata, Notsu, Honda, Inf. Sci., 2021</p>
-  <aside class="notes"><p>Finally, / overlapping clusters / could form a prototype graph.<br>This is a concept / that we are working toward.<br>Overlaps could also show how clusters connect: / the shape, or topology, of the data.<br>This new example is a ring, / with ExRCM and 8 prototypes.<br>With ExRCM or RMCM2, / shared data points glue neighboring clusters into a graph.<br>Here, / the graph is a <b>loop</b>.<br>[End of Part 2]</p></aside>
 </section>
 
 <!-- ============================================================ Part 3 (7.5 min) -->
@@ -622,7 +599,6 @@
 <section class="scene" data-id="toc3" data-theme="dark" data-part="3" data-title="Outline · Part 3">
   <h2>Part 3 · Topographic Mapping</h2>
   <p class="cap" data-steps="0"><span class="pt">Part 3 lays out high-dimensional data on a low-dimensional map.</span><span class="pt">From the SOM to SOM-OLP, with one objective.</span></p>
-  <aside class="notes"><p>[Part 3 · 7.5 min]<br>Part 3 is topographic mapping.<br>It lays out high-dimensional data / on a low-dimensional map, / with prototypes kept in order.<br>We go from the SOM to SOM-OLP, / with one objective.</p></aside>
 </section>
 
 
@@ -631,7 +607,6 @@
   <div class="motive" data-steps="0"><p><b>Goal</b> To see data with many dimensions, which cannot be drawn directly.</p><p><b>We need</b> the few dimensions the data really vary in.</p></div>
   <p class="cap" data-steps="0">Manifold hypothesis: such data often lie near a low-dimensional surface (here, 2D in 3D).<span class="next">→ The self-organizing map (SOM) learns such a map with ordered prototypes.</span></p>
   <p class="ref">Fefferman, Mitter, Narayanan, JAMS, 2016</p>
-  <aside class="notes"><p>This slide shows / that a low-dimensional map lets us see high-dimensional data.<br>We want to see data with many dimensions, / which cannot be drawn directly.<br>So <b>we need</b> the few dimensions / the data really vary in.<br>The <b>manifold hypothesis</b> says / that such data often lie near a low-dimensional surface.<br>Here, / the surface is 2D in 3D.<br>On the right, / a 2D topographic map lays the surface flat.<br>The <b>self-organizing map</b>, or SOM, / learns such a map / with ordered prototypes.</p></aside>
 </section>
 
 <section class="scene" data-id="som" data-part="3" data-title="The SOM orders prototypes on a lattice">
@@ -643,7 +618,6 @@
   <p class="cap" data-steps="0">The shading on the right is $h(c,w)$: largest at the winner, less for its lattice neighbors.</p>
   <p class="cap" data-steps="1">On the lattice, a data point can only sit on its winner node.<span class="next">→ Can each data point have its own position on the lattice?</span></p>
     <p class="ref">Kohonen, 1982</p>
-  <aside class="notes"><p>The SOM / orders prototypes on a lattice.<br>First, / an input x comes in.<br>Then, / its nearest prototype is found: / the winner w.<br>Then, / the winner and the nodes near it in the latent space / move toward x together.<br>In the update, / node c moves toward the input / at the rate alpha.<br>h of c and w / pulls the winner's neighbors too.<br>r_c is node c on the lattice, / and sigma is the reach.<br>The shading on the right is h of c and w: / largest at the winner, / and less for its lattice neighbors.<br>After a few inputs, / we <b>fast-forward</b>.</p><p>(→) In batch SOM, / each node moves to a weighted mean of all data points.<br>w_i is the winner of data point i.<br>In the data space, / the lattice unfolds.<br>But on the lattice, / a data point can only sit on its winner node.<br>So, / can each data point have its own position / on the lattice?</p></aside>
 </section>
 
 
@@ -653,7 +627,6 @@
   <p class="lead" data-steps="0">We proposed SOM with optimized latent positions (SOM-OLP): each data point gets its own continuous position $\bm{v}_i$ on the lattice.</p>
   <p class="benefit" data-steps="0"><b>Benefit</b> The map shows each data point, not just its node; and $\bm{v}_i$ is a variable, learned with the prototypes under one objective.</p>
   <p class="ref">Ubukata, Notsu, Honda, IJCNN 2026</p>
-  <aside class="notes"><p>This slide shows / that SOM-OLP gives each data point a position on the lattice.<br>We proposed SOM with optimized latent positions, / or SOM-OLP.<br>Each data point gets its own continuous position, v_i, / on the lattice.<br>On the left, / batch SOM puts the data points on the nodes, / spread out to be seen.<br>On the right, / SOM-OLP puts them between the nodes.<br>So the map shows <b>each data point</b>, / not just its node.<br>And v_i is a <b>variable</b>, / learned with the prototypes under one objective.</p></aside>
 </section>
 
 <section class="scene" data-id="probe" data-part="3" data-title="SOM-OLP moves a data point smoothly on the lattice">
@@ -663,7 +636,6 @@
   <p class="cap" data-steps="0"><b class="label">Notice</b> The SOM winner jumps from node to node; the latent position $\bm{v}$ moves smoothly.<span class="next">→ How is $\bm{v}$ found?</span></p>
   <div class="ctrl"><label class="param">$\lambda$ <input type="range" id="pr-lam" min="0.01" max="0.3" step="0.01" value="0.08"><output for="pr-lam"></output></label><label class="param">$\gamma$ <input type="range" id="pr-gamma" min="0" max="2" step="0.05" value="0.2"><output for="pr-gamma"></output></label></div>
   <p class="ref">Ubukata, Notsu, Honda, IJCNN 2026</p>
-  <aside class="notes"><p>SOM-OLP moves a data point / smoothly on the lattice.<br>We move one input, x, / across the data space, / and watch where it lands on the lattice.<br>[Drag x.]<br>The SOM winner jumps from node to node, / but the latent position v moves smoothly.<br>So how is v found?</p></aside>
 </section>
 
 <section class="scene" data-id="bcd" data-split="all" data-part="3" data-title="SOM-OLP minimizes one objective in closed form">
@@ -682,7 +654,6 @@
   <div class="ctrl"><label class="param">$\lambda$ <input type="range" id="bc-lam" min="0.05" max="1" step="0.05" value="0.3"><output for="bc-lam"></output></label><label class="param">$\gamma$ <input type="range" id="bc-gamma" min="0" max="10" step="0.5" value="3"><output for="bc-gamma"></output></label></div>
   <p class="ref" data-steps="0,1">Ubukata, Notsu, Honda, IJCNN 2026</p>
   <p class="ref" data-steps="2">Ubukata, Notsu, Honda, IJCNN 2026 · Heskes, 1999</p>
-  <aside class="notes"><p>SOM-OLP adds one variable: / the latent position.<br>We have the SOM's prototypes b / and memberships u, / which are soft winners.<br>And we add a new variable: / each data point's latent position, v_i.<br>We find all three by minimizing one objective, / so that no update makes it worse.<br>The memberships u link the data space / and the latent space.</p><p>(→) So SOM-OLP minimizes one objective.<br>The objective has three terms: / data fit, / lattice distance of each position v, / and entropy of u.<br>r_c is node c's place / on the lattice.<br>Gamma and lambda weigh / the lattice distance and the entropy.<br>q_ci, the data fit plus the lattice distance, / is the cost of node c for data point i.</p><p>(→) SOM-OLP minimizes J in closed form, / one block at a time.<br>We fix two blocks of variables / and minimize over the third.<br>u is a softmax, / v is a mean of nodes, / and b is a mean of data.<br>Each block update minimizes J over its block, / so J <b>never increases</b>.<br>One iteration costs order n C, / with n data points and C nodes.<br>Heskes's energy, / in contrast, / costs order n C squared.</p></aside>
 </section>
 
 <section class="scene" data-id="iris" data-part="3" data-title="Iris on a 16 × 16 map">
@@ -691,7 +662,6 @@
   <p class="lead" data-steps="0">We checked SOM-OLP on real data: Iris, 150 flowers with 4 features.</p>
   <p class="cap" data-steps="0"><b class="label">Check</b> SOM-OLP places flowers between the nodes; the species keep their order.</p>
   <p class="ref">Ubukata, Notsu, Honda, IJCNN 2026</p>
-  <aside class="notes"><p>Here is Iris / on a 16 by 16 map.<br>We checked SOM-OLP on real data: / Iris, flowers with 4 features.<br>SOM-OLP places flowers between the nodes, / and the species keep their order.<br>The parameters are the ones tuned for Iris / in the public implementation.<br>So this shows the layout, / not better performance.</p></aside>
 </section>
 
 <section class="scene" data-id="digits" data-part="3" data-title="Digits on a 16 × 16 map">
@@ -700,7 +670,6 @@
   <p class="lead" data-steps="0">Then on 64-dimensional data: Digits, 1,797 images of 8 × 8 pixels.</p>
   <p class="cap" data-steps="0"><b class="label">Check</b> With SOM-OLP, each digit gathers in its own region.</p>
   <p class="ref">Ubukata, Notsu, Honda, IJCNN 2026</p>
-  <aside class="notes"><p>Here is Digits / on a 16 by 16 map.<br>The data are 64-dimensional: / images of 8 by 8 pixels.<br>With SOM-OLP, / each digit gathers in its own region.<br>[Hover over a data point to show its image.]<br>[End of Part 3]</p></aside>
 </section>
 
 <!-- ============================================================ Summary (2 min) -->
@@ -709,7 +678,6 @@
   <h2>Summary: what we did</h2>
   <a class="site-qr corner" target="_blank" rel="noopener"><div class="qr" role="img" aria-label="QR code of the talk site"></div><p><b>Talk website</b></p></a>
   <p class="lead">We handled uncertainty and topology with prototypes, moving from rules to one objective.</p>
-  <aside class="notes"><p>This is a summary of what we did.<br>We handled uncertainty and topology with prototypes, / moving from rules to one objective.<br>In Part 1, / with ExRCM, / we unified the RCM thresholds, / and one exponent shapes the clusters flexibly.<br>In Part 2, / RMCM2 handles uncertainty through neighborhoods, / inside one objective.<br>In Part 3, / with SOM-OLP, / each data point gets its own latent position on the map, / under one objective.</p></aside>
 </section>
 
 <!-- The end of the talk, before the supplement: a slide that says so. -->
@@ -719,7 +687,6 @@
     <p class="who">Seiki Ubukata · Osaka Metropolitan University</p>
   </div>
   <a class="site-qr" target="_blank" rel="noopener"><p class="photo">Take a photo!</p><div class="qr" role="img" aria-label="QR code of the talk site"></div><p><b>Website<br>for this talk</b></p></a>
-  <aside class="notes"><p>That is the end of my talk.<br><b>Thank you</b> for your attention.<br>The QR code opens the talk site, / with the slides, papers, and code.</p></aside>
 </section>
 
 <!-- ============================================================ Supplement (after the last slide) -->
@@ -727,14 +694,12 @@
 <section class="scene" data-id="supp" data-theme="dark" data-part="5" data-title="Supplementary material">
   <h2>Supplementary material</h2>
   <p class="cap"><span class="pt">The talk ends here; the slides that follow are for questions.</span><span class="pt">RSCM and RMCM (Part 2); Heskes's SOM (Part 3).</span></p>
-  <aside class="notes"><p>(Supplement divider)<br>The talk ends here, / and the slides that follow are for questions.<br>They cover RSCM and RMCM for Part 2, / and Heskes's SOM for Part 3.</p></aside>
 </section>
 
 <section class="scene" data-id="rscm" data-part="5" data-lit="2" data-title="Supplement · RSCM and RMCM">
   <h2>Supplement: RSCM and RMCM, rough membership in rules</h2>
   <p class="lead" data-steps="0">We first proposed RSCM and RMCM, which use rough membership in rules: lower and upper regions (RSCM), or weights (RMCM).</p>
   <p class="ref">Ubukata et al., JACIII, 2018</p>
-  <aside class="notes"><p>(Supplement, for questions)<br>We first proposed RSCM and RMCM, / which use rough membership in rules.<br>RSCM uses lower and upper regions, / and RMCM uses weights.<br>Unlike RMCM2, / neither of them minimizes one objective.</p></aside>
 </section>
 
 <section class="scene" data-id="heskes" data-split="0" data-part="5" data-lit="3" data-title="Supplement · Heskes\'s SOM">
@@ -750,7 +715,6 @@
   <p class="cap" data-steps="3">Every candidate's term sums over all nodes: $O(nC^2)$ work per iteration.</p>
   <div class="ctrl"><label class="param">$\sigma$ <input type="range" id="hk-sigma" min="0.25" max="2" step="0.25" value="1"><output for="hk-sigma"></output></label></div>
   <p class="ref">Heskes, 1999</p>
-  <aside class="notes"><p>(Supplement, for questions)<br>SOM updates are rules / that decrease no known function.<br><b>So we want</b> SOM learning / to minimize one energy, / as k-means does.<br>Here is batch SOM on the surface.</p><p>(→) Heskes's SOM / minimizes one energy.<br>Heskes chooses each winner / by how well its whole lattice neighborhood fits the data point.<br>Then one energy is minimized.<br>On the left is a data point x on the surface.<br>On the right, / the lattice shows its nearest node and its winner.</p><p>(→) One energy covers all the errors, / and each winner is chosen / to make its own term smallest.<br>h of c and w_i / is large near the winner.<br>On the same surface and lattice, / the energy-based winner can differ from the nearest node.<br>Here, / it differs for many data points.</p><p>(→) Every candidate's term / sums over all nodes.<br>So each iteration needs / order n C squared work.<br>SOM-OLP, / in contrast, / keeps one objective / without this cost.</p></aside>
 </section>
 
 
@@ -765,7 +729,7 @@
      gone in full screen, where the keys do the same (O, P, C, F, ?). -->
 <div class="tools" id="tools" aria-label="Operator tools">
   <button type="button" id="b-overview" title="All scenes (O)">Scenes</button>
-  <button type="button" id="b-notes" title="Notes and timer (P)" aria-pressed="false">Notes</button>
+  <button type="button" id="b-timer" title="Timer (P)" aria-pressed="false">Timer</button>
   <button type="button" id="b-controls" title="Controls (C)" aria-pressed="false">Controls</button>
   <button type="button" id="b-full" title="Full screen (F)">Full</button>
   <button type="button" id="b-help" title="Keys (?)">?</button>
@@ -789,7 +753,7 @@
     <dt>12 Enter</dt><dd>go to scene 12</dd>
     <dt>L</dt><dd>switch the look (2026 / classic)</dd>
     <dt>O</dt><dd>all scenes</dd>
-    <dt>P</dt><dd>notes and timer on this screen</dd>
+    <dt>P</dt><dd>timer on this screen</dd>
     <dt>W</dt><dd>presenter window, kept in sync</dd>
     <dt>C</dt><dd>show or hide the controls</dd>
     <dt>R</dt><dd>restart the timer</dd>
@@ -798,16 +762,16 @@
   <p style="margin: 12px 0 0; color: var(--muted);">The timer starts when you leave the title. Plan: introduction 5 min, Part 1 5.5, Part 2 6, Part 3 7.5, summary 2 (26 in all).</p>
 </div>
 
-<section class="sheet" id="presenter" hidden aria-label="Presenter notes">
+<section class="sheet" id="presenter" hidden aria-label="Timer">
   <div class="p-clock"><span class="p-time">0:00</span><span class="p-pace"></span><span class="p-plan"></span>
     <div class="p-buttons"><button type="button" id="b-window">Open window</button><button type="button" id="p-reset">Restart timer</button></div></div>
-  <div><p class="p-now"></p><p class="p-next"></p><div class="p-notes"></div></div>
+  <div><p class="p-now"></p><p class="p-next"></p></div>
 </section>
 
 <section id="presenter-window" hidden aria-label="Presenter window">
   <div class="p-clock"><span class="p-time">0:00</span><span class="p-pace"></span><span class="p-plan"></span>
     <div class="p-buttons"><button type="button" id="p-prev">← Back</button><button type="button" id="p-next">Next →</button><button type="button" id="p-reset2">Restart timer</button></div></div>
-  <div><p class="p-now"></p><p class="p-next"></p><div class="p-notes"></div></div>
+  <div><p class="p-now"></p><p class="p-next"></p></div>
 </section>
 
 <script>
