@@ -115,7 +115,7 @@
   .scene h2 { position: absolute; left: 3rem; top: 3.1rem; right: 16rem; font: 720 2.8rem/1.08 var(--display); font-variation-settings: "wdth" 90;
     letter-spacing: -.01em; color: var(--title); white-space: nowrap; }
   /* The longest heading beside an Ours tag: a little narrower, so that the tag (left of the corner code) clears it. */
-  .scene[data-id="bcd"] h2[data-steps="2"] { font-variation-settings: "wdth" 84; }
+  .scene[data-id="bcd"] h2[data-steps="1"] { font-variation-settings: "wdth" 84; }
   /* Math in a heading: its capitals as tall as the heading's (the body's scale would make them taller). */
   .scene h2 mjx-container { font-size: .88em; }
   /* Inline math in a one-line text (heading, lead) must not make its line taller and push the text down: the box of an
@@ -630,7 +630,8 @@
   <h2>SOM-OLP gives each data point a position on the lattice</h2>
   <span class="ours-tag">Ours</span>
   <p class="lead" data-steps="0">We proposed SOM with optimized latent positions (SOM-OLP): each data point gets its own continuous position $\bm{v}_i$ on the lattice.</p>
-  <p class="benefit" data-steps="0"><b>Benefit</b> The map shows each data point, not just its node; and $\bm{v}_i$ is a variable, learned with the prototypes under one objective.</p>
+  <p class="cap" data-steps="0">Variables: prototypes $\bm{b}$ and memberships $u$ (soft winners), as in the SOM, plus the latent positions $\bm{v}$ (new).</p>
+  <p class="benefit" data-steps="0"><b>Benefit</b> The map shows each data point, not just its node; $\bm{b}$, $u$ and $\bm{v}$ are learned together under one objective.</p>
   <p class="ref">Ubukata, Notsu, Honda, IJCNN 2026</p>
 </section>
 
@@ -644,18 +645,15 @@
 </section>
 
 <section class="scene" data-id="bcd" data-split="all" data-part="3" data-title="SOM-OLP minimizes one objective in closed form">
-  <h2 data-steps="0">SOM-OLP adds one variable: the latent position</h2>
-  <h2 data-steps="1">SOM-OLP minimizes one objective</h2>
-  <h2 data-steps="2">SOM-OLP minimizes $J$ in closed form, one block at a time</h2>
-  <div class="motive" data-steps="0" data-wide="720"><p><b>Given</b> The SOM's prototypes $\bm{b}$ and memberships $u$ (soft winners), plus a new variable: each data point's latent position $\bm{v}_i$.</p><p><b>Find</b> all three by minimizing one objective, so that no update makes it worse.</p></div>
+  <h2 data-steps="0">SOM-OLP minimizes one objective</h2>
+  <h2 data-steps="1">SOM-OLP minimizes $J$ in closed form, one block at a time</h2>
   <span class="ours-tag">Ours</span>
-  <p class="lead" data-steps="1">One objective: data fit, lattice distance of each position $\bm{v}$, entropy of $u$.</p>
-  <p class="lead" data-steps="2">Fix two blocks of variables and minimize over the third, in closed form.</p>
-  <div class="eqband tall" data-steps="1">$$J=\sum_{i,c}u_{ci}\bigl(\underbrace{\class{t-fit}{\|\bm{x}_i-\bm{b}_c\|^2}}_{\text{data fit}}+\underbrace{\class{t-lat}{\gamma\|\bm{v}_i-\bm{r}_c\|^2}}_{\text{lattice distance}}+\underbrace{\class{t-ent}{\lambda\ln u_{ci}}}_{\text{entropy}}\bigr)$$</div>
-  <div class="eqband tall small-gap" data-steps="2" data-beside>$$\underbrace{\class{t-bu}{u_{ci}=\frac{\exp\bigl(-(\|\bm{x}_i-\bm{b}_c\|^2+\gamma\|\bm{v}_i-\bm{r}_c\|^2)/\lambda\bigr)}{\sum_k\exp\bigl(-(\|\bm{x}_i-\bm{b}_k\|^2+\gamma\|\bm{v}_i-\bm{r}_k\|^2)/\lambda\bigr)}}}_{\text{softmax}}$$ $$\underbrace{\class{t-bv}{\bm{v}_i=\sum_c u_{ci}\,\bm{r}_c}}_{\text{mean of nodes}}$$ $$\underbrace{\class{t-bb}{\bm{b}_c=\frac{\sum_i u_{ci}\bm{x}_i}{\sum_i u_{ci}}}}_{\text{mean of data}}$$</div>
-  <p class="cap" data-steps="0">Memberships $u$ link the data space and the latent space.</p>
-    <p class="cap" data-steps="1" data-wide="720"><span class="pt"><b>Data fit</b>: fits the prototypes $\bm{b}_c$ to the data.</span><span class="pt"><b>Lattice distance</b> (weight $\gamma$): fits the latent positions $\bm{v}_i$ to the lattice points.</span><span class="pt"><b>Entropy</b> (weight $\lambda$): tunes how ambiguous the memberships are; a larger $\lambda$ makes them more ambiguous and loosens the ties to the data points and the lattice points.</span></p>
-    <p class="cap" data-steps="2" data-wide="720">Each block update minimizes $J$ over its block, so $J$ never increases.</p>
+  <p class="lead" data-steps="0">One objective: data fit, lattice distance of each position $\bm{v}$, entropy of $u$.</p>
+  <p class="lead" data-steps="1">Fix two blocks of variables and minimize over the third, in closed form.</p>
+  <div class="eqband tall" data-steps="0">$$J=\sum_{i,c}u_{ci}\bigl(\underbrace{\class{t-fit}{\|\bm{x}_i-\bm{b}_c\|^2}}_{\text{data fit}}+\underbrace{\class{t-lat}{\gamma\|\bm{v}_i-\bm{r}_c\|^2}}_{\text{lattice distance}}+\underbrace{\class{t-ent}{\lambda\ln u_{ci}}}_{\text{entropy}}\bigr)$$</div>
+  <div class="eqband tall small-gap" data-steps="1" data-beside>$$\underbrace{\class{t-bu}{u_{ci}=\frac{\exp\bigl(-(\|\bm{x}_i-\bm{b}_c\|^2+\gamma\|\bm{v}_i-\bm{r}_c\|^2)/\lambda\bigr)}{\sum_k\exp\bigl(-(\|\bm{x}_i-\bm{b}_k\|^2+\gamma\|\bm{v}_i-\bm{r}_k\|^2)/\lambda\bigr)}}}_{\text{softmax}}$$ $$\underbrace{\class{t-bv}{\bm{v}_i=\sum_c u_{ci}\,\bm{r}_c}}_{\text{mean of nodes}}$$ $$\underbrace{\class{t-bb}{\bm{b}_c=\frac{\sum_i u_{ci}\bm{x}_i}{\sum_i u_{ci}}}}_{\text{mean of data}}$$</div>
+    <p class="cap" data-steps="0" data-wide="720"><span class="pt"><b>Data fit</b>: fits the prototypes $\bm{b}_c$ to the data.</span><span class="pt"><b>Lattice distance</b> (weight $\gamma$): fits the latent positions $\bm{v}_i$ to the lattice points.</span><span class="pt"><b>Entropy</b> (weight $\lambda$): tunes how ambiguous the memberships are; a larger $\lambda$ makes them more ambiguous and loosens the ties to the data points and the lattice points.</span></p>
+    <p class="cap" data-steps="1" data-wide="720">Each block update minimizes $J$ over its block, so $J$ never increases.</p>
   <div class="ctrl"><label class="param">$\lambda$ <input type="range" id="bc-lam" min="0.05" max="1" step="0.05" value="0.3"><output for="bc-lam"></output></label><label class="param">$\gamma$ <input type="range" id="bc-gamma" min="0" max="10" step="0.5" value="3"><output for="bc-gamma"></output></label></div>
   <p class="ref">Ubukata, Notsu, Honda, IJCNN 2026</p>
 </section>
@@ -663,8 +661,8 @@
 <section class="scene" data-id="real" data-part="3" data-title="SOM-OLP on real data: Iris and Digits">
   <h2>SOM-OLP on real data: Iris and Digits</h2>
   <span class="ours-tag">Ours</span>
-  <p class="lead">Iris (150 flowers, 4 features) and Digits (1,797 images, 64 pixels) on 16&nbsp;×&nbsp;16 maps.</p>
-  <p class="cap"><b class="label">Check</b> The species keep their order; each digit gathers in its own region.</p>
+  <p class="lead">Iris (150 flowers, 4 dimensions) and Digits (1,797 images, 64 dimensions).</p>
+  <p class="cap"><b class="label">Check</b> On 16&nbsp;×&nbsp;16 maps, the species keep their order; each digit gathers in its own region.</p>
   <p class="benefit"><b>Benefit</b> A simple optimization problem enables flexible mapping.</p>
   <p class="ref">Ubukata, Notsu, Honda, IJCNN 2026</p>
 </section>
