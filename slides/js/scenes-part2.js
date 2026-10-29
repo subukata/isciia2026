@@ -149,7 +149,10 @@ export default function part2(ctx) {
     setup(ctx) { grR = slider('gr-radius', () => ctx.rerender()); },
     show(ctx, step, { dur }) {
       M.hide();
-      const zoom = step < 3, F = ctx.field({ eq: zoom ? 'tall' : true }), km = kmeansA(), left = leftOf(km.B);
+      const zoom = step < 3, F0 = ctx.field({ eq: zoom ? 'tall' : true }), km = kmeansA(), left = leftOf(km.B);
+      // The two cases side by side reach down into the room above the reference (the larger key sentence pushes them down).
+      const F = zoom || ctx.narrow() ? F0 : { ...F0, h: F0.h + 90 };
+      if (F !== F0) S.clip = { x: F.x - 14, y: F.y - 10, w: F.w + 28, h: F.h + 16 };
       // The radius swings slowly (from the slider's value): the neighborhood, its counts and the degrees follow.
       let r = grR(), hood = hoodOf(r), mu = A.roughMembership(hood, km.labels, 2);
       // The point in focus: in cluster 1, mixed at the starting radius (at least 4 neighbors), and with at least 3 points of
