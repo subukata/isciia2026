@@ -216,7 +216,7 @@ export default function part2(ctx) {
         // The degree as a large fraction at the figure's top right, clear of the circle at every radius of the swing: the
         // neighbors in cluster 1 (in its color) over all the neighbors.
         if (step === 2) fractionPlate(g, '$μ₁$ =', a, n, F.x + F.w - 4, F.y + 2, { tail: a === n ? '= 1' : '', numColor: C.blue });
-        if (step === 2) text(g, a === n ? `all ${n} of its neighbors are in cluster 1` : `${a} of its ${n} neighbors are in cluster 1`, P[0], P[1] + rr * mm.k + 60, { size: 34, weight: 760, align: 'center' });
+        if (step === 2) text(g, a === n ? `all ${n} of its neighbors belong to cluster 1` : `${a} of its ${n} neighbors belong to cluster 1`, P[0], P[1] + rr * mm.k + 60, { size: 34, weight: 760, align: 'center' });
       };
       S.handlers.move = hoverPoint(k => { if (k !== grHover) { grHover = k; S.wake(); } });
       S.handlers.leave = () => { grHover = -1; S.wake(); };
