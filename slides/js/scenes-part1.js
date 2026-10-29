@@ -381,8 +381,8 @@ export default function part1(ctx) {
       };
     });
     S.over = g => {
-      plate(g, 'FCM: a degree for every cluster', a.x, a.y - 56);
-      plate(g, 'RCM: between clusters, in both', b.x, b.y - 56);
+      plate(g, 'FCM: soft clusters', a.x, a.y - 56);
+      plate(g, 'RCM: crisp overlapped clusters', b.x, b.y - 56);
       // The parameter values, under each panel.
       text(g, `$m = ${m.toFixed(2)}$`, a.x + 4, a.y + a.h - 6, { size: 34, weight: 760, color: C.hl });
       text(g, `$β = ${beta.toFixed(2)}$`, b.x + 4, b.y + b.h - 6, { size: 34, weight: 760, color: C.hl });
