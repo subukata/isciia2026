@@ -790,7 +790,7 @@ export default function part3(ctx) {
   };
 
   // Heskes's SOM is a supplement (after the last slide), kept for questions.
-  return [maps, som, remap(latent, [1]), probe, remap(withIdea(withMotive(bcd, bcdMotive, { aspect: 1.15 }), 1), [0, 2, 4]),
+  return [maps, som, remap(latent, [1]), { ...probe, supplement: true }, remap(withIdea(withMotive(bcd, bcdMotive, { aspect: 1.15 }), 1), [0, 2, 4]),
     // Iris and Digits in one step each: Batch SOM and SOM-OLP side by side at once.
     remap(iris, [1]), remap(digits, [1]),
     { ...withIdea(withMotive(heskes, heskesMotive, { aspect: 0.9 }), 1), supplement: true }];
