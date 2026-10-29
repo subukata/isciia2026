@@ -309,6 +309,9 @@ function placeEquation(s) {
     root.classList.add('eq-beside');
     const right = Math.max(...bands.flatMap(b => [...b.querySelectorAll('mjx-container')].map(m => (m.getBoundingClientRect().right - fr.left) * unit)));
     eqRowSide = { x: Math.ceil(right) + 40, y: Math.min(...bands.map(b => (b.getBoundingClientRect().top - fr.top) * unit)) };
+    // The words under the equation are as wide as it: the figure is beside the equation, not beside them.
+    colWidth = Math.max(560, Math.ceil(right) - 60);
+    s.el.style.setProperty('--col-w', `${colWidth / 20}rem`);
   }
 }
 const next = () => {
