@@ -783,8 +783,8 @@ export default function part3(ctx) {
       // The maps swing slowly from one to the other and back.
       const LAMS = [[1.32, DIGITS_PARAMS.lam], [LAM_HARD, LAM_HARD]];
       const runs = [[irisOlp(), dg], [irisOlp(LAM_HARD), digitsRuns.olpHard]];
-      let bound = 0, label = 0, focus = -1;
-      const digitStyle = i => (focus < 0 ? { r: 3.6 } : { r: DIGITS.y[i] === focus ? 5.6 : 3.6, alpha: DIGITS.y[i] === focus ? 1 : 0.45 });
+      let bound = 0, label = 0;
+      const digitStyle = () => ({ r: 3.6 });
       const itemsOf = ([ir, d]) => [
         ...ir.emb.map((v, i) => { const [x, y] = li.at(v); return { ...irisItem(i), id: 'j' + i, x, y, hit: true, data: i }; }),
         ...(d ? d.emb.map((v, i) => { const [x, y] = ld.at(v); return { ...digitStyle(i), id: 'e' + i, x, y, fill: TAB10[DIGITS.y[i]], hit: true, data: i }; }) : []),
@@ -806,13 +806,6 @@ export default function part3(ctx) {
       S.under = g => { drawGrid(g, li, 16, C.faint); if (dg) drawGrid(g, ld, 16, C.faint); };
       // The digits' key: each digit's mean image and its color, ten rows over the map's height.
       const kStep = (half[1].map.h - 40) / 9, kScale = Math.min(5, (kStep - 8) / 8);
-      if (dg) live(ctx, forward ? 2600 : 1200, () => () => {
-        // One digit after another comes forward.
-        const k = cycle([0, 1, 2, 3, 4, 5, 6, 7, 8, 9], 2.4);
-        if (k === focus) return;
-        focus = k;
-        S.patch(Array.from({ length: DIGITS.raw.length }, (_, i) => ['e' + i, { r: DIGITS.y[i] === k ? 5.6 : 3.6, alpha: DIGITS.y[i] === k ? 1 : 0.45 }]), { dur: 400 });
-      });
       S.over = g => {
         // Each map's λ, and where it puts the data points.
         const where = label ? 'on the nodes' : 'between the nodes';
@@ -830,7 +823,6 @@ export default function part3(ctx) {
           const x = half[1].key.x, y = half[1].map.y + k * kStep;
           digitImage(g, img, x, y, kScale);
           text(g, String(k), x + 8 * kScale + 12, y + kScale * 7, { size: 34, weight: 780, color: TAB10[k], halo: false });
-          if (focus === k) ring(g, x + kScale * 4, y + kScale * 4, kScale * 6, { color: C.hl, lw: 3, grow: born('rlk:focus' + k, { dur: 300 }) });
         });
         if (!dg) plate(g, 'Computing on this computer…', half[1].map.x + 20, half[1].map.y + half[1].map.h / 2 - 24);
         // The image under the pointer, beside its point.

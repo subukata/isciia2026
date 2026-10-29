@@ -124,6 +124,15 @@ for (const s of scenes) {
   const sp = s.el.dataset.split;
   s.split = !sp ? () => false : sp === 'all' ? () => true : (list => step => list.includes(step))(sp.split(',').map(Number));
 }
+// Pages: every step is a page, numbered through the deck (the title is page 1). The page number is shown bottom right,
+// written in the hash (#7), and typed to go there (7 Enter).
+const firstPage = scenes.reduce((acc, s, i) => [...acc, i ? acc[i - 1] + scenes[i - 1].steps : 1], []);
+const pageOf = (si, step) => firstPage[si] + step;
+const fromPage = n => {
+  let si = 0;
+  while (si + 1 < scenes.length && firstPage[si + 1] <= n) si++;
+  return [si, Math.max(0, Math.min(scenes[si].steps - 1, n - firstPage[si]))];
+};
 const cur = { si: -1, step: 0 };
 
 function show(si, step, { instant = false } = {}) {
@@ -146,8 +155,8 @@ function show(si, step, { instant = false } = {}) {
   const lit = s.lit ? s.lit[Math.min(step, s.lit.length - 1)] : s.part >= 0 && s.part <= 3 ? [s.part] : [];
   for (const chip of document.querySelectorAll('.part-chip')) chip.classList.toggle('lit', lit.includes(Number(chip.dataset.k)));
   $('parts').hidden = s.id === 'title' && step === 0;
-  // The slide number, bottom right (none on the title): the scene's number, as in the hash and "number + Enter".
-  $('pageno').textContent = s.id === 'title' ? '' : String(si + 1);
+  // The page number, bottom right (none on the title): one per step, as in the hash and "number + Enter".
+  $('pageno').textContent = s.id === 'title' ? '' : String(pageOf(si, step));
   split = s.split(step);
   root.classList.toggle('split', split);
   // Outline slides (data-theme="dark") are dark: a break between parts.
@@ -184,7 +193,7 @@ function show(si, step, { instant = false } = {}) {
   }
   updateRail();
   fitWords(s);
-  try { history.replaceState(null, '', step ? `#${si + 1}.${step + 1}` : `#${si + 1}`); } catch (e) {}
+  try { history.replaceState(null, '', `#${pageOf(si, step)}`); } catch (e) {}
   if (!sameScene && si > 0 && clock.start === null) clock.start = Date.now();
   if (document.activeElement && document.activeElement !== document.body && !document.activeElement.closest('.sheet')) document.activeElement.blur();
   updatePresenter();
@@ -341,7 +350,7 @@ function buildRail() {
     if (!p.minutes) return '';
     const items = scenes.map((s, i) => [s, i]).filter(([s]) => s.part === k);
     return `<div class="rail-part" style="flex: ${items.length}">${items.map(([s, i]) =>
-      `<button type="button" class="tick" data-i="${i}" title="${i + 1}. ${s.title.replace(/"/g, '&quot;')}" aria-label="Go to ${i + 1}: ${s.title.replace(/"/g, '&quot;')}"><i></i></button>`).join('')}</div>`;
+      `<button type="button" class="tick" data-i="${i}" title="${firstPage[i]}. ${s.title.replace(/"/g, '&quot;')}" aria-label="Go to ${firstPage[i]}: ${s.title.replace(/"/g, '&quot;')}"><i></i></button>`).join('')}</div>`;
   }).join('');
   rail.addEventListener('click', e => { const b = e.target.closest('.tick'); if (b) { show(Number(b.dataset.i), 0); b.blur(); } });
 }
@@ -381,8 +390,8 @@ function updatePresenter() {
   let end = 0;
   for (let k = 0; k <= s.part; k++) end += PARTS[k].minutes;
   box.querySelector('.p-plan').textContent = `${PARTS[s.part].name} ends at ${mmss(end * 60)} · talk ${mmss(PARTS.reduce((a, p) => a + p.minutes, 0) * 60)}`;
-  box.querySelector('.p-now').textContent = `${cur.si + 1}. ${s.title} — step ${cur.step + 1} of ${s.steps}`;
-  const n = cur.step < s.steps - 1 ? `step ${cur.step + 2}: ${capText(s, cur.step + 1)}` : scenes[cur.si + 1] ? `${cur.si + 2}. ${scenes[cur.si + 1].title}` : 'end';
+  box.querySelector('.p-now').textContent = `${pageOf(cur.si, cur.step)}. ${s.title} — step ${cur.step + 1} of ${s.steps}`;
+  const n = cur.step < s.steps - 1 ? `${pageOf(cur.si, cur.step + 1)}: ${capText(s, cur.step + 1)}` : scenes[cur.si + 1] ? `${firstPage[cur.si + 1]}. ${scenes[cur.si + 1].title}` : 'end';
   box.querySelector('.p-next').textContent = `Next: ${n}`;
 }
 setInterval(() => { if (!$('presenter').hidden || PRESENTER) updatePresenter(); }, 1000);
@@ -412,7 +421,7 @@ channel?.addEventListener('message', ({ data }) => {
 
 function buildOverview() {
   $('overview-list').innerHTML = PARTS.map((p, k) => `<li class="ov-part"><h3>${p.name}</h3><ol>${scenes.map((s, i) => [s, i]).filter(([s]) => s.part === k)
-    .map(([s, i]) => `<li><a href="#${i + 1}" data-i="${i}"><span class="ov-n">${String(i + 1).padStart(2, '0')}</span>${s.title}</a></li>`).join('')}</ol></li>`).join('');
+    .map(([s, i]) => `<li><a href="#${firstPage[i]}" data-i="${i}"><span class="ov-n">${String(firstPage[i]).padStart(2, '0')}</span>${s.title}</a></li>`).join('')}</ol></li>`).join('');
   $('overview-list').addEventListener('click', e => {
     const a = e.target.closest('a');
     if (!a) return;
@@ -438,7 +447,7 @@ document.addEventListener('keydown', e => {
   const k = e.key;
   const send = cmd => (PRESENTER ? channel?.postMessage({ type: 'cmd', cmd }) : cmd === 'next' ? next() : prev());
   if (/^[0-9]$/.test(k)) { typed = (typed + k).slice(-2); return; }
-  if (k === 'Enter' && typed) { show(Number(typed) - 1, 0); typed = ''; e.preventDefault(); return; }
+  if (k === 'Enter' && typed) { show(...fromPage(Number(typed))); typed = ''; e.preventDefault(); return; }
   typed = '';
   if (k === 'PageDown' || (k === 'ArrowRight' && !inRange) || (k === 'ArrowDown' && !inRange) || (k === ' ' && !onButton)) {
     e.preventDefault();
@@ -497,9 +506,11 @@ document.addEventListener('touchend', e => {
   if (!stage.claimed && Math.abs(dx) > 50 && Math.abs(dx) > 1.5 * Math.abs(dy)) (dx < 0 ? next : prev)();
 }, { passive: true });
 window.addEventListener('hashchange', () => { const [a, b] = parseHash(); if (a !== cur.si || b !== cur.step) show(a, b); });
+/** #7: page 7. #5.2 (the older form, scene and step) still opens scene 5, step 2. */
 function parseHash() {
   const m = location.hash.match(/^#(\d+)(?:\.(\d+))?$/);
-  return m ? [Number(m[1]) - 1, m[2] ? Number(m[2]) - 1 : 0] : [0, 0];
+  if (!m) return [0, 0];
+  return m[2] ? [Number(m[1]) - 1, Number(m[2]) - 1] : fromPage(Number(m[1]));
 }
 
 // ---------------------------------------------------------------- equations linked to the stage
