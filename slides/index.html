@@ -444,7 +444,7 @@
   <h2 data-steps="0">Good prototypes are close to their data points</h2>
   <h2 data-steps="1">k-means minimizes one objective</h2>
   <h2 data-steps="2">k-means minimizes $J$ by two alternating updates</h2>
-  <div class="motive" data-steps="0"><p><b>Goal</b> A clustering is not only its prototypes but also its assignment: the cluster of each data point.</p><p><b>We need</b> one measure of how good this cluster structure is.</p></div>
+  <div class="motive" data-steps="0"><p><b>Goal</b> Find prototypes and assign each data point to a cluster.</p><p><b>We need</b> one measure of clustering quality.</p></div>
   <p class="lead" data-steps="1">We split the data points into $C$ clusters (here $C=3$).<br>The membership $u_{ci}$ says which cluster data point $i$ is in, so choosing $u$ is the clustering.</p>
   <p class="lead" data-steps="2">Minimize $J$ in turns: assign with the prototypes fixed, then average.</p>
   <div class="eqband tall" data-steps="1" data-beside>$$J=\underbrace{\class{t-s}{\sum_i\sum_c}}_{\substack{\text{all data points}\\\text{and clusters}}}\;\underbrace{\class{t-u}{u_{ci}}}_{\substack{1\text{ if }i\text{ is in }c\text{,}\\\text{else }0}}\;\underbrace{\class{t-d}{\|\bm{x}_i-\bm{b}_c\|^2}}_{\substack{\text{squared}\\\text{distance}}}$$</div>
