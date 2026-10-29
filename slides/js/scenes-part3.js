@@ -591,9 +591,9 @@ export default function part3(ctx) {
           if (bcTerm.has('ent')) { let h = 0; for (let c = 0; c < K; c++) { const u = U[i * K + c]; if (u > 0) h -= u * Math.log(u); } ring(g, ...p, 8 + 18 * h, { color: C.hl, lw: 3 }); }
           if (bcTerm.has('fit')) ring(g, ...p, 14, { color: C.hl, lw: 3.4 });
         }
-        if (bcTerm.has('ent')) plate(g, 'entropy: softness of u', F.x + 4, F.y + 2, { color: C.hl });
+        if (bcTerm.has('ent')) plate(g, 'entropy: ambiguity of u', F.x + 4, F.y + 2, { color: C.hl });
         if (bcTerm.has('lat')) plate(g, 'lattice distance of v to the nodes', F.x + 4, F.y + 2, { color: C.hl });
-        if (bcTerm.has('fit')) plate(g, 'data fit: data points near their prototypes (data space)', F.x + 4, F.y + 2, { color: C.hl });
+        if (bcTerm.has('fit')) plate(g, 'data fit: data points near their prototypes', F.x + 4, F.y + 2, { color: C.hl });
       };
       if (step === 0) {
         showUpTo(0, dur);

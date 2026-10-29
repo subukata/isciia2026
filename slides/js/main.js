@@ -281,7 +281,12 @@ function placeEquation(s) {
   leadBottom = 0;
   if (!split || narrow) { placeLead(s); return; }
   const bands = [...s.el.querySelectorAll('.eqband')].filter(b => getComputedStyle(b).display !== 'none');
-  if (!bands.length) return;
+  if (!bands.length) {
+    // No equation: the column of words may still ask for more room (data-wide on one of them, in stage units).
+    const wide = [...s.el.children].find(e => e.hasAttribute('data-wide') && getComputedStyle(e).display !== 'none');
+    if (wide) { colWidth = Number(wide.dataset.wide); s.el.style.setProperty('--col-w', `${colWidth / 20}rem`); }
+    return;
+  }
   const fr = $('frame').getBoundingClientRect(), unit = 1600 / fr.width, y = e => (e.getBoundingClientRect().bottom - fr.top) * unit;
   // The column widens to its widest equation (up to 790), and the figure takes the rest.
   const widest = Math.max(...bands.flatMap(b => [...b.querySelectorAll('mjx-container')].map(m => m.getBoundingClientRect().width * unit)));
