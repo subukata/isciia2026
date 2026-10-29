@@ -453,13 +453,14 @@ export const newExample = (ctx, s, F) => plate(ctx, `New example · ${s}`, F.x +
 
 /** The membership scale, 0 (vermilion) to 1 (blue), with its labels. */
 /** The membership scale, 0 (vermilion) to 1 (blue): the caption above, the end values below. */
-export function membershipLegend(ctx, x, y, w, caption = 'membership in cluster 1') {
-  text(ctx, caption, x + w / 2, y - 12, { size: 28, align: 'center', halo: false, color: C.muted });
-  for (let k = 0; k < w; k += 2) { ctx.fillStyle = diverging(k / w); ctx.fillRect(x + k, y, 2.5, 16); }
-  ctx.strokeStyle = C.line; ctx.lineWidth = 1; ctx.strokeRect(x, y, w, 16);
-  text(ctx, '0', x, y + 46, { size: 28, align: 'left', halo: false });
-  text(ctx, '0.5', x + w / 2, y + 46, { size: 28, align: 'center', halo: false });
-  text(ctx, '1', x + w, y + 46, { size: 28, align: 'right', halo: false });
+export function membershipLegend(ctx, x, y, w, caption = 'membership in cluster 1', size = 28) {
+  const bar = Math.round(size * 0.6), k2 = size / 28;
+  text(ctx, caption, x + w / 2, y - 12 * k2, { size, align: 'center', halo: false, color: C.muted });
+  for (let k = 0; k < w; k += 2) { ctx.fillStyle = diverging(k / w); ctx.fillRect(x + k, y, 2.5, bar); }
+  ctx.strokeStyle = C.line; ctx.lineWidth = 1; ctx.strokeRect(x, y, w, bar);
+  text(ctx, '0', x, y + bar + 30 * k2, { size, align: 'left', halo: false });
+  text(ctx, '0.5', x + w / 2, y + bar + 30 * k2, { size, align: 'center', halo: false });
+  text(ctx, '1', x + w, y + bar + 30 * k2, { size, align: 'right', halo: false });
 }
 export function heightLegend(ctx, x, y, w) {
   for (let k = 0; k < w; k += 2) { ctx.fillStyle = viridis(k / w); ctx.fillRect(x + k, y, 2.5, 16); }
