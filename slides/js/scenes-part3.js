@@ -102,8 +102,8 @@ export default function part3(ctx) {
       M.hide();
       // Both spaces side by side: the prototypes in the data space (left; the view turns, and a drag turns it) and their
       // lattice, the latent space (right), where "near the winner" is measured and where each point lands on the map.
-      // Step 0 has no caption: its figure reaches down to the reference (and the stage's clip with it).
-      const F0 = ctx.field({ eq: 'tall' }), F = step === 0 && !ctx.narrow() ? { ...F0, h: F0.h + 90 } : F0;
+      // No caption under either step: the figure reaches down to the reference (and the stage's clip with it).
+      const F0 = ctx.field({ eq: 'tall' }), F = !ctx.narrow() ? { ...F0, h: F0.h + 90 } : F0;
       if (F !== F0) S.clip = { x: F.x - 14, y: F.y - 10, w: F.w + 28, h: F.h + 16 };
       const enter = Math.max(dur, 1000), top = 56, side = F.h - top;
       // The pair centered in the figure, close together: the data space as wide as its plate needs, the lattice square.

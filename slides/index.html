@@ -634,20 +634,19 @@
 
 <section class="scene" data-id="som" data-part="3" data-title="Self-organizing maps (SOM)">
   <h2 data-steps="0">Self-organizing maps (SOM)</h2>
-  <h2 data-steps="1">The SOM orders prototypes on a lattice</h2>
+  <h2 data-steps="1">Batch SOM</h2>
   <p class="lead" data-steps="0">The SOM fits the lattice structure to the data distribution.<br>1. An input $\bm{x}$ comes in.<br>2. Its nearest prototype is found: the winner $w$.<br>3. The winner and the nodes near it in the latent space move toward $\bm{x}$ together.</p>
   <div class="eqband tall" data-steps="0">$$\underbrace{\bm{b}_c}_{\text{node }c}\leftarrow\bm{b}_c+\underbrace{\alpha}_{\text{rate}}\,\underbrace{h(c,w)}_{\substack{w\text{: the winner,}\\\text{nearest to }\bm{x}}}\,\underbrace{(\bm{x}-\bm{b}_c)}_{\substack{\text{toward}\\\text{the input}}}$$ $$\underbrace{h(c,w)=e^{-\|\bm{r}_c-\bm{r}_w\|^2/2\sigma^2}}_{\substack{\text{pulls the winner's neighbors too}\\\bm{r}_c\text{: node }c\text{ on the lattice; }\sigma\text{: reach}}}$$</div>
-  <p class="lead" data-steps="1">In batch SOM, each node moves to a weighted mean of all data points.</p>
+  <p class="lead" data-steps="1">Batch SOM uses all data points at once, which makes learning efficient.<br>Each node moves to a weighted mean of all data points.</p>
   <div class="eqband tall" data-steps="1">$$\bm{b}_c=\frac{\sum_i h(c,w_i)\,\bm{x}_i}{\sum_i h(c,w_i)}$$ $$\underbrace{w_i=\mathop{\arg\min}_k\|\bm{x}_i-\bm{b}_k\|^2}_{\text{the winner of data point }i}$$</div>
-  <p class="cap" data-steps="1">On the lattice, a data point can only sit on its winner node.<span class="next">→ Can each data point have its own position on the lattice?</span></p>
     <p class="ref">Kohonen, 1982</p>
 </section>
 
 
-<section class="scene" data-id="latent" data-part="3" data-title="SOM-OLP gives each data point a position on the lattice">
-  <h2>SOM-OLP gives each data point a position on the lattice</h2>
+<section class="scene" data-id="latent" data-part="3" data-title="Proposed method: SOM with optimized latent positions">
+  <h2>Proposed method: SOM with optimized latent positions</h2>
   <span class="ours-tag">Ours</span>
-  <p class="lead" data-steps="0">We proposed SOM with optimized latent positions (SOM-OLP): each data point gets its own continuous position $\bm{v}_i$ on the lattice.</p>
+  <p class="lead" data-steps="0">In SOM-OLP, each data point gets its own continuous position $\bm{v}_i$ on the lattice.</p>
   <p class="cap" data-steps="0">Variables: prototypes $\bm{b}$ and memberships $u$ (soft winners), as in the SOM, plus the latent positions $\bm{v}$ (new).</p>
   <p class="benefit" data-steps="0"><b>Benefit</b> The map shows each data point, not just its node; $\bm{b}$, $u$ and $\bm{v}$ are learned together under one objective.</p>
   <p class="ref">Ubukata, Notsu, Honda, IJCNN 2026</p>
