@@ -223,6 +223,8 @@
   .cap b { font-weight: 700; color: var(--title); }
   .cap b.label { color: var(--hl); font-weight: 800; }
   .cap .part { font-weight: 700; color: var(--title); }
+  /* The recommendation example: its tables leave room above the words, so they start higher and grow (main.js fitWords). */
+  .scene[data-id="cfex"] > .cap { top: var(--cap-top, 36.4rem); }
   .pos { color: var(--pos); font-weight: 700; } .neg { color: var(--neg); font-weight: 700; } .ours { color: var(--ours); font-weight: 700; }
   [data-steps]:not(.shown) { display: none !important; }
 
@@ -552,13 +554,12 @@
 <section class="scene" data-id="granule" data-split="0" data-part="2" data-title="Rough membership grades a data point by its neighbors">
   <h2 data-steps="0,1">Rough membership grades a data point by its neighbors</h2>
   <p class="lead" data-steps="0">Rough membership is the share of a data point's neighbors that are in the cluster.</p>
-  <p class="lead" data-steps="1">All neighbors in the cluster: certain; neighbors in both: possibly in either.</p>
+  <p class="lead" data-steps="1">We can extract certain and uncertain regions by $\mu_{ci}$.<br>All neighbors in the cluster: certain; neighbors in both: possibly in either.</p>
   <div class="eqband tall" data-steps="0">$$\mu_{ci}=\underbrace{\frac{|\mathcal{N}_i\cap X_c|}{|\mathcal{N}_i|}}_{\text{share of cluster }c\text{ among the neighbors}}$$</div>
   <!-- Each case over its own panel; the scene's JS sets left and width from the panel. -->
   <div class="rule-eq" data-k="0" data-steps="1">$$\underbrace{\mu_{ci}=1}_{\text{certainly in }c}$$</div>
   <div class="rule-eq" data-k="1" data-steps="1">$$\underbrace{0<\mu_{ci}<1}_{\text{possibly in }c\text{ (boundary)}}$$</div>
-  <p class="cap" data-steps="0">$X_c$: the data points in cluster $c$ (labels from k-means).</p>
-  <p class="cap" data-steps="1"><span class="pt">$\mu_{ci}$ is a neighborhood-induced fuzzy membership.</span><span class="pt">We can extract certain and uncertain regions by $\mu_{ci}$.</span></p>
+  <p class="cap" data-steps="0"><span class="pt">Rough membership can be seen as a neighborhood-induced fuzzy membership.</span><span class="pt">$X_c$: the data points in cluster $c$ (labels from k-means).</span></p>
   <div class="ctrl"><label class="param">radius <input type="range" id="gr-radius" min="0.15" max="0.8" step="0.01" value="0.30"><output for="gr-radius"></output></label></div>
   <p class="ref">Pawlak and Skowron, 1994</p>
 </section>
@@ -570,7 +571,7 @@
     <p class="lead" data-steps="1">The update rules of the labels and the prototypes are derived by minimizing $J$.<br>Labels go by the smaller cost $q$; prototypes are $\mu$-weighted means.</p>
   <div class="eqband tall" data-steps="0">$$J=\sum_c\sum_i \underbrace{\class{t-mu}{\mu_{ci}}}_{\substack{\text{rough membership,}\\\text{in place of }u}}\|\bm{x}_i-\bm{b}_c\|^2$$</div>
     <div class="eqband tall small-gap" data-steps="1">$$q_{cj}=\underbrace{\sum_i P_{ij}\|\bm{x}_i-\bm{b}_c\|^2}_{\substack{\bm{b}_c\text{'s error over the data points}\\\text{with }j\text{ in their neighborhoods}}}$$ $$\underbrace{\bm{b}_c=\frac{\sum_i \mu_{ci}\,\bm{x}_i}{\sum_i \mu_{ci}}}_{\mu\text{-weighted mean}}$$</div>
-  <p class="cap" data-steps="1"><span class="pt">$P_{ij}=1/|\mathcal{N}_i|$ if $j\in\mathcal{N}_i$, else 0.</span><span class="pt">Each update minimizes $J$, so $J$ never increases.</span></p>
+  <p class="cap" data-steps="1"><span class="pt">Data point $j$ is assigned by the distance between its whole neighborhood and each prototype.</span><span class="pt">$P_{ij}=1/|\mathcal{N}_i|$ if $j\in\mathcal{N}_i$, else 0.</span><span class="pt">Each update minimizes $J$, so $J$ never increases.</span></p>
   <div class="ctrl"><label class="param">radius <input type="range" id="ob-radius" min="0.15" max="0.8" step="0.01" value="0.30"><output for="ob-radius"></output></label><button type="button" class="btn" id="ob-run">Run</button></div>
   <p class="ref">Ubukata, Notsu, Honda, Inf. Sci., 2021</p>
 </section>
@@ -629,11 +630,11 @@
   <p class="ref">Ubukata, Notsu, Honda, IJCNN 2026</p>
 </section>
 
-<section class="scene" data-id="probe" data-part="3" data-title="SOM-OLP moves a data point smoothly on the lattice">
-  <h2>SOM-OLP moves a data point smoothly on the lattice</h2>
+<section class="scene" data-id="probe" data-part="5" data-lit="3" data-title="Supplement · SOM-OLP moves a data point smoothly">
+  <h2>Supplement: SOM-OLP moves a data point smoothly</h2>
   <span class="ours-tag">Ours</span>
   <p class="lead" data-steps="0">We move one input $\bm{x}$ across the data space and watch where it lands on the lattice.</p>
-  <p class="cap" data-steps="0"><b class="label">Notice</b> The SOM winner jumps from node to node; the latent position $\bm{v}$ moves smoothly.<span class="next">→ How is $\bm{v}$ found?</span></p>
+  <p class="cap" data-steps="0"><b class="label">Notice</b> The SOM winner jumps from node to node; the latent position $\bm{v}$ moves smoothly.</p>
   <div class="ctrl"><label class="param">$\lambda$ <input type="range" id="pr-lam" min="0.01" max="0.3" step="0.01" value="0.08"><output for="pr-lam"></output></label><label class="param">$\gamma$ <input type="range" id="pr-gamma" min="0" max="2" step="0.05" value="0.2"><output for="pr-gamma"></output></label></div>
   <p class="ref">Ubukata, Notsu, Honda, IJCNN 2026</p>
 </section>
@@ -649,8 +650,8 @@
   <div class="eqband tall" data-steps="1">$$J=\sum_{i,c}u_{ci}\bigl(\underbrace{\class{t-fit}{\|\bm{x}_i-\bm{b}_c\|^2}}_{\text{data fit}}+\underbrace{\class{t-lat}{\gamma\|\bm{v}_i-\bm{r}_c\|^2}}_{\text{lattice distance}}+\underbrace{\class{t-ent}{\lambda\ln u_{ci}}}_{\text{entropy}}\bigr)$$</div>
   <div class="eqband tall small-gap" data-steps="2">$$\underbrace{\class{t-bu}{u_{ci}\propto \exp(-q_{ci}/\lambda)}}_{\text{softmax}}$$ $$\underbrace{\class{t-bv}{\bm{v}_i=\sum_c u_{ci}\,\bm{r}_c}}_{\text{mean of nodes}}$$ $$\underbrace{\class{t-bb}{\bm{b}_c=\frac{\sum_i u_{ci}\bm{x}_i}{\sum_i u_{ci}}}}_{\text{mean of data}}$$</div>
   <p class="cap" data-steps="0">Memberships $u$ link the data space and the latent space.</p>
-    <p class="cap" data-steps="1"><span class="pt">$\bm{r}_c$: node $c$'s place on the lattice; $\gamma$ and $\lambda$ weigh the lattice distance and the entropy.</span><span class="pt">$q_{ci}$: the data fit plus the lattice distance, the cost of node $c$ for data point $i$.</span></p>
-    <p class="cap" data-steps="2"><span class="pt">Each block update minimizes $J$ over its block, so $J$ never increases.</span><span class="pt">$O(nC)$ per iteration ($n$ data points, $C$ nodes); Heskes's energy: $O(nC^2)$.</span></p>
+    <p class="cap" data-steps="1" data-wide="620"><span class="pt"><b>Data fit</b>: fits the prototypes $\bm{b}_c$ to the data.</span><span class="pt"><b>Lattice distance</b> (weight $\gamma$): fits the latent positions $\bm{v}_i$ to the lattice points.</span><span class="pt"><b>Entropy</b> (weight $\lambda$): tunes how ambiguous the memberships are; a larger $\lambda$ makes them more ambiguous and loosens the ties to the data points and the lattice points.</span></p>
+    <p class="cap" data-steps="2"><span class="pt">$q_{ci}$: the data fit plus the lattice distance, the cost of node $c$ for data point $i$.</span><span class="pt">Each block update minimizes $J$ over its block, so $J$ never increases.</span><span class="pt">$O(nC)$ per iteration ($n$ data points, $C$ nodes); Heskes's energy: $O(nC^2)$.</span></p>
   <div class="ctrl"><label class="param">$\lambda$ <input type="range" id="bc-lam" min="0.05" max="1" step="0.05" value="0.3"><output for="bc-lam"></output></label><label class="param">$\gamma$ <input type="range" id="bc-gamma" min="0" max="10" step="0.5" value="3"><output for="bc-gamma"></output></label></div>
   <p class="ref" data-steps="0,1">Ubukata, Notsu, Honda, IJCNN 2026</p>
   <p class="ref" data-steps="2">Ubukata, Notsu, Honda, IJCNN 2026 · Heskes, 1999</p>
@@ -693,7 +694,7 @@
 
 <section class="scene" data-id="supp" data-theme="dark" data-part="5" data-title="Supplementary material">
   <h2>Supplementary material</h2>
-  <p class="cap"><span class="pt">The talk ends here; the slides that follow are for questions.</span><span class="pt">RSCM and RMCM (Part 2); Heskes's SOM (Part 3).</span></p>
+  <p class="cap"><span class="pt">The talk ends here; the slides that follow are for questions.</span><span class="pt">RSCM and RMCM (Part 2); SOM-OLP and Heskes's SOM (Part 3).</span></p>
 </section>
 
 <section class="scene" data-id="rscm" data-part="5" data-lit="2" data-title="Supplement · RSCM and RMCM">

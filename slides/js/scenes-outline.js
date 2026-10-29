@@ -95,10 +95,10 @@ export default function outlines(ctx) {
     narrowAspect: () => 0.82,
     show(ctx, step, { dur }) { S.set([], { dur }); draw(ctx, { focus: k }); },
   }));
-  // Between the last slide and the supplement: the talk ends here, and what follows belongs to Part 3.
+  // Between the last slide and the supplement: the talk ends here, and what follows is for questions (Parts 2 and 3).
   const supplement = {
     id: 'supp', steps: 1,
-    show(ctx, step, { dur }) { S.set([], { dur }); draw(ctx, { supplement: [['RSCM · RMCM', 'Part 2'], ["Heskes's SOM", 'Part 3']] }); },
+    show(ctx, step, { dur }) { S.set([], { dur }); draw(ctx, { supplement: [['RSCM · RMCM', 'Part 2'], ["SOM-OLP · Heskes's SOM", 'Part 3']] }); },
   };
   return { outline, part, supplement };
 }
