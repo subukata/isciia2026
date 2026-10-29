@@ -98,7 +98,7 @@ export default function outlines(ctx) {
   // Between the last slide and the supplement: the talk ends here, and what follows is for questions (Parts 2 and 3).
   const supplement = {
     id: 'supp', steps: 1,
-    show(ctx, step, { dur }) { S.set([], { dur }); draw(ctx, { supplement: [['RSCM · RMCM · Recommendation', 'Part 2'], ["SOM-OLP · Heskes's SOM", 'Part 3']] }); },
+    show(ctx, step, { dur }) { S.set([], { dur }); draw(ctx, { supplement: [['RSCM · RMCM · Recommendation', ''], ["Manifolds · SOM-OLP · Heskes's SOM", '']] }); },
   };
   return { outline, part, supplement };
 }
