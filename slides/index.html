@@ -531,14 +531,12 @@
   <p class="cap" data-steps="0"><span class="pt">Part 2 finds uncertainty by neighborhoods, with rough set theory.</span><span class="pt">From rough membership to RMCM2, recommendation, and a concept: graphs.</span></p>
 </section>
 
+<!-- One page (2026-10-30): the definition of the neighborhood, the idea, and the figure of three neighborhoods. -->
 <section class="scene" data-id="roughset" data-split="all" data-part="2" data-title="Rough sets judge each data point by its neighborhood">
-  <h2 data-steps="0">In rough set theory, neighborhoods give rise to uncertainty</h2>
-  <h2 data-steps="1">Rough sets judge each data point by its neighborhood</h2>
-  <div class="motive" data-steps="0"><p><b>Insight</b> A data point is seen only through its neighbors: if they are in different clusters, its cluster is uncertain.</p><p><b>So we</b> judge each data point by its neighborhood, not by distance.</p></div>
-  <p class="lead" data-steps="1">The neighborhood of a data point: every data point within a radius $\delta$, itself included.</p>
-  <div class="eqband tall" data-steps="1">$$\underbrace{\mathcal{N}_i}_{\text{the neighborhood of }i}=\{\,j:\ \|\bm{x}_i-\bm{x}_j\|\le \delta\,\}$$</div>
-  <p class="idea" data-steps="1"><b>Idea</b> If all neighbors of a data point are in a cluster, the data point is certainly in it; if only some are, possibly.</p>
-  <p class="cap" data-steps="1">As $\delta$ shrinks, $\mathcal{N}_i$ becomes pure and $i$ certain.</p>
+  <h2>Rough sets judge each data point by its neighborhood</h2>
+  <p class="lead">The neighborhood of a data point: every data point within a radius $\delta$, itself included.</p>
+  <div class="eqband tall">$$\underbrace{\mathcal{N}_i}_{\text{the neighborhood of }i}=\{\,j:\ \|\bm{x}_i-\bm{x}_j\|\le \delta\,\}$$</div>
+  <p class="idea"><b>Idea</b> If all neighbors of a data point are in a cluster, the data point is certainly in it; if only some are, possibly.</p>
   <p class="ref">Pawlak, 1982</p>
 </section>
 
