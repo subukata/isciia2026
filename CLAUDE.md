@@ -91,6 +91,6 @@
 
 ## PDF
 
-- `node tools/export_pdf.js <出力.pdf>`: 段階ごとに 1 ページ、16:9（1200 × 675 pt）。各ページ 1919 × 1080 の JPEG、約 13 MB。
+- `node tools/export_pdf.js <出力.pdf>`: 段階ごとに 1 ページ、16:9（1200 × 675 pt）。各ページ 1920 × 1080 の JPEG、約 13 MB。
   Python の Pillow が必要。以前の無損失 3200 × 1800 版（約 25 MB、Chromium で印刷して pypdf で整える）は、
   ユーザーの環境で開けなかった（2026-10-29）。PDF は軽く素直な作り（JPEG・DeviceRGB・色プロファイルなし）にする。
