@@ -191,6 +191,8 @@
   .cap .cols { display: grid; grid-template-columns: 1fr 1fr; column-gap: 4.5rem; }
   /* Two or more points in a caption: a list with round bullets, not lines stacked under each other. */
   .cap .pt { display: block; position: relative; padding-left: 1.05em; }
+  /* Degrees of membership read as words (FCM, page 9): the value, then what it means, in two columns. */
+  .cap.degrees { display: grid; grid-template-columns: max-content 1fr; gap: .15em 1.2em; align-items: baseline; }
   .cap .pt::before { content: "•"; position: absolute; left: .15em; color: var(--hl); font-weight: 800; }
   .cap .next { display: block; color: var(--hl); font-weight: 700; }
   /* The next line on its own, at the very bottom, under a benefit box (main.js placeFoot). */
@@ -476,10 +478,10 @@
   <p class="lead" data-steps="3">Both updates minimize $J$: degrees from distances, prototypes as weighted means.</p>
   <div class="eqband tall" data-steps="2">$$J=\sum_i\sum_c \underbrace{\class{t-u}{u_{ci}^{\,m}}}_{\text{degree, to the power }m}\|\bm{x}_i-\bm{b}_c\|^2$$</div>
   <div class="eqband tall small-gap" data-steps="3">$$\underbrace{u_{ci}=\frac{\|\bm{x}_i-\bm{b}_c\|^{-2/(m-1)}}{\sum_k\|\bm{x}_i-\bm{b}_k\|^{-2/(m-1)}}}_{\text{nearer, larger; summing to 1}}$$ $$\underbrace{\bm{b}_c=\frac{\sum_i u_{ci}^{\,m}\,\bm{x}_i}{\sum_i u_{ci}^{\,m}}}_{\text{weighted mean}}$$</div>
-  <p class="idea" data-steps="1" data-wide="760"><b>Idea</b> The nearer a prototype, the larger the degree; each data point’s degrees add up to 1.</p>
+  <p class="idea" data-steps="1" data-wide="760"><b>Idea</b> FCM (fuzzy c-means) gives each data point a degree of membership $u_{ci}$ in every cluster: the nearer the prototype, the larger the degree.</p>
   <p class="cap" data-steps="0"><span class="next">→ FCM (fuzzy c-means) is fuzzy clustering: it extends the discrete membership $\{0, 1\}$ to a continuous membership $[0, 1]$.</span></p>
-  <p class="cap" data-steps="1">FCM (fuzzy c-means) is a clustering method that gives each data point a degree of membership in every cluster.</p>
-  <p class="cap" data-steps="2"><span class="pt">$u_{ci}\in[0,1]$, summing to 1 over the clusters.</span><span class="pt">$m&gt;1$ is the fuzzifier: the larger $m$, the softer the degrees.</span></p>
+  <p class="cap degrees" data-steps="1"><span>$u_{ci}=1.0$</span><span>fully belongs</span><span>$u_{ci}=0.8$</span><span>largely belongs</span><span>$u_{ci}=0.5$</span><span>partly belongs</span><span>$u_{ci}=0.2$</span><span>hardly belongs</span><span>$u_{ci}=0.0$</span><span>does not belong at all</span></p>
+  <p class="cap" data-steps="2"><b>Differences from k-means</b><span class="pt">$u_{ci}$ is relaxed from $\{0,1\}$ to $[0,1]$, summing to 1 over the clusters.</span><span class="pt">$u_{ci}^{\,m}$ is powered by $m&gt;1$ (the fuzzifier): the larger $m$, the softer the degrees.</span></p>
   <p class="cap" data-steps="3" data-wide="720"><span class="pt">$u_{ci}$ is the degree of membership, larger for clusters that are relatively nearer.</span><span class="pt">$\bm{b}_c$ is the prototype of cluster $c$: the mean of the data points weighted by $u_{ci}^{\,m}$.</span><span class="pt">$J$ never increases.</span></p>
   <div class="ctrl"><label class="param">$m$ <input type="range" id="fz-m" min="1.1" max="6" step="0.01" value="2"><output for="fz-m"></output></label><button type="button" class="btn" id="fz-run">Run</button></div>
   <p class="ref">Bezdek, 1981</p>
