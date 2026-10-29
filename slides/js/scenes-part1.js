@@ -44,12 +44,13 @@ export default function part1(ctx) {
         };
         return;
       }
-      const fin = fcmA(fzM()), axes = { yRange: [Math.min(...fin.history), Math.max(...fin.history)], xMax: fin.history.length };
+      // No meter of J: after the first iterations FCM's J barely changes, so the curve would say little.
+      M.hide();
+      const fin = fcmA(fzM());
       let state = fin, mu = null, mNow = fzM();
-      const draw = (s, d, fixed = true) => {
+      const draw = (s, d) => {
         state = s; mu = null; mNow = fzM();
         S.set([...pointItems(XA, m, i => ({ fill: diverging(muLeft(s, i)), shape: 'circle' })), ...protoItems(s.B, m)], { dur: d });
-        if (step >= 2) M.show({ name: `FCM, $m = ${fzM().toFixed(2)}$`, values: s.history, ...(fixed ? axes : {}) }); else M.hide();
       };
       // Then m swings slowly and only the degrees follow: the prototypes stay where FCM put them (for the slider's m), so that
       // the swing shows what m does to the degrees and nothing else. m - 1 swings on a log scale, so that crisp (m near 1.1)
@@ -71,7 +72,7 @@ export default function part1(ctx) {
         g.save(); g.globalAlpha *= born('fz:legend', { delay: 300 }); membershipLegend(g, lx, ly, lw); g.restore();
         // u lit in the equation: the scale that shows it is framed.
         if (hotU) { g.save(); g.strokeStyle = C.hl; g.lineWidth = 3; g.strokeRect(lx - 12, ly - 46, lw + 24, 100); g.restore(); }
-        // The m of the degrees shown (the prototypes are those of the run in the meter).
+        // The m of the degrees shown (the prototypes are those of FCM run with the slider's m).
         text(g, `$m = ${mNow.toFixed(2)}$`, F.x + 4, F.y + F.h - 6, { size: 34, weight: 760, color: C.hl });
       };
     },
@@ -261,7 +262,7 @@ export default function part1(ctx) {
           }
           if (k < 3 && !ctx.narrow()) arrow(g, [r.x + r.w + 8, r.y + r.h / 2], [r.x + r.w + 40, r.y + r.h / 2], { color: k + 1 < n ? C.gray : C.line, lw: 3.4, head: 14, grow: born('fam:arrow' + k, { delay: 200 }) });
         });
-        // No key: the caption says what the colors mean, and the notes say a star can be dragged.
+        // No key: the caption says what the colors mean (a star can be dragged).
       };
       // The same three prototypes in every panel: drag one, and all rules redraw.
       let held = null;
@@ -404,5 +405,5 @@ export default function part1(ctx) {
     };
   };
 
-  return [remap(withIdea(fuzzy, 1), [0, 1, 2, 4]), remap(withIdea(withMotive(rough, roughMotive), 1, roughIdea), [0, 1, 4, 5]), remap(family, [3]), remap(shapes, [4])];
+  return [remap(withIdea(fuzzy, 1), [0, 1, 2, 4]), remap(withIdea(withMotive(rough, roughMotive), 1, roughIdea), [1, 4, 5]), remap(family, [3]), remap(shapes, [4])];
 }

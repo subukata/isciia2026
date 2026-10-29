@@ -1,6 +1,6 @@
 /**
  * The deck. Scenes advance in build steps; the stage and its points persist across all of them.
- * Keys, hash (#scene or #scene.step), the rail, an overview, notes with a pacing timer, and a
+ * Keys, hash (#scene or #scene.step), the rail, an overview, a pacing timer, and a
  * presenter window kept in sync over a BroadcastChannel (#presenter).
  */
 import { Stage } from './stage.js';
@@ -365,25 +365,11 @@ function updatePresenter() {
   box.querySelector('.p-now').textContent = `${cur.si + 1}. ${s.title} — step ${cur.step + 1} of ${s.steps}`;
   const n = cur.step < s.steps - 1 ? `step ${cur.step + 2}: ${capText(s, cur.step + 1)}` : scenes[cur.si + 1] ? `${cur.si + 2}. ${scenes[cur.si + 1].title}` : 'end';
   box.querySelector('.p-next').textContent = `Next: ${n}`;
-  showNotes(box.querySelector('.p-notes'), s);
-}
-// The scene's notes, with the paragraphs of the current step lit and kept in view ("(→)" opens each further step).
-function showNotes(el, s) {
-  const key = `${cur.si}.${cur.step}`;
-  if (el.dataset.key === key) return;
-  if (el.dataset.scene !== String(cur.si)) { el.innerHTML = s.el.querySelector('aside.notes')?.innerHTML ?? ''; el.dataset.scene = String(cur.si); }
-  let k = 0;
-  for (const p of el.querySelectorAll('p')) {
-    if (/^\s*[（(]→[)）]/.test(p.textContent)) k++;
-    p.classList.toggle('now', k === cur.step);
-  }
-  el.dataset.key = key;
-  el.querySelector('p.now')?.scrollIntoView({ block: 'nearest' });
 }
 setInterval(() => { if (!$('presenter').hidden || PRESENTER) updatePresenter(); }, 1000);
 function togglePresenter() {
   $('presenter').hidden = !$('presenter').hidden;
-  $('b-notes').setAttribute('aria-pressed', String(!$('presenter').hidden));
+  $('b-timer').setAttribute('aria-pressed', String(!$('presenter').hidden));
   updatePresenter();
 }
 function openPresenterWindow() {
@@ -460,7 +446,7 @@ const clickBlur = (id, fn) => $(id)?.addEventListener('click', e => { fn(); e.cu
 clickBlur('b-prev', prev);
 clickBlur('b-next', next);
 clickBlur('b-overview', () => toggle('overview'));
-clickBlur('b-notes', togglePresenter);
+clickBlur('b-timer', togglePresenter);
 clickBlur('b-controls', toggleControls);
 clickBlur('b-full', fullscreen);
 clickBlur('b-help', () => toggle('help'));

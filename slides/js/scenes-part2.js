@@ -21,7 +21,6 @@ export default function part2(ctx) {
     return best;
   };
   const hoverPoint = onPick => (x, y) => { const it = S.pick(x, y, { within: 16, test: it => it.id[0] === 'p' }); onPick(it ? it.data : -1); };
-  const axesOf = h => ({ yRange: [Math.min(...h), Math.max(...h)], xMax: h.length });
 
   // ------------------------------------------------------------ rough sets: uncertainty induced by neighborhoods
   const roughset = {
@@ -253,15 +252,16 @@ export default function part2(ctx) {
       const cx = (p1[0] + p2[0]) / 2, cy = (p1[1] + p2[1]) / 2, hw = Math.abs(p1[0] - p2[0]) / 2 + 0.6;
       const m = S.view(step === 2 ? [cx - hw, cx + hw, cy - 0.75, cy + 0.75] : BOUNDS_A, F, dur);
       let state = fin;
-      const draw = (s, d, fixed = true, fresh = false) => {
+      // No meter of J: the curve says little (J barely changes after the first iterations); the caption says J never increases.
+      M.hide();
+      const draw = (s, d, fresh = false) => {
         state = s;
         S.set([...pointItems(XA, m, muStyle(s.mu, leftOf(s.B))), ...protoItems(s.B, m)], { dur: d, fresh });
-        if (step === 2) M.show({ name: 'RMCM2', values: s.history, ...(fixed ? axesOf(fin.history) : {}) }); else M.hide();
       };
       // The radius stays at the slider's value, and with it the prototypes: a size that changed while the prototypes moved
       // would mix two effects. The update step shows the run once.
       objective.replay = () => ctx.play(A.rmcm2(XA, START, hood), s => draw(s, 450), { delay: 750 });
-      if (step === 2 && forward) objective.replay(); else draw(fin, dur, true, fresh);
+      if (step === 2 && forward) objective.replay(); else draw(fin, dur, fresh);
       ctx.highlight(step === 1 ? ['mu'] : step === 2 ? ['P'] : []);
       if (step === 1) {
         // The errors of J, each weighted by μ: a line from every point to each prototype, as strong as its μ. A point between

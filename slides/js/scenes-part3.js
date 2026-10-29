@@ -558,13 +558,13 @@ export default function part3(ctx) {
       // The data space (prototypes b on the surface) beside the latent space (positions v): each update moves its own block.
       const F = ctx.field({ eq: 'tall', meter: true }), run = blockRun(bcLam(), bcGamma());
       const [dRect, lRect] = ctx.panels({ x: F.x, y: F.y + 92, w: F.w, h: F.h - 92 }, 2, { gap: 40 }), lm = latticeMap(lRect);
-      const last = run.states.length - 1, js = run.states.map(s => s.J).slice(1);
-      const axes = { yRange: [Math.min(...js), Math.max(...js)], xMax: run.states.length, xLabel: 'block update' };
+      const last = run.states.length - 1;
+      // No meter of J: the curve says little (J barely changes after the first block updates); the caption says J never increases.
+      M.hide();
       const items = st => XS.map((p, i) => { const [x, y] = lm.at([st.V[2 * i], st.V[2 * i + 1]]); return { id: 's' + i, x, y, r: 4.5, fill: ZCOLOR[i], hit: true, data: i }; });
       const showUpTo = (k, d) => {
-        const sts = run.states.slice(0, k + 1), st = sts.at(-1);
+        const st = run.states[Math.min(k, last)];
         S.set(items(st), { dur: d });
-        if (step >= 1) M.show({ name: `SOM-OLP, iteration ${st.iteration}`, values: sts.map(s => s.J), tags: sts.map(s => s.block), from: 1, ...axes }); else M.hide();
         if (step >= 1) ctx.highlight(st.block === 'start' ? [] : ['b' + st.block]);
         bcd.k = k;
       };

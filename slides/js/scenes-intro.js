@@ -261,14 +261,14 @@ export default function intro(ctx) {
         };
         return;
       }
-      const axes = { yRange: [Math.min(...fin.history), Math.max(...fin.history)], xMax: fin.history.length };
-      const draw = (s, d) => { S.set([...painted(s), ...protoItems(s.B, m, { r: 22 })], { dur: d }); M.show({ name: 'k-means', values: s.history, ...axes }); };
+      // No meter of J here: a rerun from another start barely changes J, so the curve would say little.
+      M.hide();
+      const draw = (s, d) => S.set([...painted(s), ...protoItems(s.B, m, { r: 22 })], { dur: d });
       // Back, opened directly, or with motion reduced (as for the PDF): the converged state at once.
       if (!forward || ctx.reduced()) { draw(fin, dur); S.under = cells(fin.B); return; }
       // From a k-means++ start: the first cycle slowly (assign, then move), then the rest.
       const gen = ub.steps.kmeans(BLOBS, 3, { init }), first = A.fromUbukit(gen.next().value.result());
       S.set([...painted(first), ...protoItems(init, m, { r: 22 })], { dur: 700 });
-      M.show({ name: 'k-means', values: first.history, ...axes });
       let phase = 'assign';
       ctx.highlight(['ua']);
       S.over = (g, st) => {
