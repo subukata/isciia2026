@@ -552,13 +552,12 @@
 <section class="scene" data-id="granule" data-split="0" data-part="2" data-title="Rough membership grades a data point by its neighbors">
   <h2 data-steps="0,1">Rough membership grades a data point by its neighbors</h2>
   <p class="lead" data-steps="0">Rough membership is the share of a data point's neighbors that are in the cluster.</p>
-  <p class="lead" data-steps="1">All neighbors in the cluster: certain; neighbors in both: possibly in either.</p>
+  <p class="lead" data-steps="1">We can extract certain and uncertain regions by $\mu_{ci}$.<br>All neighbors in the cluster: certain; neighbors in both: possibly in either.</p>
   <div class="eqband tall" data-steps="0">$$\mu_{ci}=\underbrace{\frac{|\mathcal{N}_i\cap X_c|}{|\mathcal{N}_i|}}_{\text{share of cluster }c\text{ among the neighbors}}$$</div>
   <!-- Each case over its own panel; the scene's JS sets left and width from the panel. -->
   <div class="rule-eq" data-k="0" data-steps="1">$$\underbrace{\mu_{ci}=1}_{\text{certainly in }c}$$</div>
   <div class="rule-eq" data-k="1" data-steps="1">$$\underbrace{0<\mu_{ci}<1}_{\text{possibly in }c\text{ (boundary)}}$$</div>
-  <p class="cap" data-steps="0">$X_c$: the data points in cluster $c$ (labels from k-means).</p>
-  <p class="cap" data-steps="1"><span class="pt">$\mu_{ci}$ is a neighborhood-induced fuzzy membership.</span><span class="pt">We can extract certain and uncertain regions by $\mu_{ci}$.</span></p>
+  <p class="cap" data-steps="0" data-wide="720"><span class="pt">Rough membership can be seen as a neighborhood-induced fuzzy membership.</span><span class="pt">$X_c$: the data points in cluster $c$ (labels from k-means).</span></p>
   <div class="ctrl"><label class="param">radius <input type="range" id="gr-radius" min="0.15" max="0.8" step="0.01" value="0.30"><output for="gr-radius"></output></label></div>
   <p class="ref">Pawlak and Skowron, 1994</p>
 </section>
