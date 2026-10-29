@@ -29,7 +29,7 @@ const out = path.resolve(args[0] ?? 'slides.pdf');
   for (let n = 0; n < 300; n++) {
     const id = await page.evaluate(() => document.querySelector('.scene.active')?.dataset.id);
     // Digits is computed in a worker started when the deck opens: give it time.
-    await page.waitForTimeout(id === 'digits' ? 9000 : 1800);
+    await page.waitForTimeout(['digits', 'real'].includes(id) ? 9000 : 1800);
     const hash = await page.evaluate(() => location.hash);
     if (files.length && hash === files.at(-1).hash) break;
     const file = path.join(dir, `${String(n + 1).padStart(3, '0')}.png`);

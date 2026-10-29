@@ -755,6 +755,73 @@ export default function part3(ctx) {
     leave() { dgShown = false; dgHover = -1; digitsRuns.onReady = null; },
   };
 
+  // ------------------------------------------------------------ Iris and Digits on one slide: SOM-OLP's map of each, side by side
+  // (the two scenes above, with Batch SOM and the data space, are kept but not in the talk).
+  let rlShown = false, rlHover = -1;
+  const irisItem = i => ({ r: 7, fill: CLUSTER[species[i]], shape: SHAPE[species[i]], stroke: '#FFFFFF', lw: 1.2 });
+  const real = {
+    id: 'real', steps: 1,
+    narrowAspect: () => 1.9,
+    show(ctx, step, { dur, forward }) {
+      rlShown = true;
+      M.hide();
+      // Each half: its key, then its map just right of it (as large as the half's height allows), the pair centered.
+      const F = ctx.field(), [L, R] = ctx.panels(F, 2, { gap: 70, top: 56 });
+      const keyW = [190, 100], half = [L, R].map((h, k) => {
+        const size = Math.min(h.w - keyW[k] - 24, h.h), x0 = h.x + (h.w - keyW[k] - 24 - size) / 2;
+        return { key: { x: x0, y: h.y, w: keyW[k], h: h.h }, map: { x: x0 + keyW[k] + 24, y: h.y + (h.h - size) / 2, w: size, h: size } };
+      });
+      const li = latticeMap(half[0].map, 0.05), ld = latticeMap(half[1].map, 0.05);
+      // Digits is computed in a worker started when the deck opens; until it is done, its half says so.
+      digitsRuns.onReady = () => { if (rlShown) ctx.rerender(); };
+      if (digitsRuns.failed && !digitsRuns.olp) ctx.after(80, digitsHere);
+      const dg = digitsRuns.olp;
+      const items = irisOlp().emb.map((v, i) => { const [x, y] = li.at(v); return { ...irisItem(i), id: 'j' + i, x, y, hit: true, data: i }; });
+      if (dg) items.push(...dg.emb.map((v, i) => { const [x, y] = ld.at(v); return { id: 'e' + i, x, y, r: 3.6, fill: TAB10[DIGITS.y[i]], hit: true, data: i }; }));
+      S.set(items, { dur: Math.max(dur, 1300), stagger: forward ? (sp, k) => k * (1400 / items.length) : null });
+      S.under = g => { drawGrid(g, li, 16, C.faint); if (dg) drawGrid(g, ld, 16, C.faint); };
+      // The digits' key: each digit's mean image and its color, ten rows over the map's height.
+      const kStep = (half[1].map.h - 40) / 9, kScale = Math.min(5, (kStep - 8) / 8);
+      let focus = -1;
+      if (dg) live(ctx, forward ? 2600 : 1200, () => () => {
+        // One digit after another comes forward.
+        const k = cycle([0, 1, 2, 3, 4, 5, 6, 7, 8, 9], 2.4);
+        if (k === focus) return;
+        focus = k;
+        S.patch(Array.from({ length: DIGITS.raw.length }, (_, i) => ['e' + i, { r: DIGITS.y[i] === k ? 5.6 : 3.6, alpha: DIGITS.y[i] === k ? 1 : 0.45 }]), { dur: 400 });
+      });
+      S.over = g => {
+        plate(g, 'Iris: SOM-OLP', half[0].map.x, half[0].map.y - 56, { color: C.ours });
+        plate(g, 'Digits: SOM-OLP', half[1].map.x, half[1].map.y - 56, { color: C.ours });
+        NAMES.forEach((name, k) => {
+          const x = half[0].key.x, y = half[0].map.y + 40 + k * 56;
+          g.fillStyle = CLUSTER[k]; g.beginPath();
+          if (k === 0) g.arc(x + 12, y - 10, 11, 0, Math.PI * 2); else if (k === 1) g.rect(x + 2, y - 20, 20, 20); else { g.moveTo(x + 12, y - 24); g.lineTo(x + 24, y); g.lineTo(x, y); g.closePath(); }
+          g.fill();
+          text(g, name, x + 34, y, { size: 30, weight: 700, halo: false });
+        });
+        DIGITS.means.forEach((img, k) => {
+          const x = half[1].key.x, y = half[1].map.y + k * kStep;
+          digitImage(g, img, x, y, kScale);
+          text(g, String(k), x + 8 * kScale + 12, y + kScale * 7, { size: 34, weight: 780, color: TAB10[k], halo: false });
+          if (focus === k) ring(g, x + kScale * 4, y + kScale * 4, kScale * 6, { color: C.hl, lw: 3, grow: born('rlk:focus' + k, { dur: 300 }) });
+        });
+        if (!dg) plate(g, 'Computing on this computer…', half[1].map.x + 20, half[1].map.y + half[1].map.h / 2 - 24);
+        // The image under the pointer, beside its point.
+        if (rlHover < 0) return;
+        const p = S.pos('e' + rlHover);
+        if (!p) return;
+        ring(g, ...p, 10, { color: C.ink, lw: 3 });
+        const x = Math.min(p[0] + 18, F.x + F.w - 100), y = Math.max(p[1] - 110, F.y);
+        g.fillStyle = '#FFFFFF'; g.fillRect(x - 6, y - 6, 100, 100);
+        digitImage(g, DIGITS.raw[rlHover], x, y, 11);
+      };
+      S.handlers.move = (x, y) => { const it = S.pick(x, y, { within: 10, test: it => it.id[0] === 'e' }); const i = it ? it.data : -1; if (i !== rlHover) { rlHover = i; S.wake(); } };
+      S.handlers.leave = () => { rlHover = -1; S.wake(); };
+    },
+    leave() { rlShown = false; rlHover = -1; digitsRuns.onReady = null; },
+  };
+
   // Before the energy: SOM's updates are rules, with no function they are sure to decrease.
   const heskesMotive = (ctx, { dur }) => {
     const F = ctx.field({ eq: true, meter: true }), B = batchSaddle().B, enter = Math.max(dur, 900);
@@ -791,7 +858,7 @@ export default function part3(ctx) {
 
   // Heskes's SOM is a supplement (after the last slide), kept for questions.
   return [maps, som, remap(latent, [1]), { ...probe, supplement: true }, remap(withIdea(withMotive(bcd, bcdMotive, { aspect: 1.15 }), 1), [0, 2, 4]),
-    // Iris and Digits in one step each: Batch SOM and SOM-OLP side by side at once.
-    remap(iris, [1]), remap(digits, [1]),
+    // Iris and Digits on one slide, SOM-OLP only (the scenes iris and digits, with Batch SOM, are kept but not shown).
+    real,
     { ...withIdea(withMotive(heskes, heskesMotive, { aspect: 0.9 }), 1), supplement: true }];
 }
