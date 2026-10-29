@@ -494,7 +494,8 @@
 
 
 <section class="scene" data-id="rough" data-split="1,2" data-part="1" data-title="Rough c-means (RCM) clustering">
-  <h2>Rough c-means (RCM) clustering</h2>
+  <h2 data-steps="0,1">Rough c-means (RCM) clustering</h2>
+  <h2 data-steps="2">RCM: Update rules of memberships and prototypes</h2>
     <p class="lead" data-steps="1">RCM assigns a data point not only to the nearest cluster but also to relatively close clusters.</p>
   <p class="lead" data-steps="2">A data point in two clusters counts ½ in each; each prototype is the weighted mean.</p>
       <div class="eqband tall" data-steps="1">$$\underbrace{\overline{u}_{ci}=1}_{i\text{ belongs to }c}\iff d_{ci}\le \underbrace{\class{t-dmin}{d_i^{\min}}}_{\text{nearest}}+\underbrace{\class{t-beta}{\beta}}_{\text{slack}}$$</div>
