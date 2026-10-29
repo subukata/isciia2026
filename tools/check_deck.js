@@ -39,7 +39,7 @@ const wanted = new Set(args.map(s => '#' + s.replace(/\.1$/, '')));
     if (s.stopped) stopped.push(s.hash);
     if (s.meter) meter.push(s.hash);
     if (shots && wanted.has(s.hash)) {
-      await page.waitForTimeout(s.id === 'digits' ? 9000 : 2500);
+      await page.waitForTimeout(['digits', 'real'].includes(s.id) ? 9000 : 2500);
       await page.screenshot({ path: `${shots}/${s.hash.slice(1)}.png` });
     }
     await page.keyboard.press('ArrowRight');
