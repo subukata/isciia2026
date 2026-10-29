@@ -457,7 +457,7 @@
   <h2 data-steps="1">k-means minimizes one objective</h2>
   <h2 data-steps="2">Update rules of assignments and prototypes</h2>
   <div class="motive" data-steps="0"><p><b>Goal</b> Find prototypes and assign each data point to a cluster.</p><p><b>We need</b> one measure of clustering quality.</p></div>
-  <p class="lead" data-steps="1">We split the data points into $C$ clusters (here $C=3$).<br>k-means minimizes $J$, the sum of within-cluster squared errors.</p>
+  <p class="lead" data-steps="1">We first determine the number of clusters, $C$ (here $C=3$).<br>k-means minimizes $J$, the sum of within-cluster squared errors.</p>
   <p class="lead" data-steps="2">Minimize $J$ in turns: assign with the prototypes fixed, then average.</p>
   <div class="eqband tall" data-steps="1" data-beside>$$J=\underbrace{\class{t-s}{\sum_i\sum_c}}_{\substack{\text{all data points}\\\text{and clusters}}}\;\underbrace{\class{t-u}{u_{ci}}}_{\substack{1\text{ if }i\text{ belongs}\\\text{to }c\text{, else }0}}\;\underbrace{\class{t-d}{\|\bm{x}_i-\bm{b}_c\|^2}}_{\substack{\text{squared}\\\text{distance}}}$$</div>
   <div class="eqband tall small-gap" data-steps="2">$$\underbrace{\class{t-ua}{u_{ci}=1\ \text{for}\ c=\mathop{\arg\min}_k\|\bm{x}_i-\bm{b}_k\|^2}}_{\text{fix }\bm{b}\text{: the nearest prototype}}$$ $$\underbrace{\class{t-bm}{\bm{b}_c=\frac{\sum_i u_{ci}\bm{x}_i}{\sum_i u_{ci}}}}_{\text{fix }u\text{: the mean}}$$</div>
