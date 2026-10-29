@@ -453,7 +453,7 @@
   <div class="eqband tall small-gap" data-steps="2">$$\underbrace{\class{t-ua}{u_{ci}=1\ \text{for}\ c=\mathop{\arg\min}_k\|\bm{x}_i-\bm{b}_k\|^2}}_{\text{fix }\bm{b}\text{: the nearest prototype}}$$ $$\underbrace{\class{t-bm}{\bm{b}_c=\frac{\sum_i u_{ci}\bm{x}_i}{\sum_i u_{ci}}}}_{\text{fix }u\text{: the mean}}$$</div>
   <p class="cap" data-steps="0">k-means is a clustering method that represents each cluster by the mean of its data points.</p>
   <p class="cap" data-steps="1"><span class="pt">$J$ measures the fit: the squared distance from each data point to its prototype, summed over all data points.</span><span class="pt">$\bm{x}_i$: data point $i$; $\bm{b}_c$: the prototype of cluster $c$.</span></p>
-  <p class="cap" data-steps="2">Each update minimizes $J$, so $J$ never increases.</p>
+  <p class="cap" data-steps="2"><span class="pt">$u_{ci}$: data point $i$ is assigned to the nearest cluster.</span><span class="pt">$\bm{b}_c$: the prototype of cluster $c$ is the mean of its data points.</span><span class="pt">Each update minimizes $J$, so $J$ never increases.</span></p>
   <p class="ref">MacQueen, 1967 · Lloyd, 1982</p>
 </section>
 
