@@ -72,7 +72,7 @@ export default function outlines(ctx) {
         g.restore();
       });
       if (supplement) {
-        const sy = below, { w } = plate(g, 'Supplement · for questions', F.x, sy, { ...PLATE, color: K.hl, border: K.hl });
+        const sy = below, { w } = plate(g, 'Supplement', F.x, sy, { ...PLATE, color: K.hl, border: K.hl });
         // Each supplement: its methods as a chip, and the part it belongs to.
         let x = F.x + w + 20;
         for (const [name, note] of supplement) {
@@ -98,7 +98,7 @@ export default function outlines(ctx) {
   // Between the last slide and the supplement: the talk ends here, and what follows is for questions (Parts 2 and 3).
   const supplement = {
     id: 'supp', steps: 1,
-    show(ctx, step, { dur }) { S.set([], { dur }); draw(ctx, { supplement: [['RSCM · RMCM', 'Part 2'], ["SOM-OLP · Heskes's SOM", 'Part 3']] }); },
+    show(ctx, step, { dur }) { S.set([], { dur }); draw(ctx, { supplement: [['RSCM · RMCM · Recommendation', 'Part 2'], ["SOM-OLP · Heskes's SOM", 'Part 3']] }); },
   };
   return { outline, part, supplement };
 }
