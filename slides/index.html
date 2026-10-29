@@ -506,15 +506,14 @@
   <p class="cap" data-steps="0"><span class="cols"><span>FCM gives every data point a degree.</span><span>RCM gives each cluster certain and possible members.</span></span></p>
   <p class="benefit" data-steps="0"><b>Benefit</b> RCM handles overlapping membership and extracts a clear boundary: the data points in both clusters (diamonds).</p>
   <p class="cap" data-steps="1"><span class="pt">$d_{ci}$: the distance from $i$ to prototype $c$.</span><span class="pt">$d_i^{\min}$: the distance to the nearest prototype.</span><span class="pt">$\beta=0$: k-means.</span><span class="pt">A larger $\beta$ makes the clusters overlap more.</span></p>
-  <p class="cap" data-steps="2"><span class="next">→ Two classic rules set this threshold differently.</span></p>
   <div class="ctrl"><label class="param">$\beta$ <input type="range" id="rg-beta" min="0" max="1.2" step="0.05" value="0.35"><output for="rg-beta"></output></label><button type="button" class="btn" id="rg-run">Run</button></div>
   <p class="ref">Pawlak, 1982 · Lingras and West, 2004</p>
 </section>
 
-<section class="scene" data-id="family" data-part="1" data-title="ExRCM generalizes the RCM thresholds">
-  <h2>ExRCM generalizes the RCM thresholds</h2>
+<section class="scene" data-id="family" data-part="1" data-title="Development of RCM clustering">
+  <h2>Development of RCM clustering</h2>
   <span class="ours-tag">Ours</span>
-  <p class="lead">Lingras adds a difference $\beta$, Peters a ratio $\alpha$.<br>We proposed exponentiated RCM (ExRCM), which takes both and adds a power $p$.</p>
+  <p class="lead">Lingras' RCM uses a difference $\beta$; Peters' RCM uses a ratio $\alpha$.<br>We proposed exponentiated RCM (ExRCM), which takes both and adds a power $p$.</p>
   <!-- Each rule's inequality over its own panel; the scene's JS sets left and width from the panel. -->
   <div class="rule-eq" data-k="0">$$d_{ci}\le d_i^{\min}+\beta$$</div>
   <div class="rule-eq" data-k="1">$$d_{ci}\le \alpha\, d_i^{\min}$$</div>
