@@ -180,6 +180,9 @@
   /* Inequalities set over their own panels (the scene places them). */
   /* An inequality is never broken over two lines: over four panels the rules are a little smaller (scripts stay 28+). */
   .scene[data-id="family"] .rule-eq { font-size: 1.85rem; }
+  /* Rough membership's two cases (page 21): the key sentence larger; the equations and panels move down under it (main.js
+     placeLead), into the room the figure left at the bottom (scenes-part2.js). */
+  .scene[data-id="granule"] > .lead[data-steps="1"] { font-size: 2.3rem; line-height: 1.2; }
   .rule-eq { position: absolute; top: calc(9.15rem + var(--lead-shift, 0rem)); height: 5.25rem; display: flex; align-items: center; justify-content: center; font-size: 2rem; color: var(--ink); }
   .rule-eq mjx-container[display="true"] { margin: 0 !important; }
   html.narrow .rule-eq { position: static; order: 3; width: auto !important; height: auto; font-size: 16px; }
