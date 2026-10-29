@@ -290,7 +290,8 @@ function placeEquation(s) {
   const fr = $('frame').getBoundingClientRect(), unit = 1600 / fr.width, y = e => (e.getBoundingClientRect().bottom - fr.top) * unit;
   // The column widens to its widest equation (up to 790), and the figure takes the rest.
   const widest = Math.max(...bands.flatMap(b => [...b.querySelectorAll('mjx-container')].map(m => m.getBoundingClientRect().width * unit)));
-  if (widest <= 790) {
+  // A band marked data-beside always takes its own row (the key sentence above it across the slide, the figure beside it).
+  if (widest <= 790 && !bands.some(b => b.hasAttribute('data-beside'))) {
     colWidth = Math.max(560, Math.ceil(widest) + 10);
     s.el.style.setProperty('--col-w', `${colWidth / 20}rem`);
     const words = [...s.el.children].filter(e => e.matches('.lead, .motive, .idea, .eqband, .cap, .benefit, p.next') && getComputedStyle(e).display !== 'none');
