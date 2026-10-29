@@ -238,6 +238,8 @@
   .cap .part { font-weight: 700; color: var(--title); }
   /* The recommendation example: its tables leave room above the words, so they start higher and grow (main.js fitWords). */
   .scene[data-id="cfex"] > .cap { top: var(--cap-top, 36.4rem); }
+  /* Page 26: the goal box larger (the room under the title allows it). */
+  .scene[data-id="maps"] > .motive { font-size: 2.2rem; }
   .pos { color: var(--pos); font-weight: 700; } .neg { color: var(--neg); font-weight: 700; } .ours { color: var(--ours); font-weight: 700; }
   [data-steps]:not(.shown) { display: none !important; }
 
@@ -620,26 +622,31 @@
 <section class="scene" data-id="maps" data-part="3" data-title="Grasp the structure of high-dimensional data">
   <h2>Grasp the structure of high-dimensional data</h2>
   <div class="motive" data-steps="0"><p><b>Goal</b> To see data with many dimensions, which cannot be drawn directly.</p><p><b>We need</b> the few dimensions the data really vary in.</p></div>
-  <p class="cap" data-steps="0">Manifold hypothesis: such data often lie near a low-dimensional surface (here, 2D in 3D).<span class="next">→ The self-organizing map (SOM) learns such a map with ordered prototypes.</span></p>
+  <p class="cap" data-steps="0"><span class="next">→ The self-organizing map (SOM) learns such a map with ordered prototypes.</span></p>
+</section>
+
+<!-- The manifold hypothesis behind the map above, kept for questions (the same figure). -->
+<section class="scene" data-id="manifold" data-part="5" data-lit="3" data-title="Supplement · The manifold hypothesis">
+  <h2>Supplement: The manifold hypothesis</h2>
+  <p class="cap" data-steps="0">Manifold hypothesis: such data often lie near a low-dimensional surface (here, 2D in 3D).</p>
   <p class="ref">Fefferman, Mitter, Narayanan, JAMS, 2016</p>
 </section>
 
-<section class="scene" data-id="som" data-part="3" data-title="The SOM orders prototypes on a lattice">
-  <h2>The SOM orders prototypes on a lattice</h2>
-  <p class="lead" data-steps="0">1. An input $\bm{x}$ comes in.<br>2. Its nearest prototype is found: the winner $w$.<br>3. The winner and the nodes near it in the latent space move toward $\bm{x}$ together.</p>
+<section class="scene" data-id="som" data-part="3" data-title="Self-organizing maps (SOM)">
+  <h2 data-steps="0">Self-organizing maps (SOM)</h2>
+  <h2 data-steps="1">Batch SOM</h2>
+  <p class="lead" data-steps="0">The SOM fits the lattice structure to the data distribution.<br>1. An input $\bm{x}$ comes in.<br>2. Its nearest prototype is found: the winner $w$.<br>3. The winner and the nodes near it in the latent space move toward $\bm{x}$ together.</p>
   <div class="eqband tall" data-steps="0">$$\underbrace{\bm{b}_c}_{\text{node }c}\leftarrow\bm{b}_c+\underbrace{\alpha}_{\text{rate}}\,\underbrace{h(c,w)}_{\substack{w\text{: the winner,}\\\text{nearest to }\bm{x}}}\,\underbrace{(\bm{x}-\bm{b}_c)}_{\substack{\text{toward}\\\text{the input}}}$$ $$\underbrace{h(c,w)=e^{-\|\bm{r}_c-\bm{r}_w\|^2/2\sigma^2}}_{\substack{\text{pulls the winner's neighbors too}\\\bm{r}_c\text{: node }c\text{ on the lattice; }\sigma\text{: reach}}}$$</div>
-  <p class="lead" data-steps="1">In batch SOM, each node moves to a weighted mean of all data points.</p>
+  <p class="lead" data-steps="1">Batch SOM uses all data points at once, which makes learning efficient.<br>Each node moves to a weighted mean of all data points.</p>
   <div class="eqband tall" data-steps="1">$$\bm{b}_c=\frac{\sum_i h(c,w_i)\,\bm{x}_i}{\sum_i h(c,w_i)}$$ $$\underbrace{w_i=\mathop{\arg\min}_k\|\bm{x}_i-\bm{b}_k\|^2}_{\text{the winner of data point }i}$$</div>
-  <p class="cap" data-steps="0">The shading on the right is $h(c,w)$: largest at the winner, less for its lattice neighbors.</p>
-  <p class="cap" data-steps="1">On the lattice, a data point can only sit on its winner node.<span class="next">→ Can each data point have its own position on the lattice?</span></p>
     <p class="ref">Kohonen, 1982</p>
 </section>
 
 
-<section class="scene" data-id="latent" data-part="3" data-title="SOM-OLP gives each data point a position on the lattice">
-  <h2>SOM-OLP gives each data point a position on the lattice</h2>
+<section class="scene" data-id="latent" data-part="3" data-title="Proposed method: SOM with optimized latent positions">
+  <h2>Proposed method: SOM with optimized latent positions</h2>
   <span class="ours-tag">Ours</span>
-  <p class="lead" data-steps="0">We proposed SOM with optimized latent positions (SOM-OLP): each data point gets its own continuous position $\bm{v}_i$ on the lattice.</p>
+  <p class="lead" data-steps="0">In SOM-OLP, each data point gets its own continuous position $\bm{v}_i$ on the lattice.</p>
   <p class="cap" data-steps="0">Variables: prototypes $\bm{b}$ and memberships $u$ (soft winners), as in the SOM, plus the latent positions $\bm{v}$ (new).</p>
   <p class="benefit" data-steps="0"><b>Benefit</b> The map shows each data point, not just its node; $\bm{b}$, $u$ and $\bm{v}$ are learned together under one objective.</p>
   <p class="ref">Ubukata, Notsu, Honda, IJCNN 2026</p>
@@ -715,7 +722,7 @@
 
 <section class="scene" data-id="supp" data-theme="dark" data-part="5" data-title="Supplementary material">
   <h2>Supplementary material</h2>
-  <p class="cap"><span class="pt">The talk ends here; the slides that follow are for questions.</span><span class="pt">RSCM, RMCM, recommendation (Part 2); SOM-OLP, Heskes's SOM (Part 3).</span></p>
+  <p class="cap"><span class="pt">The talk ends here; the slides that follow are for questions.</span><span class="pt">Part 2: RSCM, RMCM, recommendation.</span><span class="pt">Part 3: the manifold hypothesis, SOM-OLP, Heskes's SOM.</span></p>
 </section>
 
 <section class="scene" data-id="rscm" data-part="5" data-lit="2" data-title="Supplement · RSCM and RMCM">

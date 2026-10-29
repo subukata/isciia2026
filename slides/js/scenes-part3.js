@@ -77,7 +77,9 @@ export default function part3(ctx) {
       M.hide();
       // Side by side from the start: the surface in 3D (left; it turns, and a drag turns it) and the map that lays it flat
       // (right). The colors (the height) tie each point to its place on the map; no point travels between the panels.
-      const F = ctx.field({ eq: true }), [left, right] = ctx.panels(F, 2, { gap: 120, top: 56 }), enter = Math.max(dur, 1000);
+      // Under the goal box (page 26; its larger type ends lower); the supplement's copy has no box and uses the same room.
+      const F0 = ctx.field({ eq: true }), F = ctx.narrow() ? F0 : { ...F0, y: F0.y + 52, h: F0.h - 52 };
+      const [left, right] = ctx.panels(F, 2, { gap: 120, top: 56 }), enter = Math.max(dur, 1000);
       const s = batchSaddle(), lm = latticeMap(right), off = packAtNodes('saddle-som', s.emb, SPACING10);
       const flat = XS.map((p, i) => { const [x, y] = lm.at([s.emb[i][0] + off[i][0], s.emb[i][1] + off[i][1]]); return { id: 'm' + i, x, y, r: 3.6, fill: ZCOLOR[i] }; });
       const place = d => S.set([...saddleItems(left, null, { r: 3.6 }).items, ...flat], { dur: d });
@@ -100,7 +102,10 @@ export default function part3(ctx) {
       M.hide();
       // Both spaces side by side: the prototypes in the data space (left; the view turns, and a drag turns it) and their
       // lattice, the latent space (right), where "near the winner" is measured and where each point lands on the map.
-      const F = ctx.field({ eq: 'tall' }), enter = Math.max(dur, 1000), top = 56, side = F.h - top;
+      // No caption under either step: the figure reaches down to the reference (and the stage's clip with it).
+      const F0 = ctx.field({ eq: 'tall' }), F = !ctx.narrow() ? { ...F0, h: F0.h + 90 } : F0;
+      if (F !== F0) S.clip = { x: F.x - 14, y: F.y - 10, w: F.w + 28, h: F.h + 16 };
+      const enter = Math.max(dur, 1000), top = 56, side = F.h - top;
       // The pair centered in the figure, close together: the data space as wide as its plate needs, the lattice square.
       const dw = Math.max(1.6 * side, 680), x0 = F.x + (F.w - dw - 100 - side) / 2;
       const data = { x: x0, y: F.y + top, w: dw, h: side }, lat = { x: x0 + dw + 100, y: F.y + top, w: side, h: side };
@@ -877,7 +882,7 @@ export default function part3(ctx) {
   };
 
   // Heskes's SOM is a supplement (after the last slide), kept for questions.
-  return [maps, som, remap(latent, [1]), { ...probe, supplement: true }, // SOM-OLP's objective and its updates; the motive (the new variable v) is said on the latent scene before it, and kept here, not shown.
+  return [maps, som, remap(latent, [1]), { ...maps, id: 'manifold', supplement: true }, { ...probe, supplement: true }, // SOM-OLP's objective and its updates; the motive (the new variable v) is said on the latent scene before it, and kept here, not shown.
     remap(withIdea(withMotive(bcd, bcdMotive, { aspect: 1.15 }), 1), [2, 4]),
     // Iris and Digits on one slide, SOM-OLP only (the scenes iris and digits, with Batch SOM, are kept but not shown).
     real,
