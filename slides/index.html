@@ -488,14 +488,14 @@
 
 <section class="scene" data-id="rough" data-split="1,2" data-part="1" data-title="Rough c-means (RCM) clustering">
   <h2>Rough c-means (RCM) clustering</h2>
-    <p class="lead" data-steps="1">To let a data point belong to several clusters, RCM uses the upper membership $\overline{u}_{ci}$.<br>Data point $i$ belongs to every cluster at most $\beta$ farther than the nearest one.</p>
+    <p class="lead" data-steps="1">RCM assigns a data point not only to the nearest cluster but also to relatively close clusters.</p>
   <p class="lead" data-steps="2">A data point in two clusters counts ½ in each; each prototype is the weighted mean.</p>
       <div class="eqband tall" data-steps="1">$$\underbrace{\overline{u}_{ci}=1}_{i\text{ belongs to }c}\iff d_{ci}\le \underbrace{\class{t-dmin}{d_i^{\min}}}_{\text{nearest}}+\underbrace{\class{t-beta}{\beta}}_{\text{slack}}$$</div>
   <div class="eqband tall" data-steps="2">$$\underbrace{\tilde{u}_{ci}=\frac{\overline{u}_{ci}}{\sum_k\overline{u}_{ki}}}_{\substack{\text{normalized}\\\text{membership}}}$$ $$\underbrace{\bm{b}_c=\frac{\sum_i\tilde{u}_{ci}\,\bm{x}_i}{\sum_i\tilde{u}_{ci}}}_{\text{weighted mean}}$$</div>
   <p class="lead" data-steps="0">RCM builds on rough set theory: a theory of sets with certain and possible members.</p>
   <p class="cap" data-steps="0"><span class="cols"><span>FCM gives every data point a degree.</span><span>RCM gives each cluster certain and possible members.</span></span></p>
   <p class="benefit" data-steps="0"><b>Benefit</b> RCM handles overlapping membership and extracts a clear boundary: the data points in both clusters (diamonds).</p>
-  <p class="cap" data-steps="1">$d_{ci}$: the distance from $i$ to prototype $c$; $d_i^{\min}$: to the nearest (solid circle); dashed: plus $\beta$.</p>
+  <p class="cap" data-steps="1"><span class="pt">$d_{ci}$: the distance from $i$ to prototype $c$.</span><span class="pt">$d_i^{\min}$: the distance to the nearest prototype.</span></p>
   <p class="cap" data-steps="2"><span class="next">→ Two classic rules set this threshold differently.</span></p>
   <div class="ctrl"><label class="param">$\beta$ <input type="range" id="rg-beta" min="0" max="1.2" step="0.05" value="0.35"><output for="rg-beta"></output></label><button type="button" class="btn" id="rg-run">Run</button></div>
   <p class="ref">Pawlak, 1982 · Lingras and West, 2004</p>
