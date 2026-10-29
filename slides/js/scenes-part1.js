@@ -67,13 +67,13 @@ export default function part1(ctx) {
       if (step === 2 && forward) fuzzy.replay(); else { draw(fin, dur); ctx.after(dur + 300, swingM); }
       ctx.highlight(step === 1 ? ['u'] : []);
       S.over = g => {
-        // The membership scale, at the figure's lower right.
-        const lx = F.x + F.w - 400, ly = F.y + F.h - 50, lw = 380;
-        g.save(); g.globalAlpha *= born('fz:legend', { delay: 300 }); membershipLegend(g, lx, ly, lw); g.restore();
+        // The membership scale, at the figure's lower right (large type: it is read from the back of the room).
+        const lw = Math.min(440, F.w - 260), lx = F.x + F.w - lw - 10, ly = F.y + F.h - 64;
+        g.save(); g.globalAlpha *= born('fz:legend', { delay: 300 }); membershipLegend(g, lx, ly, lw, 'membership in cluster 1', 34); g.restore();
         // u lit in the equation: the scale that shows it is framed.
-        if (hotU) { g.save(); g.strokeStyle = C.hl; g.lineWidth = 3; g.strokeRect(lx - 12, ly - 46, lw + 24, 100); g.restore(); }
+        if (hotU) { g.save(); g.strokeStyle = C.hl; g.lineWidth = 3; g.strokeRect(lx - 12, ly - 54, lw + 24, 118); g.restore(); }
         // The m of the degrees shown (the prototypes are those of FCM run with the slider's m).
-        text(g, `$m = ${mNow.toFixed(2)}$`, F.x + 4, F.y + F.h - 6, { size: 34, weight: 760, color: C.hl });
+        text(g, `$m = ${mNow.toFixed(2)}$`, F.x + 4, F.y + F.h - 6, { size: 46, weight: 760, color: C.hl });
       };
     },
     term(ctx, name, on) { if (name === 'u') hotU = on; },

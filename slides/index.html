@@ -468,13 +468,15 @@
 
 <section class="scene" data-id="fuzzy" data-split="all" data-part="0" data-title="FCM expresses the boundary by degrees">
   <h2 data-steps="0">Problem of k-means clustering</h2>
-  <h2 data-steps="1,2,3">FCM expresses the boundary by degrees</h2>
+  <h2 data-steps="1">FCM expresses the boundary by degrees</h2>
+  <h2 data-steps="2">Objective function of FCM</h2>
+  <h2 data-steps="3">FCM: Update rules of memberships and prototypes</h2>
   <div class="motive" data-steps="0"><p><b>Problem</b> k-means draws a crisp boundary, so it cannot express the ambiguity of the boundary.</p></div>
   <p class="lead" data-steps="2">The same $J$ as k-means, but membership is a degree, softened by the power $m$.</p>
   <p class="lead" data-steps="3">Both updates minimize $J$: degrees from distances, prototypes as weighted means.</p>
   <div class="eqband tall" data-steps="2">$$J=\sum_i\sum_c \underbrace{\class{t-u}{u_{ci}^{\,m}}}_{\text{degree, to the power }m}\|\bm{x}_i-\bm{b}_c\|^2$$</div>
   <div class="eqband tall small-gap" data-steps="3">$$\underbrace{u_{ci}=\frac{\|\bm{x}_i-\bm{b}_c\|^{-2/(m-1)}}{\sum_k\|\bm{x}_i-\bm{b}_k\|^{-2/(m-1)}}}_{\text{nearer, larger; summing to 1}}$$ $$\underbrace{\bm{b}_c=\frac{\sum_i u_{ci}^{\,m}\,\bm{x}_i}{\sum_i u_{ci}^{\,m}}}_{\text{weighted mean}}$$</div>
-  <p class="idea" data-steps="1"><b>Idea</b> The nearer a prototype, the larger the degree; each data point’s degrees add up to 1.</p>
+  <p class="idea" data-steps="1" data-wide="760"><b>Idea</b> The nearer a prototype, the larger the degree; each data point’s degrees add up to 1.</p>
   <p class="cap" data-steps="0"><span class="next">→ FCM (fuzzy c-means) is fuzzy clustering: it extends the discrete membership $\{0, 1\}$ to a continuous membership $[0, 1]$.</span></p>
   <p class="cap" data-steps="1">FCM (fuzzy c-means) is a clustering method that gives each data point a degree of membership in every cluster.</p>
   <p class="cap" data-steps="2"><span class="pt">$u_{ci}\in[0,1]$, summing to 1 over the clusters.</span><span class="pt">$m&gt;1$ is the fuzzifier: the larger $m$, the softer the degrees.</span></p>
