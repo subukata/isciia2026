@@ -405,5 +405,5 @@ export default function part1(ctx) {
     };
   };
 
-  return [remap(withIdea(fuzzy, 1), [0, 1, 2, 4]), remap(withIdea(withMotive(rough, roughMotive), 1, roughIdea), [0, 1, 4, 5]), remap(family, [3]), remap(shapes, [4])];
+  return [remap(withIdea(fuzzy, 1), [0, 1, 2, 4]), remap(withIdea(withMotive(rough, roughMotive), 1, roughIdea), [1, 4, 5]), remap(family, [3]), remap(shapes, [4])];
 }
