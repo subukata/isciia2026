@@ -40,7 +40,7 @@ export default function part1(ctx) {
           const lx = Math.min(Math.max(rg.reduce((a, q) => a + q[0], 0) / rg.length, F.x + 230), F.x + F.w - 230);
           const ly = Math.min(F.y + F.h - 48, Math.max(...rg.map(q => q[1])) + 44);
           text(g, 'ringed: near the boundary,', lx, ly, { size: 30, weight: 700, color: C.ink, align: 'center' });
-          text(g, 'yet in one cluster only', lx, ly + 36, { size: 30, weight: 700, color: C.ink, align: 'center' });
+          text(g, 'yet belonging to one cluster only', lx, ly + 36, { size: 30, weight: 700, color: C.ink, align: 'center' });
         };
         return;
       }

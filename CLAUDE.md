@@ -60,6 +60,7 @@
   - section を `data-part="5"` と `data-lit="<部>"` にし、タイトルを "Supplement: ..." にする。
   - 補足の目次（`supp` の文、`scenes-outline.js` のチップ）も直す。
 - スライドの文は英語。用語はスライド間でそろえる（data point、prototype、membership など）。
+  所属は「is in」ではなく「belongs to」で書く（i belongs to c）。k-means の J は「the sum of within-cluster squared errors」と呼ぶ。
 
 ## 仕組みのメモ
 

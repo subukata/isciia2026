@@ -453,23 +453,23 @@
 <section class="scene" data-id="kmeans" data-split="all" data-part="0" data-title="k-means minimizes one objective by two alternating updates">
   <h2 data-steps="0">Good prototypes are close to their data points</h2>
   <h2 data-steps="1">k-means minimizes one objective</h2>
-  <h2 data-steps="2">k-means minimizes $J$ by two alternating updates</h2>
+  <h2 data-steps="2">Update rules of assignments and prototypes</h2>
   <div class="motive" data-steps="0"><p><b>Goal</b> Find prototypes and assign each data point to a cluster.</p><p><b>We need</b> one measure of clustering quality.</p></div>
-  <p class="lead" data-steps="1">We split the data points into $C$ clusters (here $C=3$).<br>The membership $u_{ci}$ says which cluster data point $i$ is in, so choosing $u$ is the clustering.</p>
+  <p class="lead" data-steps="1">We split the data points into $C$ clusters (here $C=3$).<br>k-means minimizes $J$, the sum of within-cluster squared errors.</p>
   <p class="lead" data-steps="2">Minimize $J$ in turns: assign with the prototypes fixed, then average.</p>
-  <div class="eqband tall" data-steps="1" data-beside>$$J=\underbrace{\class{t-s}{\sum_i\sum_c}}_{\substack{\text{all data points}\\\text{and clusters}}}\;\underbrace{\class{t-u}{u_{ci}}}_{\substack{1\text{ if }i\text{ is in }c\text{,}\\\text{else }0}}\;\underbrace{\class{t-d}{\|\bm{x}_i-\bm{b}_c\|^2}}_{\substack{\text{squared}\\\text{distance}}}$$</div>
+  <div class="eqband tall" data-steps="1" data-beside>$$J=\underbrace{\class{t-s}{\sum_i\sum_c}}_{\substack{\text{all data points}\\\text{and clusters}}}\;\underbrace{\class{t-u}{u_{ci}}}_{\substack{1\text{ if }i\text{ belongs}\\\text{to }c\text{, else }0}}\;\underbrace{\class{t-d}{\|\bm{x}_i-\bm{b}_c\|^2}}_{\substack{\text{squared}\\\text{distance}}}$$</div>
   <div class="eqband tall small-gap" data-steps="2">$$\underbrace{\class{t-ua}{u_{ci}=1\ \text{for}\ c=\mathop{\arg\min}_k\|\bm{x}_i-\bm{b}_k\|^2}}_{\text{fix }\bm{b}\text{: the nearest prototype}}$$ $$\underbrace{\class{t-bm}{\bm{b}_c=\frac{\sum_i u_{ci}\bm{x}_i}{\sum_i u_{ci}}}}_{\text{fix }u\text{: the mean}}$$</div>
-  <p class="cap" data-steps="0"><span class="pt">k-means represents each cluster by the mean of its data points.</span><span class="pt">k-means minimizes the sum of within-cluster squared errors.</span></p>
-  <p class="cap" data-steps="1"><span class="pt">$J$ is the sum of within-cluster squared errors: the squared distance from each data point to its prototype, summed over all data points.</span><span class="pt">$\bm{x}_i$: data point $i$.</span><span class="pt">$\bm{b}_c$: the prototype of cluster $c$.</span></p>
+  <p class="cap" data-steps="0">k-means minimizes the sum of within-cluster squared errors.</p>
+  <p class="cap" data-steps="1"><span class="pt">$u_{ci}$ is the membership: 1 if data point $i$ belongs to cluster $c$, else 0.</span><span class="pt">$\bm{x}_i$: data point $i$.</span><span class="pt">$\bm{b}_c$: the prototype of cluster $c$.</span></p>
   <p class="cap" data-steps="2" data-wide="720"><span class="pt">$u_{ci}$: data point $i$ is assigned to the nearest cluster.</span><span class="pt">$\bm{b}_c$: the prototype of cluster $c$ is the mean of its data points.</span><span class="pt">Each update minimizes $J$, so $J$ never increases.</span></p>
   <p class="ref">MacQueen, 1967 · Lloyd, 1982</p>
 </section>
 
 
 <section class="scene" data-id="fuzzy" data-split="all" data-part="0" data-title="FCM expresses the boundary by degrees">
-  <h2 data-steps="0">k-means splits clusters with a crisp boundary</h2>
+  <h2 data-steps="0">Problem of k-means clustering</h2>
   <h2 data-steps="1,2,3">FCM expresses the boundary by degrees</h2>
-  <div class="motive" data-steps="0"><p><b>Problem</b> k-means draws a crisp boundary, so it cannot express how ambiguous the boundary is.</p></div>
+  <div class="motive" data-steps="0"><p><b>Problem</b> k-means draws a crisp boundary, so it cannot express the ambiguity of the boundary.</p></div>
   <p class="lead" data-steps="2">The same $J$ as k-means, but membership is a degree, softened by the power $m$.</p>
   <p class="lead" data-steps="3">Both updates minimize $J$: degrees from distances, prototypes as weighted means.</p>
   <div class="eqband tall" data-steps="2">$$J=\sum_i\sum_c \underbrace{\class{t-u}{u_{ci}^{\,m}}}_{\text{degree, to the power }m}\|\bm{x}_i-\bm{b}_c\|^2$$</div>
@@ -541,7 +541,7 @@
   <h2>Rough sets judge each data point by its neighborhood</h2>
   <p class="lead">The neighborhood of a data point: every data point within a radius $\delta$, itself included.</p>
   <div class="eqband tall">$$\underbrace{\mathcal{N}_i}_{\text{the neighborhood of }i}=\{\,j:\ \|\bm{x}_i-\bm{x}_j\|\le \delta\,\}$$</div>
-  <p class="idea"><b>Idea</b> If all neighbors of a data point are in a cluster, the data point is certainly in it; if only some are, possibly.</p>
+  <p class="idea"><b>Idea</b> If all neighbors of a data point belong to a cluster, the data point certainly belongs to it; if only some do, possibly.</p>
   <p class="ref">Pawlak, 1982</p>
 </section>
 
@@ -557,13 +557,13 @@
 
 <section class="scene" data-id="granule" data-split="0" data-part="2" data-title="Rough membership grades a data point by its neighbors">
   <h2 data-steps="0,1">Rough membership grades a data point by its neighbors</h2>
-  <p class="lead" data-steps="0">Rough membership is the share of a data point's neighbors that are in the cluster.</p>
-  <p class="lead" data-steps="1">We can extract certain and uncertain regions by $\mu_{ci}$.<br>All neighbors in the cluster: certain; neighbors in both: possibly in either.</p>
+  <p class="lead" data-steps="0">Rough membership: the share of the neighbors that belong to cluster $c$.</p>
+  <p class="lead" data-steps="1">We can extract certain and uncertain regions by $\mu_{ci}$.<br>All neighbors belong to $c$: certain; only some do: possible.</p>
   <div class="eqband tall" data-steps="0">$$\mu_{ci}=\underbrace{\frac{|\mathcal{N}_i\cap X_c|}{|\mathcal{N}_i|}}_{\text{share of cluster }c\text{ among the neighbors}}$$</div>
   <!-- Each case over its own panel; the scene's JS sets left and width from the panel. -->
-  <div class="rule-eq" data-k="0" data-steps="1">$$\underbrace{\mu_{ci}=1}_{\text{certainly in }c}$$</div>
-  <div class="rule-eq" data-k="1" data-steps="1">$$\underbrace{0<\mu_{ci}<1}_{\text{possibly in }c\text{ (boundary)}}$$</div>
-  <p class="cap" data-steps="0"><span class="pt">Rough membership can be seen as a neighborhood-induced fuzzy membership.</span><span class="pt">$X_c$: the data points in cluster $c$ (labels from k-means).</span></p>
+  <div class="rule-eq" data-k="0" data-steps="1">$$\underbrace{\mu_{ci}=1}_{i\text{ certainly belongs to }c}$$</div>
+  <div class="rule-eq" data-k="1" data-steps="1">$$\underbrace{0<\mu_{ci}<1}_{i\text{ possibly belongs to }c\text{ (boundary)}}$$</div>
+  <p class="cap" data-steps="0"><span class="pt">Rough membership can be seen as a neighborhood-induced fuzzy membership.</span><span class="pt">$X_c$: the data points that belong to cluster $c$ (labels from k-means).</span></p>
   <div class="ctrl"><label class="param">radius <input type="range" id="gr-radius" min="0.15" max="0.8" step="0.01" value="0.30"><output for="gr-radius"></output></label></div>
   <p class="ref">Pawlak and Skowron, 1994</p>
 </section>
