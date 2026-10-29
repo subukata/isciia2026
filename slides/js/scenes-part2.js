@@ -593,7 +593,8 @@ export default function part2(ctx) {
   };
 
   // The comparison of RCM and rough sets (disagree) is not in the talk.
-  return [remap(withIdea(withMotive(roughset, roughsetMotive), 1), [0, 2]), remap(withIdea(withMotive(granule, granuleMotive), 1), [4, 5]),
+  // Rough sets on one page: the figure of three neighborhoods (the motive) beside the definition; the close-up is kept, not shown.
+  return [remap(withIdea(withMotive(roughset, roughsetMotive), 1), [0]), remap(withIdea(withMotive(granule, granuleMotive), 1), [4, 5]),
     remap(objective, [1, 2]), cfex, graph,
     // RSCM and RMCM (the first step of the objective scene) are kept for questions, after the last slide.
     { ...remap(objective, [0]), id: 'rscm', setup: undefined, supplement: true }];
