@@ -566,9 +566,9 @@
 <section class="scene" data-id="granule" data-split="0" data-part="2" data-title="Rough membership">
   <h2 data-steps="0">Rough membership</h2>
   <h2 data-steps="1">Certain and boundary regions based on rough membership</h2>
-  <p class="lead" data-steps="0">Rough membership: the share of the neighbors that belong to cluster $c$.</p>
+  <p class="lead" data-steps="0">Rough membership: the share of cluster $c$ in the neighborhood.</p>
   <p class="lead" data-steps="1">We can extract certain and uncertain regions by $\mu_{ci}$.<br>All neighbors belong to $c$: certain; only some do: possible.</p>
-  <div class="eqband tall" data-steps="0">$$\mu_{ci}=\underbrace{\frac{|\mathcal{N}_i\cap X_c|}{|\mathcal{N}_i|}}_{\text{share of cluster }c\text{ among the neighbors}}$$</div>
+  <div class="eqband tall" data-steps="0">$$\mu_{ci}=\underbrace{\frac{|\mathcal{N}_i\cap X_c|}{|\mathcal{N}_i|}}_{\text{share of cluster }c\text{ in the neighborhood}}$$</div>
   <!-- Each case over its own panel; the scene's JS sets left and width from the panel. -->
   <div class="rule-eq" data-k="0" data-steps="1">$$\underbrace{\mu_{ci}=1}_{i\text{ certainly belongs to }c}$$</div>
   <div class="rule-eq" data-k="1" data-steps="1">$$\underbrace{0<\mu_{ci}<1}_{i\text{ possibly belongs to }c\text{ (boundary)}}$$</div>
