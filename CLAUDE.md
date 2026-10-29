@@ -36,7 +36,10 @@
   - 悪い例: "A clustering is not only its prototypes but also its assignment: ..."
   - 良い例: "Goal: Find prototypes and assign each data point to a cluster. / We need one measure of clustering quality."
 - 折り返しで語が 1 つだけ行に残る（"is." など）なら言い換える。
-- 式に出てこない記号はその段階で説明しない（`J` に `q_ci` が出ないなら、`q_ci` は使う段階で定義する）。説明不要と言われた記号（`r_c`）は書かない。
+- 式に出てこない記号はその段階で説明しない。説明不要と言われた記号（`r_c`）は書かない。
+- 更新式は「∝」や中間の記号（SOM-OLP の `q_ci` など）を使わず、書き下す（p21.3 の u の式）。
+- 発表時間が限られている（30 分枠）。枝分かれは削る: GRCM はスライドから外し、LRCM・PRCM から直接 ExRCM へ
+  （p9。`scenes-part1.js` の `SHOWN`。GRCM のコードは残してある）。講演サイトの論文・手法の一覧には GRCM が残っている。
 - 項の説明は「何をする項か」を一言で。例: data fit はプロトタイプをデータに合わせる、lattice distance は潜在位置を格子点に合わせる、entropy は帰属の曖昧さを調整する。
 - 目的関数 J の推移グラフ（メーター）は使わない（どの段階にも出さない）。
 - スライドノート（`<aside class="notes">`）は使わない。
@@ -54,7 +57,8 @@
   - シーンの段階を減らすときは `remap(scene, map)` を使い、使わない段階のコードは残す（このリポジトリの流儀）。
   - `withMotive`（最初に問題提起の箱）、`withIdea`（式の前に言葉の段階）。
 - `data-split`: 指定した段階で「左に文、右に図」の配置にする。式が文の列に入らなければ、式は専用の行になる（`eq-row`）。
-- `data-beside`（`eqband` に付ける）: 式の行でも、図を式の右に置く（例: p5.2）。
+- `data-beside`（`eqband` に付ける）: 式の行でも、図を式の右に置く（例: p5.2）。式が 2 行に折り返すときは、
+  最後の行の右に置く（例: p21.3。1 行目に長い u の式、2 行目に v と b）。
 - `data-wide="720"` など（文の要素に付ける）: `data-split` の段階で、文の列幅を指定する（既定 560）。
   式の行がある段階と、式のない段階（例: p21.1 の motive）の両方で効く。
   広げると図が狭くなり、図のラベルが切れることがあるので必ず目で見る。

@@ -310,10 +310,14 @@ function placeEquation(s) {
   }
   // A tall but narrow equation (data-beside on its band): the figure takes the room right of it, from the top of the row,
   // instead of the short strip under it. The band is only as wide as its equations, so it stays clear of the figure.
+  // Equations on two lines (a wide one, then narrower ones): the figure goes beside the last line, from its top.
   if (bands.some(b => b.hasAttribute('data-beside'))) {
     root.classList.add('eq-beside');
-    const right = Math.max(...bands.flatMap(b => [...b.querySelectorAll('mjx-container')].map(m => (m.getBoundingClientRect().right - fr.left) * unit)));
-    eqRowSide = { x: Math.ceil(right) + 40, y: Math.min(...bands.map(b => (b.getBoundingClientRect().top - fr.top) * unit)) };
+    const eqs = bands.flatMap(b => [...b.querySelectorAll('mjx-container')]).map(m => m.getBoundingClientRect());
+    const lastTop = Math.max(...eqs.map(q => q.top)), last = eqs.filter(q => q.top >= lastTop - 2);
+    const top = last.length === eqs.length ? Math.min(...bands.map(b => b.getBoundingClientRect().top)) : lastTop;
+    const right = Math.max(...last.map(q => (q.right - fr.left) * unit));
+    eqRowSide = { x: Math.ceil(right) + 40, y: (top - fr.top) * unit };
     // The words under the equation are as wide as it: the figure is beside the equation, not beside them.
     colWidth = Math.max(560, Math.ceil(right) - 60);
     s.el.style.setProperty('--col-w', `${colWidth / 20}rem`);

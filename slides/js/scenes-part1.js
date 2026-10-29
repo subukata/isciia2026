@@ -1,7 +1,7 @@
 /**
  * Part 1 (5.5 min), uncertain membership judged by distance: from k-means to degrees (FCM, its
  * objective read term by term, then its updates), to deferred decisions (rough c-means, its rule
- * read term by term), the family of thresholds (GRCM, ExRCM: generalized rules), and the shapes
+ * read term by term), the family of thresholds (ExRCM, a generalized rule), and the shapes
  * that ExRCM's exponent gives one cluster.
  */
 import {
@@ -177,7 +177,7 @@ export default function part1(ctx) {
     leave() { hotRough.clear(); },
   };
 
-  // ------------------------------------------------------------ one family of thresholds: LRCM ▶ PRCM ▶ GRCM ▶ ExRCM on one screen
+  // ------------------------------------------------------------ one family of thresholds: LRCM ▶ PRCM ▶ ExRCM on one screen (GRCM kept, not shown)
   const LINGRAS = [1, 0.5, 1], PETERS = [1.4, 0, 1], GRCM_TO = [1.25, 0.3], EX_TO = [1, 0.9, 2];
   const WORLD = [-2.4, 2.4, -1.6, 1.6];
   const P = [[-1.0, 0.55], [1.0, 0.65], [0.05, -0.85]];
@@ -203,6 +203,8 @@ export default function part1(ctx) {
     { name: 'GRCM (ours)', params: () => [grcm[0], grcm[1], 1], label: () => `$α = ${f2(grcm[0])}$ · $β = ${f2(grcm[1])}$` },
     { name: 'ExRCM (ours)', params: () => ex, label: () => `$p = ${ex[2].toFixed(1)}$ · $α = ${ex[0].toFixed(1)}$ · $β = ${ex[1].toFixed(1)}$` },
   ];
+  // The rules on the slide, one panel each: GRCM (2) is left out of the talk (time), and ExRCM takes both α and β.
+  const SHOWN = [0, 1, 3];
   const family = {
     id: 'family', steps: 4,
     narrowAspect: () => 2.6,
@@ -216,13 +218,14 @@ export default function part1(ctx) {
       // Two classic rules (steps 0 and 1, pictures then formulas), then GRCM (2), then ExRCM (3): each new rule
       // takes the next panel, and the earlier ones stay for comparison.
       // The panels start 64 below the field: their plates then clear ExRCM's two-line inequality above them.
-      const F = ctx.field({ eq: true }), n = step <= 1 ? 2 : step + 1;
-      const rects = ctx.panels({ x: F.x, y: F.y + 64, w: F.w, h: F.h - 64 - 44 }, 4, { gap: 48, top: 0 });
+      // n: the rules reached at this step (in RULES); the panels show those of them that are in SHOWN.
+      const F = ctx.field({ eq: true }), n = step <= 1 ? 2 : step + 1, shown = SHOWN.filter(k => k < n).length;
+      const rects = ctx.panels({ x: F.x, y: F.y + 64, w: F.w, h: F.h - 64 - 44 }, SHOWN.length, { gap: 48, top: 0 });
       const ms = rects.map(r => fit(WORLD, r));
-      // Each rule's inequality (index.html: .rule-eq) sits over its own panel; 20 stage units are 1rem.
-      for (const el of ctx.el('copy').querySelectorAll('.rule-eq')) { const r = rects[Number(el.dataset.k)]; el.style.left = `${r.x / 20}rem`; el.style.width = `${r.w / 20}rem`; }
-      const stars = k => P.map((p, c) => { const [x, y] = ms[k].map(p); return { id: `f${k}_${c}`, x, y, r: 15, shape: 'star', fill: CLUSTER[c], stroke: '#FFFFFF', lw: 2, z: 5, hit: true, data: [k, c] }; });
-      const place = d => S.set(Array.from({ length: n }, (_, k) => stars(k)).flat(), { dur: d });
+      // Each rule's inequality (index.html: .rule-eq, data-k its rule) sits over its own panel; 20 stage units are 1rem.
+      for (const el of ctx.el('copy').querySelectorAll('.rule-eq')) { const r = rects[SHOWN.indexOf(Number(el.dataset.k))]; el.style.left = `${r.x / 20}rem`; el.style.width = `${r.w / 20}rem`; }
+      const stars = j => P.map((p, c) => { const [x, y] = ms[j].map(p); return { id: `f${j}_${c}`, x, y, r: 15, shape: 'star', fill: CLUSTER[c], stroke: '#FFFFFF', lw: 2, z: 5, hit: true, data: [j, c] }; });
+      const place = d => S.set(Array.from({ length: shown }, (_, j) => stars(j)).flat(), { dur: d });
       place(dur);
       // The new rule grows out of the one before it.
       if (step === 2) grcm = forward ? [LINGRAS[0], LINGRAS[1]] : [...GRCM_TO];
@@ -249,10 +252,11 @@ export default function part1(ctx) {
           if (step >= 3) ex = [EX_TO[0], EX_TO[1], ez()];
         };
       });
-      S.under = g => { for (let k = 0; k < n; k++) region(g, rects[k], ms[k], RULES[k].params(), born('fam:panel' + k, { dur: 700 })); };
+      S.under = g => { for (let j = 0; j < shown; j++) region(g, rects[j], ms[j], RULES[SHOWN[j]].params(), born('fam:panel' + j, { dur: 700 })); };
       S.over = g => {
-        rects.forEach((r, k) => {
-          if (k < n) {
+        rects.forEach((r, j) => {
+          const k = SHOWN[j];
+          if (j < shown) {
             plate(g, RULES[k].name, r.x, r.y - 50, { color: k >= 2 ? C.ours : C.title });
             text(g, RULES[k].label(), r.x + 4, r.y + r.h + 34, { size: 28, weight: 700, color: C.muted, halo: false });
           } else {
@@ -260,7 +264,7 @@ export default function part1(ctx) {
             g.save(); g.setLineDash([10, 8]); g.strokeStyle = C.line; g.lineWidth = 2; g.strokeRect(r.x, r.y, r.w, r.h); g.restore();
             text(g, '?', r.x + r.w / 2, r.y + r.h / 2 + 18, { size: 52, weight: 780, color: C.line, align: 'center', halo: false });
           }
-          if (k < 3 && !ctx.narrow()) arrow(g, [r.x + r.w + 8, r.y + r.h / 2], [r.x + r.w + 40, r.y + r.h / 2], { color: k + 1 < n ? C.gray : C.line, lw: 3.4, head: 14, grow: born('fam:arrow' + k, { delay: 200 }) });
+          if (j < SHOWN.length - 1 && !ctx.narrow()) arrow(g, [r.x + r.w + 8, r.y + r.h / 2], [r.x + r.w + 40, r.y + r.h / 2], { color: j + 1 < shown ? C.gray : C.line, lw: 3.4, head: 14, grow: born('fam:arrow' + j, { delay: 200 }) });
         });
         // No key: the caption says what the colors mean (a star can be dragged).
       };
