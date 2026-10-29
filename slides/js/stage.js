@@ -170,6 +170,13 @@ export class Stage {
   }
 
   pos(id) { const it = this.items.get(id); return it ? [it.cur.x, it.cur.y] : null; }
+  /** Put an item at (x, y) at once, for motion driven frame by frame; a tween of its other properties goes on. */
+  place(id, x, y) {
+    const it = this.items.get(id);
+    if (!it || it.dying) return;
+    it.cur.x = x; it.cur.y = y;
+    if (it.to) { it.from.x = it.to.x = x; it.from.y = it.to.y = y; }
+  }
   has(id) { const it = this.items.get(id); return !!it && !it.dying; }
 
   /** The nearest pickable item to (x, y) within `within` units, or null. */

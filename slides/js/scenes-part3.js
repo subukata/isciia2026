@@ -780,10 +780,11 @@ export default function part3(ctx) {
       if (digitsRuns.failed && !digitsRuns.olp) ctx.after(80, digitsHere);
       const dg = digitsRuns.olp;
       // Two λ for each data set: the tuned one (the data points free between the nodes) and a small one (bound to the nodes).
-      // The maps swing slowly from one to the other and back.
+      // The maps swing slowly from one to the other and back, all the time: a cosine, 3.5 s each way, still only at the turns.
+      const SWING = 3500;
       const LAMS = [[1.32, DIGITS_PARAMS.lam], [LAM_HARD, LAM_HARD]];
       const runs = [[irisOlp(), dg], [irisOlp(LAM_HARD), digitsRuns.olpHard]];
-      let bound = 0, label = 0;
+      let label = 0;
       const digitStyle = () => ({ r: 3.6 });
       const itemsOf = ([ir, d]) => [
         ...ir.emb.map((v, i) => { const [x, y] = li.at(v); return { ...irisItem(i), id: 'j' + i, x, y, hit: true, data: i }; }),
@@ -791,18 +792,19 @@ export default function part3(ctx) {
       ];
       const items = itemsOf(runs[0]);
       S.set(items, { dur: Math.max(dur, 1300), stagger: forward ? (sp, k) => k * (1400 / items.length) : null });
-      if (!ctx.reduced()) {
-        // Digits swings too once its small-λ run is in (it is computed after the tuned one).
-        const swingMaps = () => {
-          bound = 1 - bound;
-          const [ir, d] = runs[bound];
-          S.set(itemsOf([ir, d && runs[1 - bound][1] ? d : runs[0][1]]), { dur: 3000, keep: true });
+      live(ctx, forward ? 2600 : 1200, () => {
+        // Each point's place on its map in both runs; Digits swings too once its small-λ run is in (computed after the tuned one).
+        const at = (lm, d) => d.emb.map(v => lm.at(v)), t0 = performance.now();
+        const iris = runs.map(([ir]) => at(li, ir)), digits = runs[1][1] && dg ? runs.map(([, d]) => at(ld, d)) : null;
+        const move = (P, prefix, w) => P[0].forEach(([x0, y0], i) => { const [x1, y1] = P[1][i]; S.place(prefix + i, x0 + (x1 - x0) * w, y0 + (y1 - y0) * w); });
+        return now => {
+          const w = 0.5 - 0.5 * Math.cos(Math.PI * (now - t0) / SWING);
+          move(iris, 'j', w);
+          if (digits) move(digits, 'e', w);
           // The labels change halfway, as the points cross over.
-          ctx.after(1500, () => { label = bound; S.wake(); });
-          ctx.after(6200, swingMaps);
+          label = w > 0.5 ? 1 : 0;
         };
-        ctx.after(forward ? 3400 : 2000, swingMaps);
-      }
+      });
       S.under = g => { drawGrid(g, li, 16, C.faint); if (dg) drawGrid(g, ld, 16, C.faint); };
       // The digits' key: each digit's mean image and its color, ten rows over the map's height.
       const kStep = (half[1].map.h - 40) / 9, kScale = Math.min(5, (kStep - 8) / 8);
