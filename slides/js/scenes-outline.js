@@ -8,7 +8,7 @@ import { FONT, text, plate, labelSize, labelWidth } from './common.js';
 
 const CARDS = [
   { head: ['Introduction', 'Clustering:', 'k-means and FCM'], q: ['Crisp clusters,', 'then degrees'], methods: [['k-means', 'obj'], ['FCM', 'obj']] },
-  { head: ['Part 1', 'Rough Clustering', '(Distances)'], q: ['Uncertain regions', 'found by distances'], methods: [['RCM', 'rule'], ['GRCM', 'rule', 1], ['ExRCM', 'rule', 1]] },
+  { head: ['Part 1', 'Rough Clustering', '(Distances)'], q: ['Uncertain regions', 'found by distances'], methods: [['RCM', 'rule'], ['ExRCM', 'rule', 1]] },
   { head: ['Part 2', 'Rough Clustering', '(Neighborhoods)'], q: ['Uncertainty by', 'neighborhoods;', 'graphs from overlaps'], methods: [['RMCM2', 'obj', 1]] },
   { head: ['Part 3', 'Topographic', 'Mapping'], q: ['Prototypes kept', 'in order on a map'], methods: [['SOM', 'rule'], ['Batch SOM', 'rule'], ['SOM-OLP', 'obj', 1]] },
 ];

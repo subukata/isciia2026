@@ -166,7 +166,9 @@
     font-size: 2rem; margin: .4rem 0 .2rem; }
   html.split.eq-row:not(.narrow) .scene.active > .eqband { top: calc(9.2rem + var(--lead-shift, 0rem)); width: 75rem; height: auto; flex-wrap: wrap; align-items: flex-start; gap: .8rem 1.4rem; }
   /* A row marked data-beside: the band as wide as its equations; the figure takes the room to their right (main.js). */
-  html.split.eq-row.eq-beside:not(.narrow) .scene.active > .eqband { width: auto; }
+  html.split.eq-row.eq-beside:not(.narrow) .scene.active > .eqband { width: min-content; }
+  /* SOM-OLP's three updates: u written out takes the first line, v and b the second, the figure beside them (main.js). */
+  .scene[data-id="bcd"] .eqband[data-beside] { font-size: 1.9rem; }
   html.split:not(.narrow) #meter { left: 3rem; top: auto; bottom: 3.2rem; width: 27rem; height: 8.4rem; }
   /* Lists in captions. */
   .cap.bullets { margin: 0; padding-left: 1.3em; }
@@ -174,7 +176,6 @@
   /* Inequalities set over their own panels (the scene places them). */
   /* An inequality is never broken over two lines: over four panels the rules are a little smaller (scripts stay 28+). */
   .scene[data-id="family"] .rule-eq { font-size: 1.85rem; }
-  .scene[data-id="family"] .rule-eq[data-k="2"] { margin-left: -2rem; } .scene[data-id="family"] .rule-eq[data-k="3"] { margin-left: .5rem; }
   .rule-eq { position: absolute; top: calc(9.15rem + var(--lead-shift, 0rem)); height: 5.25rem; display: flex; align-items: center; justify-content: center; font-size: 2rem; color: var(--ink); }
   .rule-eq mjx-container[display="true"] { margin: 0 !important; }
   html.narrow .rule-eq { position: static; order: 3; width: auto !important; height: auto; font-size: 16px; }
@@ -479,7 +480,7 @@
 
 <section class="scene" data-id="toc1" data-theme="dark" data-part="1" data-title="Outline · Part 1">
   <h2>Part 1 · Rough Clustering (Distances)</h2>
-  <p class="cap" data-steps="0"><span class="pt">Part 1 finds uncertain regions between clusters by distances.</span><span class="pt">From RCM to its family of thresholds: GRCM and ExRCM.</span></p>
+  <p class="cap" data-steps="0"><span class="pt">Part 1 finds uncertain regions between clusters by distances.</span><span class="pt">From RCM to our generalization of its thresholds: ExRCM.</span></p>
 </section>
 
 
@@ -498,17 +499,16 @@
   <p class="ref">Pawlak, 1982 · Lingras and West, 2004</p>
 </section>
 
-<section class="scene" data-id="family" data-part="1" data-title="GRCM and ExRCM generalize the RCM thresholds">
-  <h2>GRCM and ExRCM generalize the RCM thresholds</h2>
+<section class="scene" data-id="family" data-part="1" data-title="ExRCM generalizes the RCM thresholds">
+  <h2>ExRCM generalizes the RCM thresholds</h2>
   <span class="ours-tag">Ours</span>
-  <p class="lead">Lingras adds a difference $\beta$, Peters a ratio $\alpha$.<br>We proposed generalized RCM (GRCM), which takes both, and exponentiated RCM (ExRCM), which adds a power $p$.</p>
+  <p class="lead">Lingras adds a difference $\beta$, Peters a ratio $\alpha$.<br>We proposed exponentiated RCM (ExRCM), which takes both and adds a power $p$.</p>
   <!-- Each rule's inequality over its own panel; the scene's JS sets left and width from the panel. -->
   <div class="rule-eq" data-k="0">$$d_{ci}\le d_i^{\min}+\beta$$</div>
   <div class="rule-eq" data-k="1">$$d_{ci}\le \alpha\, d_i^{\min}$$</div>
-  <div class="rule-eq" data-k="2">$$d_{ci}\le \alpha\, d_i^{\min}+\beta$$</div>
   <div class="rule-eq" data-k="3">$$d_{ci}^{\,p}\le(\alpha\, d_i^{\min})^{p}+\beta^{p}$$</div>
   <p class="benefit" data-steps="0"><b>Benefit</b> We can obtain clusters of flexible shapes.</p>
-  <p class="ref">Peters, 2006 · Ubukata et al., 2017 · Okimoto et al., 2026</p>
+  <p class="ref">Peters, 2006 · Okimoto et al., 2026</p>
   <div class="ctrl"><label class="param">$\alpha$ <input type="range" id="fm-alpha" min="1" max="2" step="0.05" value="1.25"><output for="fm-alpha"></output></label><label class="param">$\beta$ <input type="range" id="fm-beta" min="0" max="1.5" step="0.05" value="0.3"><output for="fm-beta"></output></label><label class="param">$p$ <input type="range" id="fm-zeta" min="0.5" max="4" step="0.25" value="1"><output for="fm-zeta"></output></label></div>
 </section>
 
@@ -518,7 +518,6 @@
   <p class="lead" data-steps="0">The same rule in every panel ($\alpha=1$, a shared $\beta$); only $p$ changes.</p>
   <p class="cap" data-steps="0">Dark orange: the center cluster's lower approximation; dark and light: its upper approximation.</p>
   <p class="benefit" data-steps="0"><b>Benefit</b> ExRCM captures clusters flexibly: one exponent $p$ makes the lower approximation round, polygonal or star-shaped.</p>
-  <p class="next" data-steps="0">→ Yet every rule judges a data point by its distances alone.</p>
   <p class="ref">Okimoto et al., 2026</p>
 </section>
 
@@ -648,10 +647,10 @@
   <p class="lead" data-steps="1">One objective: data fit, lattice distance of each position $\bm{v}$, entropy of $u$.</p>
   <p class="lead" data-steps="2">Fix two blocks of variables and minimize over the third, in closed form.</p>
   <div class="eqband tall" data-steps="1">$$J=\sum_{i,c}u_{ci}\bigl(\underbrace{\class{t-fit}{\|\bm{x}_i-\bm{b}_c\|^2}}_{\text{data fit}}+\underbrace{\class{t-lat}{\gamma\|\bm{v}_i-\bm{r}_c\|^2}}_{\text{lattice distance}}+\underbrace{\class{t-ent}{\lambda\ln u_{ci}}}_{\text{entropy}}\bigr)$$</div>
-  <div class="eqband tall small-gap" data-steps="2">$$\underbrace{\class{t-bu}{u_{ci}\propto \exp(-q_{ci}/\lambda)}}_{\text{softmax}}$$ $$\underbrace{\class{t-bv}{\bm{v}_i=\sum_c u_{ci}\,\bm{r}_c}}_{\text{mean of nodes}}$$ $$\underbrace{\class{t-bb}{\bm{b}_c=\frac{\sum_i u_{ci}\bm{x}_i}{\sum_i u_{ci}}}}_{\text{mean of data}}$$</div>
+  <div class="eqband tall small-gap" data-steps="2" data-beside>$$\underbrace{\class{t-bu}{u_{ci}=\frac{\exp\bigl(-(\|\bm{x}_i-\bm{b}_c\|^2+\gamma\|\bm{v}_i-\bm{r}_c\|^2)/\lambda\bigr)}{\sum_k\exp\bigl(-(\|\bm{x}_i-\bm{b}_k\|^2+\gamma\|\bm{v}_i-\bm{r}_k\|^2)/\lambda\bigr)}}}_{\text{softmax}}$$ $$\underbrace{\class{t-bv}{\bm{v}_i=\sum_c u_{ci}\,\bm{r}_c}}_{\text{mean of nodes}}$$ $$\underbrace{\class{t-bb}{\bm{b}_c=\frac{\sum_i u_{ci}\bm{x}_i}{\sum_i u_{ci}}}}_{\text{mean of data}}$$</div>
   <p class="cap" data-steps="0">Memberships $u$ link the data space and the latent space.</p>
     <p class="cap" data-steps="1" data-wide="720"><span class="pt"><b>Data fit</b>: fits the prototypes $\bm{b}_c$ to the data.</span><span class="pt"><b>Lattice distance</b> (weight $\gamma$): fits the latent positions $\bm{v}_i$ to the lattice points.</span><span class="pt"><b>Entropy</b> (weight $\lambda$): tunes how ambiguous the memberships are; a larger $\lambda$ makes them more ambiguous and loosens the ties to the data points and the lattice points.</span></p>
-    <p class="cap" data-steps="2" data-wide="720"><span class="pt">$q_{ci}$: the data fit plus the lattice distance, the cost of node $c$ for data point $i$.</span><span class="pt">Each block update minimizes $J$ over its block, so $J$ never increases.</span><span class="pt">$O(nC)$ per iteration ($n$ data points, $C$ nodes); Heskes's energy: $O(nC^2)$.</span></p>
+    <p class="cap" data-steps="2" data-wide="720"><span class="pt">Each block update minimizes $J$ over its block, so $J$ never increases.</span><span class="pt">$O(nC)$ per iteration ($n$ data points, $C$ nodes); Heskes's energy: $O(nC^2)$.</span></p>
   <div class="ctrl"><label class="param">$\lambda$ <input type="range" id="bc-lam" min="0.05" max="1" step="0.05" value="0.3"><output for="bc-lam"></output></label><label class="param">$\gamma$ <input type="range" id="bc-gamma" min="0" max="10" step="0.5" value="3"><output for="bc-gamma"></output></label></div>
   <p class="ref" data-steps="0,1">Ubukata, Notsu, Honda, IJCNN 2026</p>
   <p class="ref" data-steps="2">Ubukata, Notsu, Honda, IJCNN 2026 · Heskes, 1999</p>
