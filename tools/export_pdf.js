@@ -1,11 +1,12 @@
 /**
- * The deck as a PDF: one 16:9 page per step (each step's final state, with motion reduced), at 3200 x 1800 pixels,
- * lossless. The text is in the images (it cannot be searched).
+ * The deck as a PDF: one 16:9 page per step (each step's final state, with motion reduced), 1200 x 675 pt, each page a
+ * 1920 x 1080 JPEG (quality 88; about 13 MB in all). The text is in the images (it cannot be searched).
+ * A plain PDF that every viewer opens: DCT images in DeviceRGB, no ICC profile, the media box at the origin. (A first
+ * version, lossless 3200 x 1800 images through Chromium's printing, was 25 MB and would not open for the speaker.)
  *
  * Serve the repository first, from its root:  python3 -m http.server 8765
  * Then:  node tools/export_pdf.js OUT.pdf [--base http://localhost:8765/slides/]
- * Needs Playwright (as tools/check_deck.js) and Python 3 with pypdf: Chromium rounds the page to 675.12 pt, and pypdf
- * trims the white sliver that leaves under each image, so the pages are exactly 1200 x 675 pt.
+ * Needs Playwright (as tools/check_deck.js) and Python 3 with Pillow.
  */
 const { chromium } = require('playwright');
 const { spawnSync } = require('child_process');
@@ -37,27 +38,16 @@ const out = path.resolve(args[0] ?? 'slides.pdf');
     files.push({ hash, file });
     await page.keyboard.press('ArrowRight');
   }
-  const html = path.join(dir, 'book.html');
-  fs.writeFileSync(html, `<!doctype html><meta charset="utf-8"><title>Uncertainty, Topology, and Graphs in Prototype-Based Learning</title>
-<style>@page { size: 1200pt 675pt; margin: 0; } html, body { margin: 0; } img { display: block; width: 1200pt; height: 675pt; break-after: page; }</style>
-${files.map(f => `<img src="${path.basename(f.file)}">`).join('\n')}`);
-  const raw = path.join(dir, 'raw.pdf');
-  const book = await browser.newPage();
-  await book.goto('file://' + html, { waitUntil: 'load' });
-  await book.pdf({ path: raw, preferCSSPageSize: true, printBackground: true });
   await browser.close();
-  const trim = `
-import sys
-from pypdf import PdfReader, PdfWriter
-from pypdf.generic import RectangleObject
-r, w = PdfReader(sys.argv[1]), PdfWriter()
-for p in r.pages:
-    x0, y0, x1, y1 = [float(v) for v in p.mediabox]
-    p.mediabox = p.cropbox = RectangleObject([x0, y1 - 675, x1, y1])
-    w.add_page(p)
-w.add_metadata({'/Title': 'Uncertainty, Topology, and Graphs in Prototype-Based Learning', '/Author': 'Seiki Ubukata'})
-w.write(sys.argv[2])`;
-  const py = spawnSync('python3', ['-c', trim, raw, out], { stdio: 'inherit' });
-  if (py.status !== 0) { fs.copyFileSync(raw, out); console.log('pypdf failed: the PDF keeps a thin white line under each page'); }
+  // The screenshots (3200 x 1800) down to full HD, one JPEG page each, in one PDF (Pillow).
+  const build = `
+import sys, glob, os
+from PIL import Image
+src, dst = sys.argv[1], sys.argv[2]
+pages = [Image.open(f).convert('RGB').resize((1920, 1080), Image.LANCZOS) for f in sorted(glob.glob(os.path.join(src, '[0-9][0-9][0-9].png')))]
+pages[0].save(dst, 'PDF', save_all=True, append_images=pages[1:], resolution=115.2, quality=88,
+              title='Uncertainty, Topology, and Graphs in Prototype-Based Learning', author='Seiki Ubukata')`;
+  const py = spawnSync('python3', ['-I', '-c', build, dir, out], { stdio: 'inherit' });
+  if (py.status !== 0) { console.log('Pillow failed: no PDF written'); process.exit(1); }
   console.log(`${files.length} pages (${files[0].hash} to ${files.at(-1).hash}) -> ${out}`);
 })();

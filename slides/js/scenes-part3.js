@@ -811,9 +811,9 @@ export default function part3(ctx) {
       S.over = g => {
         // Each map's λ, and where it puts the data points.
         const where = label ? 'on the nodes' : 'between the nodes';
-        plate(g, `Iris, $λ = ${f2(LAMS[label][0])}$: ${where}`, half[0].map.x, half[0].map.y - 56, { color: C.ours });
-        if (dg) plate(g, `Digits, $λ = ${f2(label && runs[1][1] ? LAMS[1][1] : LAMS[0][1])}$: ${label && runs[1][1] ? where : 'between the nodes'}`, half[1].map.x, half[1].map.y - 56, { color: C.ours });
-        else plate(g, 'Digits: SOM-OLP', half[1].map.x, half[1].map.y - 56, { color: C.ours });
+        plate(g, `Iris, $λ = ${f2(LAMS[label][0])}$: ${where}`, half[0].key.x, half[0].map.y - 56, { color: C.ours });
+        if (dg) plate(g, `Digits, $λ = ${f2(label && runs[1][1] ? LAMS[1][1] : LAMS[0][1])}$: ${label && runs[1][1] ? where : 'between the nodes'}`, half[1].key.x, half[1].map.y - 56, { color: C.ours });
+        else plate(g, 'Digits: SOM-OLP', half[1].key.x, half[1].map.y - 56, { color: C.ours });
         NAMES.forEach((name, k) => {
           const x = half[0].key.x, y = half[0].map.y + 40 + k * 56;
           g.fillStyle = CLUSTER[k]; g.beginPath();
@@ -877,7 +877,8 @@ export default function part3(ctx) {
   };
 
   // Heskes's SOM is a supplement (after the last slide), kept for questions.
-  return [maps, som, remap(latent, [1]), { ...probe, supplement: true }, remap(withIdea(withMotive(bcd, bcdMotive, { aspect: 1.15 }), 1), [0, 2, 4]),
+  return [maps, som, remap(latent, [1]), { ...probe, supplement: true }, // SOM-OLP's objective and its updates; the motive (the new variable v) is said on the latent scene before it, and kept here, not shown.
+    remap(withIdea(withMotive(bcd, bcdMotive, { aspect: 1.15 }), 1), [2, 4]),
     // Iris and Digits on one slide, SOM-OLP only (the scenes iris and digits, with Batch SOM, are kept but not shown).
     real,
     { ...withIdea(withMotive(heskes, heskesMotive, { aspect: 0.9 }), 1), supplement: true }];
