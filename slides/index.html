@@ -459,7 +459,7 @@
   <p class="lead" data-steps="2">Minimize $J$ in turns: assign with the prototypes fixed, then average.</p>
   <div class="eqband tall" data-steps="1" data-beside>$$J=\underbrace{\class{t-s}{\sum_i\sum_c}}_{\substack{\text{all data points}\\\text{and clusters}}}\;\underbrace{\class{t-u}{u_{ci}}}_{\substack{1\text{ if }i\text{ belongs}\\\text{to }c\text{, else }0}}\;\underbrace{\class{t-d}{\|\bm{x}_i-\bm{b}_c\|^2}}_{\substack{\text{squared}\\\text{distance}}}$$</div>
   <div class="eqband tall small-gap" data-steps="2">$$\underbrace{\class{t-ua}{u_{ci}=1\ \text{for}\ c=\mathop{\arg\min}_k\|\bm{x}_i-\bm{b}_k\|^2}}_{\text{fix }\bm{b}\text{: the nearest prototype}}$$ $$\underbrace{\class{t-bm}{\bm{b}_c=\frac{\sum_i u_{ci}\bm{x}_i}{\sum_i u_{ci}}}}_{\text{fix }u\text{: the mean}}$$</div>
-  <p class="cap" data-steps="0">k-means minimizes the sum of within-cluster squared errors.</p>
+  <p class="cap" data-steps="0"><span class="pt">k-means minimizes the sum of within-cluster squared errors.</span><span class="pt">Minimizing the errors yields compact clusters.</span></p>
   <p class="cap" data-steps="1"><span class="pt">$u_{ci}$ is the membership: 1 if data point $i$ belongs to cluster $c$, else 0.</span><span class="pt">$\bm{x}_i$: data point $i$.</span><span class="pt">$\bm{b}_c$: the prototype of cluster $c$.</span></p>
   <p class="cap" data-steps="2" data-wide="720"><span class="pt">$u_{ci}$: data point $i$ is assigned to the nearest cluster.</span><span class="pt">$\bm{b}_c$: the prototype of cluster $c$ is the mean of its data points.</span><span class="pt">Each update minimizes $J$, so $J$ never increases.</span></p>
   <p class="ref">MacQueen, 1967 · Lloyd, 1982</p>
