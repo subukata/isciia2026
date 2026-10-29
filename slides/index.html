@@ -468,7 +468,7 @@
   <p class="cap" data-steps="0"><span class="next">→ FCM (fuzzy c-means) is fuzzy clustering: it extends the discrete membership $\{0, 1\}$ to a continuous membership $[0, 1]$.</span></p>
   <p class="cap" data-steps="1">FCM (fuzzy c-means) is a clustering method that gives each data point a degree of membership in every cluster.</p>
   <p class="cap" data-steps="2"><span class="pt">$u_{ci}\in[0,1]$, summing to 1 over the clusters.</span><span class="pt">$m&gt;1$ is the fuzzifier: the larger $m$, the softer the degrees.</span></p>
-  <p class="cap" data-steps="3"><span class="pt">$u_{ci}$ is the degree of membership, larger for clusters that are relatively nearer.</span><span class="pt">$J$ never increases.</span></p>
+  <p class="cap" data-steps="3" data-wide="720"><span class="pt">$u_{ci}$ is the degree of membership, larger for clusters that are relatively nearer.</span><span class="pt">$\bm{b}_c$ is the prototype of cluster $c$: the mean of the data points weighted by $u_{ci}^{\,m}$.</span><span class="pt">$J$ never increases.</span></p>
   <div class="ctrl"><label class="param">$m$ <input type="range" id="fz-m" min="1.1" max="6" step="0.01" value="2"><output for="fz-m"></output></label><button type="button" class="btn" id="fz-run">Run</button></div>
   <p class="ref">Bezdek, 1981</p>
 </section>

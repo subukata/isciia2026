@@ -297,6 +297,12 @@ function placeEquation(s) {
   placeLead(s);
   eqRowBottom = Math.max(...bands.map(y));
   s.el.style.setProperty('--col-top', `${(eqRowBottom + 24) / 20}rem`);
+  // Words under the row that need more room (data-wide on them: the column's width, in stage units); the figure takes the rest.
+  const wide = [...s.el.children].find(e => e.hasAttribute('data-wide') && getComputedStyle(e).display !== 'none');
+  if (wide) {
+    colWidth = Number(wide.dataset.wide);
+    s.el.style.setProperty('--col-w', `${colWidth / 20}rem`);
+  }
   // A tall but narrow equation (data-beside on its band): the figure takes the room right of it, from the top of the row,
   // instead of the short strip under it. The band is only as wide as its equations, so it stays clear of the figure.
   if (bands.some(b => b.hasAttribute('data-beside'))) {
