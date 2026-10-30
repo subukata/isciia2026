@@ -268,6 +268,8 @@
   .site-qr.corner { top: 3.4rem; width: 10rem; } .site-qr.corner .qr { width: 6.5rem; height: 6.5rem; }
   /* The summary: its key sentence clear of the code. */
   .scene[data-id="principle"] > .lead { right: 19rem; }
+  /* The summary ends with the thanks, at the bottom, centered (the end slide after it keeps "Thank you"). */
+  .scene > .thanks { position: absolute; left: 3rem; right: 3rem; bottom: 2.6rem; margin: 0; text-align: center; font: 760 2.4rem/1.1 var(--display); font-variation-settings: "wdth" 92; color: var(--title); }
   /* The end slide: thanks and the speaker on the left, the talk site's code large on the right. */
   .end-block { position: absolute; left: 3rem; top: 15rem; width: 46rem; display: grid; gap: 1.4rem; }
   .end-block h1 { font: 760 6.4rem/1 var(--display); font-variation-settings: "wdth" 90; letter-spacing: -.02em; color: var(--title); }
@@ -707,6 +709,7 @@
   <h2>Summary: what we did</h2>
   <a class="site-qr corner" target="_blank" rel="noopener"><div class="qr" role="img" aria-label="QR code of the talk site"></div><p><b>Talk website</b></p></a>
   <p class="lead">We handled uncertainty and topology with prototypes, moving from rules to one objective.</p>
+  <p class="thanks">Thank you for your kind attention.</p>
 </section>
 
 <!-- The end of the talk, before the supplement: a slide that says so. -->
