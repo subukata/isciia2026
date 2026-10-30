@@ -463,12 +463,12 @@
   <h2 data-steps="0">Good prototypes are close to their data points</h2>
   <h2 data-steps="1">k-means minimizes one objective</h2>
   <h2 data-steps="2">Update rules of assignments and prototypes</h2>
-  <div class="motive" data-steps="0"><p><b>Goal</b> Find prototypes and assign each data point to a cluster.</p><p><b>We need</b> one measure of clustering quality.</p></div>
-  <p class="lead" data-steps="1">We first determine the number of clusters, $C$ (here $C=3$).<br>k-means minimizes $J$, the sum of within-cluster squared errors.</p>
+  <div class="motive" data-steps="0" data-wide="760"><p><b>Goal</b> Find prototypes and assign each data point to a cluster.</p><p><b>We need</b> one measure (objective function) of clustering quality.</p></div>
+  <p class="lead" data-steps="1">We first determine the number of clusters, $C$ (here $C=3$).<br>k-means minimizes $J$, the sum of within&#8209;cluster squared errors.</p>
   <p class="lead" data-steps="2">Minimize $J$ in turns: assign with the prototypes fixed, then average.</p>
   <div class="eqband tall" data-steps="1" data-beside>$$J=\underbrace{\class{t-s}{\sum_i\sum_c}}_{\substack{\text{all data points}\\\text{and clusters}}}\;\underbrace{\class{t-u}{u_{ci}}}_{\substack{1\text{ if }i\text{ belongs}\\\text{to }c\text{, else }0}}\;\underbrace{\class{t-d}{\|\bm{x}_i-\bm{b}_c\|^2}}_{\substack{\text{squared}\\\text{distance}}}$$</div>
   <div class="eqband tall small-gap" data-steps="2">$$\underbrace{\class{t-ua}{u_{ci}=1\ \text{for}\ c=\mathop{\arg\min}_k\|\bm{x}_i-\bm{b}_k\|^2}}_{\text{fix }\bm{b}\text{: the nearest prototype}}$$ $$\underbrace{\class{t-bm}{\bm{b}_c=\frac{\sum_i u_{ci}\bm{x}_i}{\sum_i u_{ci}}}}_{\text{fix }u\text{: the mean}}$$</div>
-  <p class="cap" data-steps="0"><span class="pt">k-means minimizes the sum of within-cluster squared errors.</span><span class="pt">Minimizing the errors yields compact clusters.</span></p>
+  <p class="cap" data-steps="0"><span class="pt">k-means minimizes the sum of within&#8209;cluster squared errors.</span><span class="pt">Minimizing the errors yields compact clusters.</span></p>
   <p class="cap" data-steps="1"><span class="pt">$u_{ci}$ is the membership: 1 if data point $i$ belongs to cluster $c$, else 0.</span><span class="pt">$\bm{x}_i$: data point $i$.</span><span class="pt">$\bm{b}_c$: the prototype of cluster $c$.</span></p>
   <p class="cap" data-steps="2" data-wide="720"><span class="pt">The membership $u_{ci}$ is calculated by assigning data point $i$ to the nearest cluster.</span><span class="pt">The prototype $\bm{b}_c$ is calculated by averaging the data points that belong to cluster $c$.</span><span class="pt">Each update minimizes $J$, so $J$ never increases.</span></p>
   <p class="ref">MacQueen, 1967 · Lloyd, 1982</p>
@@ -480,13 +480,13 @@
   <h2 data-steps="1">FCM expresses the boundary by degrees</h2>
   <h2 data-steps="2">Objective function of FCM</h2>
   <h2 data-steps="3">FCM: Update rules of memberships and prototypes</h2>
-  <div class="motive" data-steps="0"><p><b>Problem</b> k-means draws a crisp boundary, so it cannot express the ambiguity of the boundary.</p></div>
+  <div class="motive" data-steps="0" data-wide="760"><p><b>Problem</b> k-means draws a crisp boundary, so it cannot express the ambiguity of the boundary.</p></div>
   <p class="lead" data-steps="2">The same $J$ as k-means, but membership is a degree, softened by the power $m$.</p>
   <p class="lead" data-steps="3">Both updates minimize $J$: degrees from distances, prototypes as weighted means.</p>
   <div class="eqband tall" data-steps="2">$$J=\sum_i\sum_c \underbrace{\class{t-u}{u_{ci}^{\,m}}}_{\text{degree, to the power }m}\|\bm{x}_i-\bm{b}_c\|^2$$</div>
   <div class="eqband tall small-gap" data-steps="3">$$\underbrace{u_{ci}=\frac{\|\bm{x}_i-\bm{b}_c\|^{-2/(m-1)}}{\sum_k\|\bm{x}_i-\bm{b}_k\|^{-2/(m-1)}}}_{\text{nearer, larger; summing to 1}}$$ $$\underbrace{\bm{b}_c=\frac{\sum_i u_{ci}^{\,m}\,\bm{x}_i}{\sum_i u_{ci}^{\,m}}}_{\text{weighted mean}}$$</div>
   <p class="idea" data-steps="1" data-wide="760"><b>Idea</b> FCM (fuzzy c-means) gives each data point a degree of membership $u_{ci}$ in every cluster: the nearer the prototype, the larger the degree.</p>
-  <p class="cap" data-steps="0"><span class="next">→ FCM (fuzzy c-means) is fuzzy clustering: it extends the discrete membership $\{0, 1\}$ to a continuous membership $[0, 1]$.</span></p>
+  <p class="cap" data-steps="0"><span class="next">→ FCM (fuzzy c-means) is fuzzy clustering: it extends the discrete membership $u_{ci}\in\{0, 1\}$ to a continuous membership $u_{ci}\in[0, 1]$.</span></p>
   <p class="cap degrees" data-steps="1"><span>$u_{ci}=1.0$</span><span>fully belongs</span><span>$u_{ci}=0.8$</span><span>largely belongs</span><span>$u_{ci}=0.5$</span><span>partly belongs</span><span>$u_{ci}=0.2$</span><span>hardly belongs</span><span>$u_{ci}=0.0$</span><span>does not belong at all</span></p>
   <p class="cap" data-steps="2"><b>Differences from k-means</b><span class="pt">$u_{ci}$ is relaxed from $\{0,1\}$ to $[0,1]$, summing to 1 over the clusters.</span><span class="pt">$u_{ci}^{\,m}$ is powered by $m&gt;1$ (the fuzzifier): the larger $m$, the softer the degrees.</span></p>
   <p class="cap" data-steps="3" data-wide="720"><span class="pt">$u_{ci}$ is the degree of membership, larger for clusters that are relatively nearer.</span><span class="pt">$\bm{b}_c$ is the prototype of cluster $c$: the mean of the data points weighted by $u_{ci}^{\,m}$.</span><span class="pt">$J$ never increases.</span></p>
