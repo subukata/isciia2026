@@ -33,7 +33,7 @@ export default function part1(ctx) {
           for (const sg of [1, -1]) line(g, mid, [mid[0] - sg * dy / n * 500, mid[1] + sg * dx / n * 500], { color: C.muted, lw: 2.4, dash: [10, 8], grow: cut });
           XA.forEach(p => { if (Math.abs(Math.sqrt(A.sqd(p, b1)) - Math.sqrt(A.sqd(p, b2))) <= 0.35) ring(g, ...mm.map(p), 14, { lw: 2.4, grow: near }); });
           // Parts 1 and 2 use these points; the plate says so once, as the data change from the introduction.
-          if (from !== 'fuzzy') newExample(g, '300 data points in two overlapping groups', F);
+          if (from !== 'fuzzy') newExample(g, 'two overlapping groups', F);
           else plate(g, 'k-means on 300 data points, $C = 2$', F.x + 4, F.y + 2);
           // What the rings mark, under the ringed band (the boundary), not in the caption.
           const rg = XA.filter(p => Math.abs(Math.sqrt(A.sqd(p, b1)) - Math.sqrt(A.sqd(p, b2))) <= 0.35).map(p => mm.map(p));
