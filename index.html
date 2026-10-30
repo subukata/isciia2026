@@ -57,8 +57,8 @@
 </style>
 <script>document.documentElement.lang = 'en';</script>
 <style>
-  /* Layout: a conference board of cards on a 12-column grid. First row: the talk (its title and session as in the
-     official program), the speaker in brief, and the slides. Then the talk itself: the introduction and the
+  /* Layout: a conference board of cards on a 12-column grid. First row: the talk (its title, subtitle and session
+     as in the official program), the speaker in brief, and the slides. Then the talk itself: the introduction and the
      three parts as four columns (what each covers, its methods with their papers, classic ones included, and the gist,
      lined up across the columns). Then the code; last, the speaker's selected papers, with the CV open (it can be
      folded). Medium screens: two columns; phones: one, the title and the slides first.
@@ -130,6 +130,7 @@
   /* ---------------------------------------------------------------- the talk, the speaker in brief, the slides */
   .band { align-content: center; gap: 10px; padding: 18px 22px 20px; }
   h1 { font: 760 clamp(26px, 2.5vw, 36px)/1.06 var(--display); font-variation-settings: "wdth" 88; color: var(--title); margin: 0; text-wrap: balance; letter-spacing: -.015em; }
+  .subtitle { margin: -2px 0 0; font: 640 clamp(18px, 1.55vw, 22px)/1.2 var(--display); font-variation-settings: "wdth" 92; color: var(--accent); text-wrap: balance; }
   .sub { margin: 0; font-size: 16.5px; color: var(--muted); }
   .sub b { color: var(--accent); font-weight: 700; }
   .name { font: 760 22px/1.1 var(--display); font-variation-settings: "wdth" 90; color: var(--title); margin: 0; }
@@ -251,6 +252,7 @@
     <header class="card band">
       <p class="ch">ISCIIA 2026 · Keynote</p>
       <h1>Uncertainty, Topology, and Graphs in Prototype&#8209;Based Learning</h1>
+      <p class="subtitle">From Soft Clustering to Objective&#8209;Based Structure Learning</p>
       <p class="sub">China&#8209;Japan Bilateral Symposium on Advanced Computational Intelligence<br><time datetime="2026-10-30T11:50+08:00">October 30, 2026 · 11:50–12:20</time> (Beijing time)</p>
     </header>
 
@@ -285,7 +287,7 @@
         <ul class="methods">
           <li class="m">
             <div class="m-head"><span class="m-name">k-means</span><span class="tag obj">one objective</span><span class="yr">1967</span></div>
-            <p>Each data point goes to its nearest prototype, and each prototype moves to the mean of its data points; the sum of squared distances never increases.</p>
+            <p>Each data point is assigned to its nearest prototype, and each prototype moves to the mean of its data points; the sum of within-cluster squared errors never increases.</p>
             <span class="src">MacQueen · Berkeley Symp., 1967 · Lloyd · <a href="https://doi.org/10.1109/TIT.1982.1056489" target="_blank" rel="noopener">IEEE Trans. Inf. Theory, 1982</a></span>
           </li>
           <li class="m">
