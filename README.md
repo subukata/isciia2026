@@ -1,8 +1,8 @@
 # ISCIIA 2026 keynote
 
-**Uncertainty, Topology, and Graphs in Prototype-Based Learning**
+**Uncertainty, Topology, and Graphs in Prototype-Based Learning: From Soft Clustering to Objective-Based Structure Learning**
 Seiki Ubukata, Osaka Metropolitan University.
-Keynote, China-Japan Bilateral Symposium on Advanced Computational Intelligence, ISCIIA 2026, Beijing, October 30, 2026, 11:50–12:20 (Beijing time).
+Keynote, China-Japan Bilateral Symposium on Advanced Computational Intelligence, ISCIIA 2026, Beijing, October 30, 2026.
 
 - Talk site: https://subukata.github.io/isciia2026/
 - Slides, with live figures: https://subukata.github.io/isciia2026/slides/
