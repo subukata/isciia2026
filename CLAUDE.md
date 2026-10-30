@@ -5,7 +5,7 @@
 ## 講演とリポジトリ
 
 - 正式な表記: Keynote, China-Japan Bilateral Symposium on Advanced Computational Intelligence, ISCIIA 2026（北京）。
-  2026-10-30 11:50–12:20（北京時間）。題目は "Uncertainty, Topology, and Graphs in Prototype-Based Learning"、
+  2026-10-30。講演時刻は微調整で変わったので書かない（2026-10-30、ユーザーの指示）。題目は "Uncertainty, Topology, and Graphs in Prototype-Based Learning"、
   副題は "From Soft Clustering to Objective-Based Structure Learning"（2026-10-30 に戻した。タイトルスライド・講演サイト・README に出す）。
 - 公開: GitHub Pages が `main` のルートをそのまま配信する（ビルドなし、`.nojekyll`）。
   講演サイト https://subukata.github.io/isciia2026/ 、スライド https://subukata.github.io/isciia2026/slides/
